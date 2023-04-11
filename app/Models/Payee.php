@@ -2,49 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\Model\TableMaint;
 
-class User extends Authenticatable
+class Payee extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory;
     use TableMaint;
     use SoftDeletes;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+/*
+    $table->string('name');
+    $table->string('description')->nullable();
+    $table->string('account_number')->nullable();
+    $table->string('website')->nullable();
+    $table->string('username')->nullable();
+    $table->string('password')->nullable();
+ */
 
     protected $form = [
         [
@@ -52,29 +27,11 @@ class User extends Authenticatable
                 'type' => 'input_text',
                 'parameters' =>
                 [
-                    'label' => "Account Name",
+                    'label' => "Payee Name",
                     'datapoint' => 'name',
                     'grid_class' => 'col-md-6'
                 ]
-            ],
-            [
-                'type' => 'input_checkbox',
-                'parameters' =>
-                [
-                    'label' => "Current Balance",
-                    'datapoint' => 'balance',
-                    'grid_class' => 'col-lg-4'
                 ],
-            ],
-            [
-                'type' => 'input_checkbox',
-                'parameters' =>
-                [
-                    'label' => "Is Bank Account?",
-                    'datapoint' => 'bank_account',
-                    'grid_class' => 'col-lg-2'
-                ],
-            ],
             [
                 'type' => 'textarea',
                 'parameters' =>
@@ -90,15 +47,6 @@ class User extends Authenticatable
                 [
                     'label' => "Account Number",
                     'datapoint' => 'account_number',
-                    'grid_class' => 'col-md-6'
-                ]
-            ],
-            [
-                'type' => 'input_text',
-                'parameters' =>
-                [
-                    'label' => "Routing Number",
-                    'datapoint' => 'routing_number',
                     'grid_class' => 'col-md-6'
                 ]
             ],

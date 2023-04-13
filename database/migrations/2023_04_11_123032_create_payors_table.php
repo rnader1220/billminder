@@ -14,8 +14,9 @@ class CreatePayorsTable extends Migration
     public function up()
     {
         Schema::create('payors', function (Blueprint $table) {
-            $table->id();
-            $table->bigint('user_id');
+            $table->bigIncrements('id');
+            $table->bigInteger('user_id');
+            $table->integer('display_order');
             $table->string('name');
             $table->string('description')->nullable();
             $table->string('account_number')->nullable();

@@ -1,4 +1,5 @@
 import './bootstrap';
+import '../app/temp.js';
 
 import Alpine from 'alpinejs';
 

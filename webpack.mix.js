@@ -11,7 +11,24 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .postCss('resources/css/app.css', 'public/css', [
+mix.js('resources/js/app.js', 'public/js');
+
+mix.postCss('resources/css/app.css', 'public/css', [
         //
     ]);
+
+mix.scripts([
+    'resources/bootstrap/bootstrap.min.js',
+    'resources/fontawesome/all.min.js',
+    'resources/jquery/jquery.min.js',
+    'resources/jquery/jquery-ui.js',
+    'resources/jquery/jquery.validate.min.js',
+    'resources/jquery/jquery.additional-methods.min.js',
+
+], 'public/js/resources.js');
+
+mix.styles([
+    'resources/bootstrap/bootstrap.min.css',
+    'resources/fontawesome/all.min.css',
+    'resources/jquery/jquery-ui.css',
+], 'public/css/resources.css');

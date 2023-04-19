@@ -11,11 +11,14 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js');
+mix.scripts([
+    'resources/app/utility.js',
+    'resources/app/library.js',
+], 'public/js/billminder.js').version();
 
-mix.postCss('resources/css/app.css', 'public/css', [
-        //
-    ]);
+mix.styles([
+    'resources/css/billminder.css',
+], 'public/css/billminder.css').version();
 
 mix.scripts([
     'resources/bootstrap/bootstrap.min.js',
@@ -24,11 +27,10 @@ mix.scripts([
     'resources/jquery/jquery-ui.js',
     'resources/jquery/jquery.validate.min.js',
     'resources/jquery/jquery.additional-methods.min.js',
-
-], 'public/js/resources.js');
+], 'public/js/resources.js').version();
 
 mix.styles([
     'resources/bootstrap/bootstrap.min.css',
     'resources/fontawesome/all.min.css',
     'resources/jquery/jquery-ui.css',
-], 'public/css/resources.css');
+], 'public/css/resources.css').version();

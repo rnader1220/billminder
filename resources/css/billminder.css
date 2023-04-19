@@ -34,6 +34,122 @@ body.dashboard {
     background-color:var(--body-back-color);
     color:var(--body-text-color);
 }
+/* card, modal */
+
+.card {
+    color: var(--main-text-color);
+    background-color: var(--main-back-color);
+    box-shadow: 0 4px 8px 0 var(--shadow-color-a), 0 4px 20px 0 var(--shadow-color-b);
+}
+
+.card * {
+    color: inherit;
+    background-color: inherit;
+}
+.card {
+    box-shadow: 0 4px 8px 0 var(--shadow-color-a), 0 4px 20px 0 var(--shadow-color-b);
+
+}
+.modal {
+    color: inherit
+}
+
+.modal-title,
+.card-title {
+    color:var(--main-text-color);
+    background-color:var(--main-back-color);
+    float:left;
+    margin-right:32px
+}
+
+.card-control-panel {
+    float:right;
+}
+
+.col-form-label,
+.control-label,
+.card-control-panel {
+    color: var(--main-text-color);
+    background-color: var(--main-back-color);
+}
+
+.card-borderless,
+.card-borderless .card-header,
+.card-borderless .card-body,
+.card-borderless .card-footer  {
+    border: 0;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.modal-content,
+.page-content,
+.content {
+    color: var(--body-text-color);
+    background-color: var(--body-back-color);
+    padding-bottom:30px;
+}
+
+
+/* checkboxThree */
+/* The switch - the box around the slider */
+.cb3switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 24px;
+  }
+
+  /* Hide default HTML checkbox */
+  .cb3switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  /* The slider */
+  .cb3slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    color: var(--body-text-color);
+    background-color:var(--body-back-color);
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 24px;
+  }
+
+  .cb3slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    color: var(--main-text-color);
+    background-color: var(--main-back-color);
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%;
+  }
+
+  input:checked + .cb3slider {
+    background-color: #2196F3;
+  }
+
+  input:focus + .cb3slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+
+  input:checked + .cb3slider:before {
+    -webkit-transform: translateX(36px);
+    -ms-transform: translateX(36px);
+    transform: translateX(36px);
+  }
+ /* /Slider Checkbox */
 
 /* Message Containers */
 .message-container {

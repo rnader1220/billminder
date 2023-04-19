@@ -1,6 +1,6 @@
 {
-    "/js/app.js": "/js/app.js",
-    "/css/app.css": "/css/app.css",
-    "/js/resources.js": "/js/resources.js",
-    "/css/resources.css": "/css/resources.css"
+    "/js/billminder.js": "/js/billminder.js?id=1a315114314ecbaabfe591013ce7a7da",
+    "/css/billminder.css": "/css/billminder.css?id=1fc7bbc25687efc072231db07a00b0d3",
+    "/js/resources.js": "/js/resources.js?id=5ee3269a6926b6ba69aec17e1eeafb91",
+    "/css/resources.css": "/css/resources.css?id=b376c110b521932a924a115c8bdef559"
 }

@@ -7,18 +7,22 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <!-- Fonts -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
-        <!-- Styles -->
-        <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+    <!-- Styles -->
+    <link rel="stylesheet" type="text/css" href="{{ mix('/css/resources.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ mix('/css/billminder.css') }}">
 
-        <!-- Scripts -->
-        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.7.3/dist/alpine.js" defer></script>
+    <!-- Scripts -->
+    <script type="text/javascript" src="{{ mix('/js/resources.js') }}"></script>
+    <script type="text/javascript" src="{{ mix('/js/billminder.js') }}"></script>
     </head>
     <body>
-        <div class="font-sans text-gray-900 antialiased">
             {{ $slot }}
-        </div>
+
     </body>
+    <script>
+        utility.initialize();
+    </script>
 </html>

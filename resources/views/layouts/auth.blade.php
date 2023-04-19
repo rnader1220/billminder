@@ -13,9 +13,11 @@
 
     <!-- Styles -->
     <link rel="stylesheet" type="text/css" href="{{ mix('/css/resources.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ mix('/css/billminder.css') }}">
 
     <!-- Scripts -->
     <script type="text/javascript" src="{{ mix('/js/resources.js') }}"></script>
+    <script type="text/javascript" src="{{ mix('/js/billminder.js') }}"></script>
 
 
 </head>
@@ -32,5 +34,7 @@
     <div class="overlay"></div>
     </div>
 </body>
-</body>
+<script>
+    utility.initialize();
+</script>
 </html>

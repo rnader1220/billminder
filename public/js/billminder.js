@@ -30,6 +30,7 @@ var utility = (function ($, undefined) {
         //mainmenu();
     };
 
+
     var mainmenu = function () {
         $.ajax({
             type: "GET",
@@ -232,6 +233,7 @@ var utility = (function ($, undefined) {
         show_subscriber: show_subscriber,
         show_message: show_message,
         initialize: initialize,
+        mainmenu: mainmenu,
         display_name: display_name,
         show_tab: show_tab,
         pre_load: pre_load,

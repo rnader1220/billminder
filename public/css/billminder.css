@@ -33,7 +33,13 @@ body.dark-theme {
 body.dashboard {
     background-color:var(--body-back-color);
     color:var(--body-text-color);
+
 }
+.page-content {
+    margin-top:20px;
+
+}
+
 /* card, modal */
 
 .card {

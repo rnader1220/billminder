@@ -12,8 +12,10 @@ const mix = require('laravel-mix');
  */
 
 mix.scripts([
+    'resources/app/dashboard.js',
     'resources/app/utility.js',
     'resources/app/library.js',
+    'resources/app/form.js',
 ], 'public/js/billminder.js').version();
 
 mix.styles([

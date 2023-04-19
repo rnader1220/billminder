@@ -36,14 +36,15 @@
                             Balance Here
                         </div>
                         <div class='ui-form-wrapper' id='add-new-item'>
-                            This should be a form that accepts new items easily
+                            <a href='#' onclick="dashboard.add('expense');">Add New Bill</a><br>
+                            <a href='#' onclick="dashboard.add('income');">Add New Income</a>
                         </div>
                     </div>
                     <div class='col-lg-4 col-12'>
                         <div class='ui-trans-wrapper' id='options-list'>
                             options list should be borderless. borders will be on each option
 
-                            <a href='#' onclick='utility.logout()'>logout</a>
+                            <br><a href='#' onclick='utility.logout()'>logout</a>
                         </div>
                     </div>
                 </div>

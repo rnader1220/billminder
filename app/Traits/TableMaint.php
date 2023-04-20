@@ -1,5 +1,5 @@
 <?php
-namespace App\Traits\Model;
+namespace App\Traits;
 use DB;
 use Carbon\Carbon;
 

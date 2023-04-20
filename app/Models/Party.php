@@ -5,13 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Traits\Model\TableMaint;
+use App\Traits\TableMaint;
+use App\Traits\Orderable;
 
 class Party extends Model
 {
     use HasFactory;
     use TableMaint;
     use SoftDeletes;
+    use Orderable;
 
     protected $form = [
         [

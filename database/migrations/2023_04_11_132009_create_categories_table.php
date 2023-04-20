@@ -18,7 +18,8 @@ class CreateCategoriesTable extends Migration
             $table->bigInteger('user_id');
             $table->string('label');
             $table->string('description')->nullable();
-            $table->boolean('income')->default(false);
+            $table->boolean('expense')->default(false);
+            $table->integer('display_order');
             $table->softDeletes();
             $table->timestamps();
         });

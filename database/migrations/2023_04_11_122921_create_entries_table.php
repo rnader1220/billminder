@@ -18,9 +18,9 @@ class CreateEntriesTable extends Migration
             $table->bigInteger('user_id');
             $table->string('name');
             $table->string('description')->nullable();
-            $table->integer('category_id')->nullable();
-            $table->integer('account_id')->nullable();
-            $table->integer('party_id')->nullable();
+            $table->bigInteger('category_id')->nullable();
+            $table->bigInteger('account_id')->nullable();
+            $table->bigInteger('party_id')->nullable();
             $table->decimal('amount');
             $table->datetime('next_due_date')->nullable();
             $table->integer('cycle')->default(1);

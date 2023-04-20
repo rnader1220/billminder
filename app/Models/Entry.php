@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use App\Traits\TableMaint;
 
 class Entry extends Model
@@ -12,6 +13,17 @@ class Entry extends Model
     use HasFactory;
     use TableMaint;
     use SoftDeletes;
+
+    public static function getList(string $q = '') {
+        $result = Entry::where('user_id', Auth::user()->id)-> orderBy('next_due_date')->get()->toArray();
+        return $result;
+    }
+
+    public function hydrateForm() {
+        $form[0][12]['parameters']['list'] = Category::getSelectList();
+        $form[0][13]['parameters']['list'] = Account::getSelectList();
+        $form[0][14]['parameters']['list'] = Party::getSelectList();
+    }
 
     protected $form = [
         [
@@ -52,7 +64,7 @@ class Entry extends Model
                 ],
             ],
             [
-                'type' => 'select',
+                'type' => 'checkbox',
                 'parameters' =>
                 [
                     'label' => "AutoPay",
@@ -66,7 +78,13 @@ class Entry extends Model
                 [
                     'label' => "Billing Cycle",
                     'datapoint' => 'cycle',
-                    'grid_class' => 'col-md-3'
+                    'grid_class' => 'col-md-3',
+                    'list' => [
+                        ['value' => -1, 'label' => 'monthly'],
+                        ['value' => -2, 'label' => 'quarterly'],
+                        ['value' => -3, 'label' => 'annual'],
+
+                    ]
                 ]
             ],
             [
@@ -130,25 +148,30 @@ class Entry extends Model
                 [
                     'label' => "Category",
                     'datapoint' => 'category_id',
-                    'grid_class' => 'col-md-4'
+                    'grid_class' => 'col-md-4',
+                    'list' => [],
                 ]
             ],
             [
                 'type' => 'select',
                 'parameters' =>
                 [
-                    'label' => "Paid From Account",
+                    'label' => "From Account",
+                    'label_alternate' => "To Account",
                     'datapoint' => 'account_id',
-                    'grid_class' => 'col-md-4'
+                    'grid_class' => 'col-md-4',
+                    'list' => [],
                 ]
             ],
             [
                 'type' => 'select',
                 'parameters' =>
                 [
-                    'label' => "Payee",
-                    'datapoint' => 'payee_id',
-                    'grid_class' => 'col-md-4'
+                    'label' => "Pay To",
+                    'label_alternate' => "Pay From",
+                    'datapoint' => 'party_id',
+                    'grid_class' => 'col-md-4',
+                    'list' => [],
                 ]
             ],
         ],

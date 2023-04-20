@@ -14,8 +14,7 @@ class EntryController extends Controller
      */
     public function index()
     {
-        $record = new Entry();
-        $list = $record->getList();
+        $list = Entry::getList();
         return $list;
     }
 
@@ -27,7 +26,7 @@ class EntryController extends Controller
     public function create()
     {
         $record = new Entry();
-        $form = $record->getRecord();
+        $form = $record->hydrateForm();
         return $form;
     }
 
@@ -53,7 +52,7 @@ class EntryController extends Controller
     public function show($id)
     {
         $record = Entry::find($id);
-        $form = $record->getRecord();
+        $form = $record->hydrateForm();
         return $form;
     }
 
@@ -66,7 +65,7 @@ class EntryController extends Controller
     public function edit($id)
     {
         $record = Entry::find($id);
-        $form = $record->getRecord();
+        $form = $record->hydrateForm();
         return $form;
     }
 

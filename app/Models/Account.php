@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Traits\TableMaint;
 use App\Traits\Orderable;
 
@@ -14,6 +16,35 @@ class Account extends Model
     use TableMaint;
     use SoftDeletes;
     use Orderable;
+
+    public static function getList(string $q = '') {
+        $result = Account::where('user_id', Auth::user()->id)
+        ->orderBy('display_order')
+        ->get()
+        ->toArray();
+        return $result;
+    }
+
+    public static function getSelectList(string $q = '') {
+        $result = Account::select(DB::raw('name as label'), DB::raw('id as value'))
+            ->where('user_id', Auth::user()->id)
+            ->orderBy('display_order')
+            ->get()
+            ->toArray();
+        return $result;
+    }
+
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+    ];
+
+    protected $hidden = [
+        'website',
+        'username',
+        'password',
+    ];
 
     protected $form = [
         [
@@ -85,7 +116,7 @@ class Account extends Model
                 'parameters' =>
                 [
                     'label' => "Website User",
-                    'datapoint' => 'password',
+                    'datapoint' => 'username',
                     'grid_class' => 'col-md-6'
                 ]
             ],

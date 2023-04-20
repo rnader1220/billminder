@@ -14,8 +14,7 @@ class AccountController extends Controller
      */
     public function index()
     {
-        $record = new Account();
-        $list = $record->getList();
+        $list = Account::getList();
         return $list;
     }
 
@@ -27,7 +26,7 @@ class AccountController extends Controller
     public function create()
     {
         $record = new Account();
-        $form = $record->getRecord();
+        $form = $record->hydrateForm();
         return $form;
     }
 
@@ -53,7 +52,7 @@ class AccountController extends Controller
     public function show($id)
     {
         $record = Account::find($id);
-        $form = $record->getRecord();
+        $form = $record->hydrateForm();
         return $form;
     }
 
@@ -66,7 +65,7 @@ class AccountController extends Controller
     public function edit($id)
     {
         $record = Account::find($id);
-        $form = $record->getRecord();
+        $form = $record->hydrateForm();
         return $form;
    }
 

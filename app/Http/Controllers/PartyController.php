@@ -14,8 +14,7 @@ class PartyController extends Controller
      */
     public function index()
     {
-        $record = new Party();
-        $list = $record->getList();
+        $list = Party::getList();
         return $list;
     }
 
@@ -27,7 +26,7 @@ class PartyController extends Controller
     public function create()
     {
         $record = new Party();
-        $form = $record->getRecord();
+        $form = $record->hydrateForm();
         return $form;
     }
 
@@ -53,7 +52,7 @@ class PartyController extends Controller
     public function show($id)
     {
         $record = Party::find($id);
-        $form = $record->getRecord();
+        $form = $record->hydrateForm();
         return $form;
     }
 
@@ -66,7 +65,7 @@ class PartyController extends Controller
     public function edit($id)
     {
         $record = Party::find($id);
-        $form = $record->getRecord();
+        $form = $record->hydrateForm();
         return $form;
     }
 

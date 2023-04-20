@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\Model\TableMaint;
 
-class Expense extends Model
+class Entry extends Model
 {
     use HasFactory;
     use TableMaint;
@@ -19,7 +19,7 @@ class Expense extends Model
                 'type' => 'input_text',
                 'parameters' =>
                 [
-                    'label' => "Expense Name",
+                    'label' => "Entry Name",
                     'datapoint' => 'name',
                     'grid_class' => 'col-md-6'
                 ]
@@ -39,6 +39,15 @@ class Expense extends Model
                 [
                     'label' => "Estimated?",
                     'datapoint' => 'estimated_amount',
+                    'grid_class' => 'col-lg-3'
+                ],
+            ],
+            [
+                'type' => 'checkbox',
+                'parameters' =>
+                [
+                    'label' => "Expense?",
+                    'datapoint' => 'expense',
                     'grid_class' => 'col-lg-3'
                 ],
             ],

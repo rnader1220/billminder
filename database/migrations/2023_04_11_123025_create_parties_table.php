@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePayorsTable extends Migration
+class CreatePartiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,15 @@ class CreatePayorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('payors', function (Blueprint $table) {
+        Schema::create('parties', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('user_id');
             $table->integer('display_order');
             $table->string('name');
             $table->string('description')->nullable();
             $table->string('account_number')->nullable();
+            $table->boolean('expense')->default(true);
+            $table->boolean('income')->default(false);
             $table->string('website')->nullable();
             $table->string('username')->nullable();
             $table->string('password')->nullable();
@@ -35,6 +37,6 @@ class CreatePayorsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payors');
+        Schema::dropIfExists('parties');
     }
 }

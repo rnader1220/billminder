@@ -7,19 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\Model\TableMaint;
 
-class Payee extends Model
+class Party extends Model
 {
     use HasFactory;
     use TableMaint;
     use SoftDeletes;
-/*
-    $table->string('name');
-    $table->string('description')->nullable();
-    $table->string('account_number')->nullable();
-    $table->string('website')->nullable();
-    $table->string('username')->nullable();
-    $table->string('password')->nullable();
- */
 
     protected $form = [
         [
@@ -27,11 +19,29 @@ class Payee extends Model
                 'type' => 'input_text',
                 'parameters' =>
                 [
-                    'label' => "Payee Name",
+                    'label' => "Name",
                     'datapoint' => 'name',
                     'grid_class' => 'col-md-6'
                 ]
+            ],
+            [
+                'type' => 'checkbox',
+                'parameters' =>
+                [
+                    'label' => "Expense?",
+                    'datapoint' => 'expense',
+                    'grid_class' => 'col-lg-3'
                 ],
+            ],
+            [
+                'type' => 'checkbox',
+                'parameters' =>
+                [
+                    'label' => "Income?",
+                    'datapoint' => 'income',
+                    'grid_class' => 'col-lg-3'
+                ],
+            ],
             [
                 'type' => 'textarea',
                 'parameters' =>

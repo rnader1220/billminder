@@ -151,20 +151,11 @@ var dashboard = (function ($, undefined) {
     };
 
     var endpoint = {
-        'expense': '\expense',
-        'income': '\income',
-        'payor': '\payor',
-        'payee': '\payee',
+        'billist': '\journal',
+        'party': '\payee',
         'account': '\account',
     };
 
-    var targetdiv = {
-        'expense': '#journal',
-        'income': '#journal',
-        'payor': '#table',
-        'payee': '#table',
-        'account': '#table',
-    };
 
     return {
         list: list,

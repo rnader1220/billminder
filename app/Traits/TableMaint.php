@@ -1,21 +1,77 @@
 <?php
 namespace App\Traits;
-use DB;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 trait TableMaint
 {
 
+    protected function getLabel(): string
+    {
+        if(isset($this->label)) {
+            return $this->label;
+        }
+        return substr(get_class($this), strrpos(get_class($this), '\\')+1);
+
+    }
+
+
     public function getForm($mode) {
         $view = [
-            'controls' => $this->dialogControls($mode, $this->label),
-            'title' => $this->dialogTitle($mode, $this->label),
+            'controls' => $this->dialogControls($mode, $this->getLabel()),
+            'title' => $this->dialogTitle($mode, $this->getLabel()),
             'mode' => $mode,
             'form_div_class' => "col-md-12",
             'form' => $this->hydrateForm()
         ];
         return $view;
     }
+
+    public function saveRecord($request) {
+        $success = true;
+        $detail = '';
+        $action = (isset($this->id)?'Updated':'Stored');
+        $data = $request->all();
+        unset($data['_token']);
+        $this->CustomUpdate($data);
+
+        $this->fill($data);
+
+        //dd($this);
+
+        //try {
+            $this->save();
+        //} catch (\Exception $e) {
+        //    $success = false;
+        //    $detail = $e->getMessage();
+        //}
+
+        return $this->responseMessage($action, $success, $detail, $this->id);
+    }
+
+    protected function customUpdate(array &$data)
+    {
+    }
+
+    public function destroyRecord() : array
+    {
+        $detail = null;
+        $success = true;
+        if($success) {
+            try{
+                $this->delete();
+                $success = true;
+            } catch(\Exception $e) {
+                $success = false;
+                $detail = $e->getMessage();
+            }
+        }
+
+		return  $this->responseMessage('Deleted', $success, $detail);
+    }
+
+
+
 
     protected $controls = [
         'list' => [
@@ -135,6 +191,25 @@ trait TableMaint
         return $form;
     }
 
+    protected function responseMessage(string $action, bool $success, ?string $detail = null, ?int $id = null, ?array $other = null) : array
+        {
+            $display = [
+                'label' => $this->getLabel(),
+                'action' => $action,
+                'class' => 'alert-' . ($success? 'success':'danger'),
+                'splash' => ($success? 'Success!':'Failure!'),
+                'negator' => ($success? ' ':' not ')
+            ];
+
+            $return =  compact('display', 'success', 'detail');
+            if(isset($id)) {
+                $return['id'] = $id;
+            }
+            if(isset($other)) {
+                $return = array_merge($return, $other);
+            }
+            return $return;
+        }
 
 
 }

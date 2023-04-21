@@ -98,20 +98,26 @@ var modal_form = (function ($, undefined) {
             if (attr.hasOwnProperty('label')) {
                 htmlString += "<label for='" + attr.datapoint + "' class='control-label'>" + attr.label + "</label>";
             }
+
             htmlString += "<div class='input-group'><input class='form-control' type='text' " +
                 "id='" + attr.datapoint + "' name='" + attr.datapoint + "' ";
+
             if (attr.hasOwnProperty('placeholder')) {
                 htmlString += " placeholder='" + attr.placeholder + "'";
             }
+
             if (attr.hasOwnProperty('disabled') && attr.disabled == true) {
                 htmlString += " disabled='disabled' ";
             }
+
             if (attr.hasOwnProperty('value')) {
                 htmlString += " value='" + attr.value + "' ";
             }
+0
             if (attr.hasOwnProperty('numeric')) {
                 htmlString += " style='text-align:right' ";
             }
+
             htmlString += " ></div></div></div>";
             return htmlString;
         },

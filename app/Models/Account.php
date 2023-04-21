@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 use App\Traits\TableMaint;
 use App\Traits\Orderable;
 
-class Account extends Model
+class Account extends BaseModel
 {
     use HasFactory;
     use TableMaint;
@@ -18,7 +18,8 @@ class Account extends Model
     use Orderable;
 
 
-    protected $label = 'Account';
+	protected $order_cohort = ['user_id'];
+	protected $order_column = 'display_order';
 
     public static function getList(string $q = '') {
         $result = Account::where('user_id', Auth::user()->id)
@@ -37,9 +38,21 @@ class Account extends Model
         return $result;
     }
 
+    public function __construct() {
+        parent::__construct();
+        $this->form[0][3]['parameters']['list'] = $this->getSortOrderList();
+    }
+
     protected $fillable = [
         'name',
-        'email',
+        'balance',
+        'display_order',
+        'bank_account',
+        'description',
+        'account_number',
+        'routing_number',
+        'website',
+        'username',
         'password',
     ];
 
@@ -61,11 +74,13 @@ class Account extends Model
                 ]
             ],
             [
-                'type' => 'input_checkbox',
+                'type' => 'input_text',
                 'parameters' =>
                 [
                     'label' => "Current Balance",
                     'datapoint' => 'balance',
+                    'numeric' => true,
+
                     'grid_class' => 'col-lg-4'
                 ],
             ],
@@ -75,8 +90,18 @@ class Account extends Model
                 [
                     'label' => "Is Bank Account?",
                     'datapoint' => 'bank_account',
-                    'grid_class' => 'col-lg-2'
+                    'grid_class' => 'col-lg-3'
                 ],
+            ],
+            [
+                'type' => 'select',
+                'parameters' =>
+                [
+                    'label' => "Display Order",
+                    'datapoint' => 'display_order',
+                    'grid_class' => 'col-lg-3',
+                    'list' => []
+                ]
             ],
             [
                 'type' => 'textarea',

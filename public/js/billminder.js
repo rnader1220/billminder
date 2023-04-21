@@ -3,7 +3,7 @@ var dashboard = (function ($, undefined) {
     var list = function(type) {
         $('#' + type + '_div').html('');
         $.ajax({
-            url: '/' + type + "/index",
+            url: '/' + type,
             cache: false,
             data: {
                 'q': $('#q').val(),

@@ -10,15 +10,15 @@ use Illuminate\Support\Facades\DB;
 use App\Traits\TableMaint;
 use App\Traits\Orderable;
 
-class Party extends Model
+class Party extends BaseModel
 {
     use HasFactory;
     use TableMaint;
     use SoftDeletes;
     use Orderable;
 
-
-    protected $label = 'Party';
+	protected $order_cohort = ['user_id'];
+	protected $order_column = 'display_order';
 
     public static function getList(string $q = '') {
         $result = Party::where('user_id', Auth::user()->id)
@@ -37,9 +37,20 @@ class Party extends Model
         return $result;
     }
 
+    public function __construct() {
+        parent::__construct();
+        $this->form[0][3]['parameters']['list'] = $this->getSortOrderList();
+    }
+
     protected $fillable = [
         'name',
-        'email',
+        'income',
+        'expense',
+        'description',
+        'display_order',
+        'account_number',
+        'website',
+        'username',
         'password',
     ];
 
@@ -48,7 +59,6 @@ class Party extends Model
         'username',
         'password',
     ];
-
 
     protected $form = [
         [
@@ -78,6 +88,16 @@ class Party extends Model
                     'datapoint' => 'income',
                     'grid_class' => 'col-lg-3'
                 ],
+            ],
+            [
+                'type' => 'select',
+                'parameters' =>
+                [
+                    'label' => "Display Order",
+                    'datapoint' => 'display_order',
+                    'grid_class' => 'col-lg-3',
+                    'list' => []
+                ]
             ],
             [
                 'type' => 'textarea',

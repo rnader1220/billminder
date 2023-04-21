@@ -90,7 +90,7 @@ trait Orderable
         return $response;
     }
 
-    public function generateList() {
+    public function getSortOrderList() {
         $max = $this->max_order;
         $list = [];
         for ($t = 0; $t< $max; $t++) {

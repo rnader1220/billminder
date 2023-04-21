@@ -10,28 +10,43 @@ use Illuminate\Support\Facades\DB;
 use App\Traits\TableMaint;
 use App\Traits\Orderable;
 
-class Category extends Model
+class Category extends BaseModel
 {
     use HasFactory;
     use TableMaint;
     use SoftDeletes;
     use Orderable;
 
+	protected $order_cohort = ['user_id'];
+	protected $order_column = 'display_order';
 
-    protected $label = 'Category';
+
+    protected $fillable = [
+        'label',
+        'display_order',
+        'description',
+    ];
 
     public function getList(string $q = '') {
-        $result = Category::where('user_id', Auth::user()->id)-> orderBy('display_order')->get()->toArray();
+        $result = Category::where('user_id', Auth::user()->id)
+        ->orderBy('display_order')
+        ->get()
+        ->toArray();
         return $result;
     }
 
     public static function getSelectList(string $q = '') {
-        $result = Party::select(DB::raw('name as label'), DB::raw('id as value'))
+        $result = Category::select('label', DB::raw('id as value'))
             ->where('user_id', Auth::user()->id)
             ->orderBy('display_order')
             ->get()
             ->toArray();
         return $result;
+    }
+
+    public function __construct() {
+        parent::__construct();
+        $this->form[0][1]['parameters']['list'] = $this->getSortOrderList();
     }
 
     protected $form = [
@@ -40,9 +55,19 @@ class Category extends Model
                 'type' => 'input_text',
                 'parameters' =>
                 [
-                    'label' => "Category Name",
-                    'datapoint' => 'name',
-                    'grid_class' => 'col-md-12'
+                    'label' => "Category Label",
+                    'datapoint' => 'label',
+                    'grid_class' => 'col-md-9'
+                ]
+            ],
+            [
+                'type' => 'select',
+                'parameters' =>
+                [
+                    'label' => "Display Order",
+                    'datapoint' => 'display_order',
+                    'grid_class' => 'col-lg-3',
+                    'list' => []
                 ]
             ],
             [

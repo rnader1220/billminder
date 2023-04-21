@@ -8,13 +8,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\TableMaint;
 
-class Entry extends Model
+class Entry extends BaseModel
 {
     use HasFactory;
-    use TableMaint ;
+    use TableMaint;
     use SoftDeletes;
-
-    protected $label = 'Entry';
 
     public static function getList(string $q = '') {
         $result = Entry::where('user_id', Auth::user()->id)-> orderBy('next_due_date')->get()->toArray();
@@ -22,10 +20,39 @@ class Entry extends Model
     }
 
     public function __construct() {
+        parent::__construct();
         $this->form[0][12]['parameters']['list'] = Category::getSelectList();
         $this->form[0][13]['parameters']['list'] = Account::getSelectList();
         $this->form[0][14]['parameters']['list'] = Party::getSelectList();
+
     }
+
+    protected function customUpdate(array &$data)
+    {
+        $data['income'] = (isset($data['income'])?1:0);
+        $data['autopay'] = (isset($data['autopay'])?1:0);
+        $data['estimated_amount'] = (isset($data['estimated_amount'])?1:0);
+        $data['fixed_amount'] = (isset($data['fixed_amount'])?1:0);
+        $data['estimated_date'] = (isset($data['estimated_date'])?1:0);
+    }
+
+    protected $fillable = [
+        'name',
+        'amount',
+        'estimated_amount',
+        'income',
+        'autopay',
+        'cycle',
+        'next_due_date',
+        'estimated_date',
+        'fixed',
+        'payments_remaining',
+        'balance_remaining',
+        'description',
+        'category_id',
+        'account_id',
+        'party_id',
+    ];
 
     protected $form = [
         [
@@ -60,8 +87,8 @@ class Entry extends Model
                 'type' => 'input_checkbox',
                 'parameters' =>
                 [
-                    'label' => "Expense?",
-                    'datapoint' => 'expense',
+                    'label' => "Income?",
+                    'datapoint' => 'income',
                     'grid_class' => 'col-lg-3'
                 ],
             ],
@@ -130,7 +157,7 @@ class Entry extends Model
                 'parameters' =>
                 [
                     'label' => "Balance Remaining",
-                    'datapoint' => 'balance',
+                    'datapoint' => 'balance_remaining',
                     'grid_class' => 'col-lg-6'
                 ],
             ],
@@ -149,6 +176,7 @@ class Entry extends Model
                 [
                     'label' => "Category",
                     'datapoint' => 'category_id',
+                    'allow_null' => true,
                     'grid_class' => 'col-md-4',
                     'list' => [],
                 ]
@@ -158,7 +186,8 @@ class Entry extends Model
                 'parameters' =>
                 [
                     'label' => "From Account",
-                    'label_alternate' => "To Account",
+                    'label_income' => "To Account",
+                    'allow_null' => true,
                     'datapoint' => 'account_id',
                     'grid_class' => 'col-md-4',
                     'list' => [],
@@ -169,7 +198,8 @@ class Entry extends Model
                 'parameters' =>
                 [
                     'label' => "Pay To",
-                    'label_alternate' => "Pay From",
+                    'label_income' => "Pay From",
+                    'allow_null' => true,
                     'datapoint' => 'party_id',
                     'grid_class' => 'col-md-4',
                     'list' => [],

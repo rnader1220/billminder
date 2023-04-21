@@ -25,7 +25,8 @@ class CreateEntriesTable extends Migration
             $table->datetime('next_due_date')->nullable();
             $table->integer('cycle')->default(1);
             $table->integer('payments_remaining')->nullable();
-            $table->boolean('expense')->default(true);
+            $table->integer('balance_remaining')->nullable();
+            $table->boolean('income')->default(false);
             $table->boolean('autopay')->default(false);
             $table->boolean('estimated_amount')->default(true);
             $table->boolean('estimated_date')->default(true);

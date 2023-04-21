@@ -27,49 +27,8 @@ var utility = (function ($, undefined) {
             }
             localStorage.setItem("theme", theme);
         }); */
-        //mainmenu();
     };
 
-
-    var mainmenu = function () {
-        $.ajax({
-            type: "GET",
-            url: "console/mainmenu",
-            data: null,
-            success: function (msg) {
-                $("#mainmenu").html(msg);
-                load();
-            },
-        });
-    };
-
-    var load = function () {
-        utility.pre_load();
-
-        var endpoint = "dashboard";
-        $.ajax({
-            url: endpoint,
-            cache: false,
-        })
-            .done(function (html) {
-                $("#dashboard").html(html);
-                init();
-                setTimeout(function () {
-                    $("#dashboard").fadeIn(300);
-                }, 300);
-            })
-            .fail(function (message) {
-                ajax_fail(message);
-            });
-    };
-
-    var init = function () {
-        //init_profile();
-        //init_switchers();
-        //init_admin();
-        //init_console();
-        //init_features();
-    };
 
     /**
      * @param resp          Information about the object.
@@ -233,7 +192,6 @@ var utility = (function ($, undefined) {
         show_subscriber: show_subscriber,
         show_message: show_message,
         initialize: initialize,
-        mainmenu: mainmenu,
         display_name: display_name,
         show_tab: show_tab,
         pre_load: pre_load,

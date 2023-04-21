@@ -1,27 +1,39 @@
 var dashboard = (function ($, undefined) {
 
-    var list = function(type) {
-        $('#' + type + '_div').html('');
-        $.ajax({
-            url: '/' + type,
-            cache: false,
-            data: {
-                'q': $('#q').val(),
-            },
-            dataType: 'json'
-        })
-        .done(function(response) {
-            response.forEach(function (el) {
-                // renderer for each type?
-                //$('#' + type + '_div').append(render(type, el));
-                // list-init for each type ??
-            });
-        })
-        .fail(function(message) {
-            utility.ajax_fail(message);
-        });
-        // show or make each one show separately ??
+    var initialize = function() {
+        list('entry');
     };
+
+
+    var list = function(dtype) {
+        if(dtype == 'entry') $('#entry-div').slideUp(300, function() {$('#entry-div').html('');});
+        $('#account-div').slideUp(300, function() {$('#account-div').html('');});
+        $('#party-div').slideUp(300, function() {$('#party-div').html('');});
+        $('#category-div').slideUp(300, function() {$('#category-div').html('');});
+        setTimeout(function () {
+            $.ajax({
+                url: '/' + dtype,
+                cache: false,
+                data: {
+                    'q': $('#q').val(),
+                },
+                dataType: 'json'
+            })
+            .done(function(response) {
+                $('#' + dtype + '-div').html('');
+                response.forEach(function (el) {
+                    $('#' + dtype + '-div').append(library.drawElement(dtype, el));
+                });
+                $('#' + dtype + '-div').slideDown(300);
+            })
+            .fail(function(message) {
+                utility.ajax_fail(message);
+            });
+        }, 600);
+
+    };
+
+
 
     var add = function(type) {
         $.ajax({
@@ -89,6 +101,41 @@ var dashboard = (function ($, undefined) {
         }).validate(type.update_rules);
     };
 
+
+    var show = function(type, id) {
+
+        $.ajax({
+            url: '/' + type + '/' + id,
+            cache: false,
+            dataType: 'json'
+        })
+        .done(function (resp) {
+            $('.modal-body').html(modal_form.js_form_build(resp));
+            $('.modal-header').html('<h5 class="modal-title">'+resp.title+'</h5>');
+            $('.modal-header').append(modal_form.js_panel_control(resp.controls.head));
+            $('.modal-footer').html(modal_form.js_panel_control(resp.controls.foot));
+
+            utility.set_dynamic_button('#control-cancel', function () {
+                $('#genericModal').modal('toggle');
+                utility.reset_dynamic_button('#control-cancel');
+                utility.reset_dynamic_button('#control-save');
+                $('.modal-footer').html('');
+                $('.modal-title').html('');
+                $('.modal-header').html('');
+            });
+            utility.set_dynamic_button('#control-edit', function () {
+            });
+            utility.set_dynamic_button('#control-edit', function () {
+            });
+
+
+            $('#genericModal').modal('toggle');
+        })
+        .fail(function (message) {
+            utility.ajax_fail(message);
+        });
+    };
+
     var edit = function(type, id) {
 
         $.ajax({
@@ -102,7 +149,7 @@ var dashboard = (function ($, undefined) {
             $('.modal-header').append(modal_form.js_panel_control(resp.controls.head));
             $('.modal-footer').html(modal_form.js_panel_control(resp.controls.foot));
 
-            utility.set_dynamic_button('.modal-body #control-cancel', function () {
+            utility.set_dynamic_button('#control-cancel', function () {
                 $('#genericModal').modal('toggle');
                 utility.reset_dynamic_button('#control-cancel');
                 utility.reset_dynamic_button('#control-save');
@@ -110,7 +157,7 @@ var dashboard = (function ($, undefined) {
                 $('.modal-title').html('');
                 $('.modal-header').html('');
             });
-            utility.set_dynamic_button('.modal-body  #control-save',
+            utility.set_dynamic_button('#control-save',
                 function () {
                     $('.modal-body form').submit();
                 }
@@ -170,9 +217,11 @@ var dashboard = (function ($, undefined) {
     };
 
     return {
+        initialize: initialize,
         list: list,
         add: add,
         edit: edit,
+        show: show,
         destroy: destroy,
     };
 })(jQuery);
@@ -206,49 +255,8 @@ var utility = (function ($, undefined) {
             }
             localStorage.setItem("theme", theme);
         }); */
-        //mainmenu();
     };
 
-
-    var mainmenu = function () {
-        $.ajax({
-            type: "GET",
-            url: "console/mainmenu",
-            data: null,
-            success: function (msg) {
-                $("#mainmenu").html(msg);
-                load();
-            },
-        });
-    };
-
-    var load = function () {
-        utility.pre_load();
-
-        var endpoint = "dashboard";
-        $.ajax({
-            url: endpoint,
-            cache: false,
-        })
-            .done(function (html) {
-                $("#dashboard").html(html);
-                init();
-                setTimeout(function () {
-                    $("#dashboard").fadeIn(300);
-                }, 300);
-            })
-            .fail(function (message) {
-                ajax_fail(message);
-            });
-    };
-
-    var init = function () {
-        //init_profile();
-        //init_switchers();
-        //init_admin();
-        //init_console();
-        //init_features();
-    };
 
     /**
      * @param resp          Information about the object.
@@ -412,7 +420,6 @@ var utility = (function ($, undefined) {
         show_subscriber: show_subscriber,
         show_message: show_message,
         initialize: initialize,
-        mainmenu: mainmenu,
         display_name: display_name,
         show_tab: show_tab,
         pre_load: pre_load,
@@ -658,6 +665,101 @@ var dashboard = (function($, undefined) {
 })(jQuery);
 */
 
+var library = (function ($, undefined) {
+
+    var drawEntry = function(el) {
+        html = "<div class='bg-primary border border-primary rounded-2' role='button' onclick=\"dashboard.show('entry', "+el.id+");\">";
+        html += "<div class='row'>";
+        html += "<div class='col-md-1' style='text-align:center'>";
+        html += "<i class='fa-regular fa-el.icon'></i>";
+        html += "</div>";
+        html += "<div class='col-md-3' style='text-align:right'>";
+        html += dateFormat(el.next_due_date);
+        html += "</div>";
+
+        html += "<div class='col-md-2' style='text-align:right'>";
+        html += el.amount;
+        html += "</div>";
+
+        html += "<div class='col-md-6' style='text-align:left'>";
+        html += el.name;
+        html += "</div>";
+
+        html += '</div>';
+        html += '</div>';
+        return html;
+    };
+
+    var drawAccount = function(el) {
+        html = "<div class='bg-primary border border-primary rounded-2' role='button' onclick=\"dashboard.show('account', "+el.id+");\">";
+        html += "<div class='row'>";
+        html += "<div class='col-md-12'>";
+        html += el.name;
+        html += "</div>";
+        html += '</div>';
+        html += '</div>';
+        return html;
+    };
+
+    var drawParty = function(el) {
+        html = "<div class='bg-primary border border-primary rounded-2' role='button' onclick=\"dashboard.show('party', "+el.id+");\">";
+        html += "<div class='row'>";
+        html += "<div class='col-md-12'>";
+        html += el.name;
+        html += "</div>";
+        html += '</div>';
+        html += '</div>';
+        return html;
+    };
+
+    var drawCategory = function(el) {
+        html = "<div class='bg-primary border border-primary rounded-2' role='button' onclick=\"dashboard.show('category', "+el.id+");\">";
+        html += "<div class='row'>";
+        html += "<div class='col-md-12'>";
+        html += el.label;
+        html += "</div>";
+        html += '</div>';
+        html += '</div>';
+        return html;
+    };
+
+    var dateFormat = function(value) {
+        var dateval = new Date(value);
+        return dateval.toDateString();
+    };
+
+    var drawButton = function(attr) {
+        htmlString = "<button title='" + attr.title + "' type='button' ";
+        htmlString += "class='btn btn-primary btn-utility' id='" + attr.btn_id + "'>";
+        if (attr.hasOwnProperty('icon')) {
+            htmlString += "<span class='" + attr.icon + "'></span>";
+        }
+        if (attr.hasOwnProperty('label')) {
+            htmlString += "<span>&nbsp;" + attr.label + "</span>";
+        }
+        htmlString += '</button>';
+    };
+
+    var drawElement = function(type, el) {
+        switch(type) {
+            case('entry'):
+                return drawEntry(el);
+            case('account'):
+                return drawAccount(el);
+            case('party'):
+                return drawParty(el);
+            case('category'):
+                return drawCategory(el);
+        }
+        return '';
+    };
+
+
+    return {
+        drawElement: drawElement,
+        drawButton: drawButton,
+    };
+})(jQuery);
 
 
 // this version of form.js is optimized for modal, not for card.
@@ -759,20 +861,26 @@ var modal_form = (function ($, undefined) {
             if (attr.hasOwnProperty('label')) {
                 htmlString += "<label for='" + attr.datapoint + "' class='control-label'>" + attr.label + "</label>";
             }
+
             htmlString += "<div class='input-group'><input class='form-control' type='text' " +
                 "id='" + attr.datapoint + "' name='" + attr.datapoint + "' ";
+
             if (attr.hasOwnProperty('placeholder')) {
                 htmlString += " placeholder='" + attr.placeholder + "'";
             }
+
             if (attr.hasOwnProperty('disabled') && attr.disabled == true) {
                 htmlString += " disabled='disabled' ";
             }
+
             if (attr.hasOwnProperty('value')) {
                 htmlString += " value='" + attr.value + "' ";
             }
+0
             if (attr.hasOwnProperty('numeric')) {
                 htmlString += " style='text-align:right' ";
             }
+
             htmlString += " ></div></div></div>";
             return htmlString;
         },

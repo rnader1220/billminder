@@ -1,27 +1,39 @@
 var dashboard = (function ($, undefined) {
 
-    var list = function(type) {
-        $('#' + type + '_div').html('');
-        $.ajax({
-            url: '/' + type,
-            cache: false,
-            data: {
-                'q': $('#q').val(),
-            },
-            dataType: 'json'
-        })
-        .done(function(response) {
-            response.forEach(function (el) {
-                // renderer for each type?
-                //$('#' + type + '_div').append(render(type, el));
-                // list-init for each type ??
-            });
-        })
-        .fail(function(message) {
-            utility.ajax_fail(message);
-        });
-        // show or make each one show separately ??
+    var initialize = function() {
+        list('entry');
     };
+
+
+    var list = function(dtype) {
+        if(dtype == 'entry') $('#entry-div').slideUp(300, function() {$('#entry-div').html('');});
+        $('#account-div').slideUp(300, function() {$('#account-div').html('');});
+        $('#party-div').slideUp(300, function() {$('#party-div').html('');});
+        $('#category-div').slideUp(300, function() {$('#category-div').html('');});
+        setTimeout(function () {
+            $.ajax({
+                url: '/' + dtype,
+                cache: false,
+                data: {
+                    'q': $('#q').val(),
+                },
+                dataType: 'json'
+            })
+            .done(function(response) {
+                $('#' + dtype + '-div').html('');
+                response.forEach(function (el) {
+                    $('#' + dtype + '-div').append(library.drawElement(dtype, el));
+                });
+                $('#' + dtype + '-div').slideDown(300);
+            })
+            .fail(function(message) {
+                utility.ajax_fail(message);
+            });
+        }, 600);
+
+    };
+
+
 
     var add = function(type) {
         $.ajax({
@@ -89,6 +101,46 @@ var dashboard = (function ($, undefined) {
         }).validate(type.update_rules);
     };
 
+
+    var show = function(type, id) {
+
+        $.ajax({
+            url: '/' + type + '/' + id,
+            cache: false,
+            dataType: 'json'
+        })
+        .done(function (resp) {
+            $('.modal-body').html(modal_form.js_form_build(resp));
+            $('.modal-header').html('<h5 class="modal-title">'+resp.title+'</h5>');
+            $('.modal-header').append(modal_form.js_panel_control(resp.controls.head));
+            $('.modal-footer').html(modal_form.js_panel_control(resp.controls.foot));
+
+            utility.set_dynamic_button('#control-cancel', function () {
+                $('#genericModal').modal('toggle');
+                utility.reset_dynamic_button('#control-cancel');
+                utility.reset_dynamic_button('#control-save');
+                $('.modal-footer').html('');
+                $('.modal-title').html('');
+                $('.modal-header').html('');
+            });
+            utility.set_dynamic_button('#control-edit', function () {
+                edit(type, id);
+            });
+            utility.set_dynamic_button('#control-cycle', function () {
+                cycle(type, id);
+            });
+            utility.set_dynamic_button('#control-delete', function () {
+                destroy(type, id);
+            });
+
+
+            $('#genericModal').modal('toggle');
+        })
+        .fail(function (message) {
+            utility.ajax_fail(message);
+        });
+    };
+
     var edit = function(type, id) {
 
         $.ajax({
@@ -102,7 +154,7 @@ var dashboard = (function ($, undefined) {
             $('.modal-header').append(modal_form.js_panel_control(resp.controls.head));
             $('.modal-footer').html(modal_form.js_panel_control(resp.controls.foot));
 
-            utility.set_dynamic_button('.modal-body #control-cancel', function () {
+            utility.set_dynamic_button('#control-cancel', function () {
                 $('#genericModal').modal('toggle');
                 utility.reset_dynamic_button('#control-cancel');
                 utility.reset_dynamic_button('#control-save');
@@ -110,7 +162,7 @@ var dashboard = (function ($, undefined) {
                 $('.modal-title').html('');
                 $('.modal-header').html('');
             });
-            utility.set_dynamic_button('.modal-body  #control-save',
+            utility.set_dynamic_button('#control-save',
                 function () {
                     $('.modal-body form').submit();
                 }
@@ -152,7 +204,36 @@ var dashboard = (function ($, undefined) {
         }).validate(type.update_rules);
     };
 
+
+    var cycle = function(type, id) {
+        var data = [{
+            name: "_token",
+            value: $("meta[name='csrf-token']").attr("content")
+        }]; // convert form to array
+
+        if (confirm()) $.ajax({
+            type: "patch",
+            url: '/' + type + '/' + id + '/cycle',
+            data: $.param(data),
+            dataType: 'json'
+        })
+        .done(function (resp) {
+            utility.show_message(resp, function () {
+                list(type);
+            });
+        })
+        .fail(function (message) {
+            utility.ajax_fail(message);
+        });
+    };
+
+
     var destroy = function(type, id) {
+        var data = [{
+            name: "_token",
+            value: $("meta[name='csrf-token']").attr("content")
+        }]; // convert form to array
+
         if (confirm()) $.ajax({
             type: "DELETE",
             url: '/' + type + '/' + id,
@@ -170,9 +251,11 @@ var dashboard = (function ($, undefined) {
     };
 
     return {
+        initialize: initialize,
         list: list,
         add: add,
         edit: edit,
+        show: show,
         destroy: destroy,
     };
 })(jQuery);

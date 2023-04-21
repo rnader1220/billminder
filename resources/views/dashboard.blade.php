@@ -31,27 +31,35 @@
             <div class='container-fluid'>
                 <div class='row'>
                     <div class='col-lg-8 col-12'>
-                        <div class='ui-display-wrapper' id='balance-list'>
-                            Balance List should have border. internal elements go here
-                            Balance Here
+                        <div class="ui-trans-wrapper d-grid gap-2" id='entry-div' style='display:hidden'>
                         </div>
-                        <div class='ui-form-wrapper' id='add-new-item'>
-                            <a href='#' onclick="dashboard.list('entry');">List Bills and Income</a><br>
-                            <a href='#' onclick="dashboard.add('entry');">Add New Bill or Income</a><br>
+                        <div class='ui-display-wrapper d-grid gap-2 centered' id='add-new-item'>
+                            <div class='border border-info rounded-2' role='button' onclick="dashboard.list('entry');">List Bills and Income</div>
+                            <div class='border border-info rounded-2' role='button' onclick="dashboard.add('entry');">Add New Bill or Income</div>
                         </div>
                     </div>
                     <div class='col-lg-4 col-12'>
-                        <div class='ui-trans-wrapper' id='options-list'>
-                            options list should be borderless. borders will be on each option<br>
-                            <a href='#' onclick="dashboard.list('account');">Accounts</a><br>
-                            <a href='#' onclick="dashboard.add('account');">Add New Account</a><br>
-                            <a href='#' onclick="dashboard.list('party');">Payors / Payees</a><br>
-                            <a href='#' onclick="dashboard.add('party');">Add New Payor / Payee</a><br>
-                            <a href='#' onclick="dashboard.list('category');">Categories</a><br>
-                            <a href='#' onclick="dashboard.add('category');">Add New Category</a><br>
+                        <div class='ui-display-wrapper d-grid gap-2'>
+                            <div class='border border-info rounded-2 centered' role='button' onclick="dashboard.list('account');">Accounts</div>
+                            <div id='account-div' class="d-grid gap-2" style='display:hidden'></div>
+                            <div class='border border-info rounded-2 centered' role='button' onclick="dashboard.add('account');">Add New Account</div>
+                        </div>
 
+                        <div class='ui-display-wrapper d-grid gap-2'>
+                            <div class='border border-info rounded-2 centered' role='button' onclick="dashboard.list('party');">Payors / Payees</div>
+                            <div id='party-div' class="d-grid gap-2" style='display:hidden'></div>
+                            <div class='border border-info rounded-2 centered' role='button' onclick="dashboard.add('party');">Add New Payor / Payee</div>
+                        </div>
 
-                            <br><a href='#' onclick='utility.logout()'>logout</a>
+                        <div class='ui-display-wrapper d-grid gap-2'>
+                            <div class='border border-info rounded-2 centered' role='button' onclick="dashboard.list('category');">Categories</div>
+                            <div id='category-div' class="d-grid gap-2" style='display:hidden'></div>
+                            <div class='border border-info rounded-2 centered' role='button' onclick="dashboard.add('category');">Add New Category</div>
+                        </div>
+
+                        <div class='ui-display-wrapper d-grid gap-2'>
+                            <div class='border border-info rounded-2 centered' role='button' onclick="dashboard.show('user')">Profile</div>
+                            <div class='border border-info rounded-2 centered' role='button' onclick="utility.logout()">Log Out</div>
                         </div>
                     </div>
                 </div>
@@ -73,7 +81,7 @@
 
 <script>
     utility.initialize();
-    //utility.mainmenu();
+    dashboard.initialize();
 </script>
 
 

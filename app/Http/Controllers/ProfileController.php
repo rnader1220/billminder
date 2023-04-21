@@ -58,8 +58,7 @@ class ProfileController extends Controller
     public function show($id)
     {
         $record = User::find($id);
-        $form = $record->getRecord();
-        return $form;
+        return $record->getForm('show');
     }
 
     /**
@@ -71,8 +70,7 @@ class ProfileController extends Controller
     public function edit($id)
     {
         $record = User::find($id);
-        $form = $record->getRecord();
-        return $form;
+        return $record->getForm('edit');
     }
 
     /**

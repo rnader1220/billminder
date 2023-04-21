@@ -26,8 +26,7 @@ class EntryController extends Controller
     public function create()
     {
         $record = new Entry();
-        $form = $record->hydrateForm();
-        return $form;
+        return $record->getForm('create');
     }
 
     /**
@@ -52,8 +51,7 @@ class EntryController extends Controller
     public function show($id)
     {
         $record = Entry::find($id);
-        $form = $record->hydrateForm();
-        return $form;
+        return $record->getForm('show');
     }
 
     /**
@@ -65,8 +63,7 @@ class EntryController extends Controller
     public function edit($id)
     {
         $record = Entry::find($id);
-        $form = $record->hydrateForm();
-        return $form;
+        return $record->getForm('edit');
     }
 
     /**

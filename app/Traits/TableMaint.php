@@ -6,6 +6,53 @@ use Carbon\Carbon;
 trait TableMaint
 {
 
+    public function getForm($mode) {
+        $view = [
+            'controls' => $this->dialogControls($mode, $this->label),
+            'title' => $this->dialogTitle($mode, $this->label),
+            'mode' => $mode,
+            'form_div_class' => "col-md-12",
+            'form' => $this->hydrateForm()
+        ];
+        return $view;
+    }
+
+    protected $controls = [
+        'list' => [
+            'head' => [
+                ['title' => 'Add New %name%', 'class' => 'btn-success', 'id' => 'control-create', 'icon' =>'far fa-plus'],
+            ],
+            'foot' => [
+                ['title' => 'Return', 'class' => 'btn-return', 'id' => 'control-close', 'icon' =>'far fa-undo-alt'],
+            ]
+
+        ],
+        'view' => [
+            'head' => [
+                ['title' => 'Edit This %name%', 'class' => 'btn-warning', 'id' => 'control-edit', 'icon' =>'far fa-edit'],
+                ['title' => 'Delete This %name%', 'class' => 'btn-danger', 'id' => 'control-delete', 'icon' =>'far fa-trash'],
+            ],
+            'foot' => [
+                ['title' => 'Return To List', 'class' => 'btn-return', 'id' => 'control-close', 'icon' =>'far fa-undo-alt'],
+            ]
+        ],
+        'edit' => [
+            'head' => [],
+            'foot' => [
+                ['title' => 'Save %name% Changes', 'class' => 'btn-success', 'id' => 'control-save', 'icon' =>'far fa-save'],
+                ['title' => 'Cancel Edit %name%', 'class' => 'btn-return', 'id' => 'control-cancel', 'icon' =>'far fa-undo-alt'],
+            ]
+        ],
+        'create' => [
+            'head' => [],
+            'foot' => [
+                ['title' => 'Save New %name%', 'class' => 'btn-success', 'id' => 'control-save', 'icon' =>'far fa-save'],
+                ['title' => 'Cancel New %name%', 'class' => 'btn-return', 'id' => 'control-cancel', 'icon' =>'far fa-undo-alt'],
+            ]
+        ]
+    ];
+
+
     public function getUtilities(): array
     {
         return $this->utilities;
@@ -16,6 +63,51 @@ trait TableMaint
         return $this->actions;
     }
 
+
+    public function dialogTitle(string $mode, string $label): string
+    {
+        switch($mode) {
+            case 'edit':
+                $title = 'Edit ' . $label;
+                break;
+            case 'create':
+                $title = 'New ' . $label;
+                break;
+            default:
+                $title = $label;
+                break;
+        }
+        return $title;
+    }
+
+    public function dialogControls(string $mode, string $label): array
+    {
+        if($mode == 'show') $mode = 'view';
+        $controls = $this->controls[$mode];
+        $controls = $this->applyLabels($controls, '%name%', $label);
+        return $controls;
+    }
+
+
+    private function applyLabels(array $array, string $tag, string $replacement) : array
+    {
+        $collection = collect($array);
+        $collection->transform(function ($item, $key) use ($tag, $replacement)
+            {
+                //print_r (compact('tag', 'replacement', 'item'));
+                if(is_array($item)) {
+                    return $this->applyLabels($item, $tag, $replacement);
+                } else {
+                    return str_replace($tag, $replacement, $item);
+                }
+
+
+            }
+        );
+        return $collection->all();
+    }
+
+
     public function hydrateForm(?string $formname = null): array
     {
         // use defined default form is not passed in.
@@ -24,6 +116,7 @@ trait TableMaint
         } else {
             $form = $this->$formname;
         }
+
         foreach($form as $rowIndex => $row) {
             foreach($row as $elementIndex => $element) {
                 $datapoint = $element['parameters']['datapoint'];
@@ -41,4 +134,7 @@ trait TableMaint
         }
         return $form;
     }
+
+
+
 }

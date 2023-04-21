@@ -1,9 +1,9 @@
 var dashboard = (function ($, undefined) {
 
     var list = function(type) {
-        $(targetdiv[type]).html('');
+        $('#' + type + '_div').html('');
         $.ajax({
-            url: endpoint[type] + "/list",
+            url: '/' + type + "/index",
             cache: false,
             data: {
                 'q': $('#q').val(),
@@ -13,7 +13,7 @@ var dashboard = (function ($, undefined) {
         .done(function(response) {
             response.forEach(function (el) {
                 // renderer for each type?
-                $(targetdiv[type]).append(render(type, el));
+                //$('#' + type + '_div').append(render(type, el));
                 // list-init for each type ??
             });
         })
@@ -25,24 +25,34 @@ var dashboard = (function ($, undefined) {
 
     var add = function(type) {
         $.ajax({
-            url: endpoint[type] + '/create',
+            url: '/' + type + '/create',
             cache: false,
             dataType: 'json'
         })
         .done(function (resp) {
-            resp_string = form.js_form_build(resp);
-            $('.modal-body').html(resp_string);
+            $('.modal-body').html(modal_form.js_form_build(resp));
+            $('.modal-header').html('<h5 class="modal-title">'+resp.title+'</h5>');
+            $('.modal-header').append(modal_form.js_panel_control(resp.controls.head));
 
-            utility.set_dynamic_button('.modal-body #control-cancel', function () {
-                // empty, destroy7 modalreview(self);
+            $('.modal-footer').html(modal_form.js_panel_control(resp.controls.foot));
+
+
+
+            utility.set_dynamic_button('#control-cancel', function () {
+                $('#genericModal').modal('toggle');
+                utility.reset_dynamic_button('#control-cancel');
+                utility.reset_dynamic_button('#control-save');
+                $('.modal-footer').html('');
+                $('.modal-title').html('');
+                $('.modal-header').html('');
             });
-            utility.set_dynamic_button('.modal-body  #control-save',
-                function () {
+            utility.set_dynamic_button('#control-save', function () {
                     $('.modal-body form').submit();
                 }
             );
-            store(type, id);
-            //show modal dialog
+            store(type);
+            $('#genericModal').modal('toggle');
+
         })
         .fail(function (message) {
             utility.ajax_fail(message);
@@ -62,13 +72,14 @@ var dashboard = (function ($, undefined) {
 
                 if ($(this).valid()) $.ajax({
                         type: "POST",
-                        url: endpoint[type],
+                        url: '/' + type,
                         data: $.param(data),
                         dataType: 'json'
                     })
                     .done(function (resp) {
                         utility.show_message(resp, function () {
                             list(type);
+                            $('#genericModal').modal('toggle');
                         });
                     })
                     .fail(function (message) {
@@ -81,16 +92,23 @@ var dashboard = (function ($, undefined) {
     var edit = function(type, id) {
 
         $.ajax({
-            url: endpoint[type] + '/' + id + '/edit',
+            url: '/' + type + '/' + id + '/edit',
             cache: false,
             dataType: 'json'
         })
         .done(function (resp) {
-            resp_string = form.js_form_build(resp);
-            $('.modal-body').html(resp_string);
+            $('.modal-body').html(modal_form.js_form_build(resp));
+            $('.modal-header').html('<h5 class="modal-title">'+resp.title+'</h5>');
+            $('.modal-header').append(modal_form.js_panel_control(resp.controls.head));
+            $('.modal-footer').html(modal_form.js_panel_control(resp.controls.foot));
 
             utility.set_dynamic_button('.modal-body #control-cancel', function () {
-                // empty, destroy7 modalreview(self);
+                $('#genericModal').modal('toggle');
+                utility.reset_dynamic_button('#control-cancel');
+                utility.reset_dynamic_button('#control-save');
+                $('.modal-footer').html('');
+                $('.modal-title').html('');
+                $('.modal-header').html('');
             });
             utility.set_dynamic_button('.modal-body  #control-save',
                 function () {
@@ -98,7 +116,7 @@ var dashboard = (function ($, undefined) {
                 }
             );
             update(type, id);
-            //show modal dialog
+            $('#genericModal').modal('toggle');
         })
         .fail(function (message) {
             utility.ajax_fail(message);
@@ -117,13 +135,14 @@ var dashboard = (function ($, undefined) {
 
                 if ($(this).valid()) $.ajax({
                         type: "PATCH",
-                        url: endpoint[type] + '/' + id,
+                        url: '/' + type + '/' + id,
                         data: $.param(data),
                         dataType: 'json'
                     })
                     .done(function (resp) {
                         utility.show_message(resp, function () {
                             list(type);
+                            $('#genericModal').modal('toggle');
                         });
                     })
                     .fail(function (message) {
@@ -136,7 +155,7 @@ var dashboard = (function ($, undefined) {
     var destroy = function(type, id) {
         if (confirm()) $.ajax({
             type: "DELETE",
-            url: endpoint[type] + '/' + id,
+            url: '/' + type + '/' + id,
             data: $.param(data),
             dataType: 'json'
         })
@@ -149,13 +168,6 @@ var dashboard = (function ($, undefined) {
             utility.ajax_fail(message);
         });
     };
-
-    var endpoint = {
-        'billist': '\journal',
-        'party': '\payee',
-        'account': '\account',
-    };
-
 
     return {
         list: list,

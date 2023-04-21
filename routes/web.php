@@ -27,11 +27,19 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+    Route::namespace('App\Http\Controllers')->group(function () {
 
-    Route::resource('/entry', 'EntryController');
-    Route::resource('/party', 'PartyController');
-    Route::resource('/account', 'AccountController');
-    Route::resource('/category', 'CategoryController');
-    Route::resource('/profile', 'ProfileController');
+        Route::get('/entry/list', 'EntryController@index');
+        Route::get('/party/list', 'PartyController@index');
+        Route::get('/account/list', 'AccountController@index');
+        Route::get('/category/list', 'CategoryController@index');
+        Route::get('/profile/list', 'ProfileController@index');
 
+
+        Route::resource('/entry', 'EntryController');
+        Route::resource('/party', 'PartyController');
+        Route::resource('/account', 'AccountController');
+        Route::resource('/category', 'CategoryController');
+        Route::resource('/profile', 'ProfileController');
+    });
 });

@@ -17,6 +17,9 @@ class Account extends Model
     use SoftDeletes;
     use Orderable;
 
+
+    protected $label = 'Account';
+
     public static function getList(string $q = '') {
         $result = Account::where('user_id', Auth::user()->id)
         ->orderBy('display_order')

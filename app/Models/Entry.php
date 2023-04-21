@@ -11,18 +11,20 @@ use App\Traits\TableMaint;
 class Entry extends Model
 {
     use HasFactory;
-    use TableMaint;
+    use TableMaint ;
     use SoftDeletes;
+
+    protected $label = 'Entry';
 
     public static function getList(string $q = '') {
         $result = Entry::where('user_id', Auth::user()->id)-> orderBy('next_due_date')->get()->toArray();
         return $result;
     }
 
-    public function hydrateForm() {
-        $form[0][12]['parameters']['list'] = Category::getSelectList();
-        $form[0][13]['parameters']['list'] = Account::getSelectList();
-        $form[0][14]['parameters']['list'] = Party::getSelectList();
+    public function __construct() {
+        $this->form[0][12]['parameters']['list'] = Category::getSelectList();
+        $this->form[0][13]['parameters']['list'] = Account::getSelectList();
+        $this->form[0][14]['parameters']['list'] = Party::getSelectList();
     }
 
     protected $form = [
@@ -46,7 +48,7 @@ class Entry extends Model
                 ],
             ],
             [
-                'type' => 'checkbox',
+                'type' => 'input_checkbox',
                 'parameters' =>
                 [
                     'label' => "Estimated?",
@@ -55,7 +57,7 @@ class Entry extends Model
                 ],
             ],
             [
-                'type' => 'checkbox',
+                'type' => 'input_checkbox',
                 'parameters' =>
                 [
                     'label' => "Expense?",
@@ -64,7 +66,7 @@ class Entry extends Model
                 ],
             ],
             [
-                'type' => 'checkbox',
+                'type' => 'input_checkbox',
                 'parameters' =>
                 [
                     'label' => "AutoPay",
@@ -83,7 +85,6 @@ class Entry extends Model
                         ['value' => -1, 'label' => 'monthly'],
                         ['value' => -2, 'label' => 'quarterly'],
                         ['value' => -3, 'label' => 'annual'],
-
                     ]
                 ]
             ],
@@ -97,7 +98,7 @@ class Entry extends Model
                 ],
             ],
             [
-                'type' => 'checkbox',
+                'type' => 'input_checkbox',
                 'parameters' =>
                 [
                     'label' => "Estimated?",
@@ -106,7 +107,7 @@ class Entry extends Model
                 ],
             ],
             [
-                'type' => 'checkbox',
+                'type' => 'input_checkbox',
                 'parameters' =>
                 [
                     'label' => "Fixed Amount?",

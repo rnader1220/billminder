@@ -36,13 +36,20 @@
                             Balance Here
                         </div>
                         <div class='ui-form-wrapper' id='add-new-item'>
-                            <a href='#' onclick="dashboard.add('expense');">Add New Bill</a><br>
-                            <a href='#' onclick="dashboard.add('income');">Add New Income</a>
+                            <a href='#' onclick="dashboard.list('entry');">List Bills and Income</a><br>
+                            <a href='#' onclick="dashboard.add('entry');">Add New Bill or Income</a><br>
                         </div>
                     </div>
                     <div class='col-lg-4 col-12'>
                         <div class='ui-trans-wrapper' id='options-list'>
-                            options list should be borderless. borders will be on each option
+                            options list should be borderless. borders will be on each option<br>
+                            <a href='#' onclick="dashboard.list('account');">Accounts</a><br>
+                            <a href='#' onclick="dashboard.add('account');">Add New Account</a><br>
+                            <a href='#' onclick="dashboard.list('party');">Payors / Payees</a><br>
+                            <a href='#' onclick="dashboard.add('party');">Add New Payor / Payee</a><br>
+                            <a href='#' onclick="dashboard.list('category');">Categories</a><br>
+                            <a href='#' onclick="dashboard.add('category');">Add New Category</a><br>
+
 
                             <br><a href='#' onclick='utility.logout()'>logout</a>
                         </div>
@@ -53,10 +60,7 @@
         <div class='modal' id='genericModal' tabindex='-1'>
             <div class='modal-dialog' style='max-width:60%'>
                 <div class='modal-content'>
-                    <div class='modal-header'>
-                        <h5 class='modal-title'></h5>
-                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-                    </div>
+                    <div class='modal-header'></div>
                     <div class='modal-body'></div>
                     <div class='modal-footer'></div>
                 </div>

@@ -17,6 +17,9 @@ class Party extends Model
     use SoftDeletes;
     use Orderable;
 
+
+    protected $label = 'Party';
+
     public static function getList(string $q = '') {
         $result = Party::where('user_id', Auth::user()->id)
             ->orderBy('display_order')
@@ -59,7 +62,7 @@ class Party extends Model
                 ]
             ],
             [
-                'type' => 'checkbox',
+                'type' => 'input_checkbox',
                 'parameters' =>
                 [
                     'label' => "Expense?",
@@ -68,7 +71,7 @@ class Party extends Model
                 ],
             ],
             [
-                'type' => 'checkbox',
+                'type' => 'input_checkbox',
                 'parameters' =>
                 [
                     'label' => "Income?",

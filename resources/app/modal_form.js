@@ -1,4 +1,8 @@
-var form = (function ($, undefined) {
+
+// this version of form.js is optimized for modal, not for card.
+// find and remove all mentions of card
+
+var modal_form = (function ($, undefined) {
 
     var library = {
         input_checkbox: function (attr) {
@@ -260,6 +264,8 @@ var form = (function ($, undefined) {
             return htmlString;
         },
 
+
+
         button_utility: function (attr) {
             htmlString = "<button title='" + attr.title + "' type='button' ";
 
@@ -285,7 +291,7 @@ var form = (function ($, undefined) {
 
     var panel_control = function (list) {
         htmlString = '';
-        htmlString += "<div class='card-control-panel'>";
+        htmlString += "<div class='modal-control-panel'>";
         htmlString += button_control(list);
         htmlString += "</div>";
         return htmlString;
@@ -303,9 +309,9 @@ var form = (function ($, undefined) {
 
     var panel_utility = function (list) {
         htmlString = '';
-        htmlString += "<div class='card-utility-panel'>";
+        htmlString += "<div class='modal-utility-panel'>";
         htmlString += button_utility(list);
-        htmlString += "</div class='card-utility-panel'>";
+        htmlString += "</div class='modal-utility-panel'>";
         return htmlString;
     };
 
@@ -317,73 +323,14 @@ var form = (function ($, undefined) {
         return htmlString;
     };
 
-    var header = function (content) {
-        htmlString = "<div class='card-header'>";
-
-        if (content.hasOwnProperty('controls') && content.controls.hasOwnProperty('head')) {
-            htmlString += panel_control(content.controls.head);
-        }
-        if (content.hasOwnProperty('title')) { // title
-            htmlString += "<div class='card-title'><h4>" + content.title + "</h4></div>";
-        }
-        htmlString += "</div class='card-header' >";
-        return htmlString;
-    };
-
-    var footer = function (content) {
-        htmlString = "<div class='card-footer'>";
-        if (content.hasOwnProperty('controls') && content.controls.hasOwnProperty('foot')) {
-            htmlString += panel_control(content.controls.foot);
-        }
-        htmlString += "<div style='height:36px;'></div></div class='card-footer'>";
-        return htmlString;
-
-    };
-
     var table_build = function (content) {
 
-        htmlString = "<div class='card'>";
-        /* card header */
-        htmlString += header(content);
 
         /* card body -- table here */
-        htmlString += "<div class='card-body'><div class='index-table col-lg-12'>";
+        htmlString += "<div class='index-table col-lg-12'>";
         htmlString += "<table id='" + content.table_name + "' class='hover display-table' style='width:100%'>";
-        htmlString += "<tbody></tbody><tfoot></tfoot></table></div></div>";
+        htmlString += "<tbody></tbody><tfoot></tfoot></table></div>";
 
-        /* card footer */
-        htmlString += footer(content);
-        htmlString += "</div>";
-        return htmlString;
-    };
-
-    var form_build = function (content) {
-        htmlString = "<div class='row'><div class='" + content.form_div_class + "'>" +
-            "<div id='" + content.form_name + "_div' class='card'>";
-        htmlString += header(content); // card header
-        htmlString += "<div class='card-body'>"; // card body
-
-        htmlString += form_slug_build(content);
-
-        if (content.hasOwnProperty('utilities')) {
-            htmlString += panel_utility(content.utilities);
-        }
-
-        if (content.hasOwnProperty('actions')) {
-            htmlString += panel_utility(content.actions);
-        }
-
-        htmlString += "</div>";
-        htmlString += footer(content); // card footer
-        htmlString += "</div></div>";
-
-        if (content.hasOwnProperty('tool_div_class')) {
-            htmlString += "<div class='" + content.tool_div_class + "'>" +
-                "<section id='" + content.form_name + "_content'></section>" +
-                "<section id='" + content.form_name + "_dialog'></section>" +
-                "</div>";
-        }
-        htmlString += "</div></div></div>";
         return htmlString;
     };
 
@@ -391,7 +338,7 @@ var form = (function ($, undefined) {
         return library[element.type](element.parameters);
     };
 
-    var form_slug_build = function (content) {
+    var form_build = function (content) {
         htmlString = "<form id='" + content.form_name + "_form' class='form' data-mode='" + content.mode + "' ";
         if (content.hasOwnProperty('upload_form')) {
             htmlString += "enctype='multipart/form-data'> ";
@@ -427,9 +374,9 @@ var form = (function ($, undefined) {
 
     return {
         js_form_element: form_element,
+        js_panel_control: panel_control,
         js_button_control: button_control,
         js_table_build: table_build,
         js_form_build: form_build,
-        js_form_slug_build: form_slug_build,
     };
 })(jQuery);

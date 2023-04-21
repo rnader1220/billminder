@@ -26,8 +26,7 @@ class PartyController extends Controller
     public function create()
     {
         $record = new Party();
-        $form = $record->hydrateForm();
-        return $form;
+        return $record->getForm('create');
     }
 
     /**
@@ -52,8 +51,7 @@ class PartyController extends Controller
     public function show($id)
     {
         $record = Party::find($id);
-        $form = $record->hydrateForm();
-        return $form;
+        return $record->getForm('show');
     }
 
     /**
@@ -65,8 +63,7 @@ class PartyController extends Controller
     public function edit($id)
     {
         $record = Party::find($id);
-        $form = $record->hydrateForm();
-        return $form;
+        return $record->getForm('edit');
     }
 
     /**

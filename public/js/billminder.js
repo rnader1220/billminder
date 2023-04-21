@@ -1,9 +1,9 @@
 var dashboard = (function ($, undefined) {
 
     var list = function(type) {
-        $(targetdiv[type]).html('');
+        $('#' + type + '_div').html('');
         $.ajax({
-            url: endpoint[type] + "/list",
+            url: '/' + type + "/index",
             cache: false,
             data: {
                 'q': $('#q').val(),
@@ -13,7 +13,7 @@ var dashboard = (function ($, undefined) {
         .done(function(response) {
             response.forEach(function (el) {
                 // renderer for each type?
-                $(targetdiv[type]).append(render(type, el));
+                //$('#' + type + '_div').append(render(type, el));
                 // list-init for each type ??
             });
         })
@@ -25,24 +25,34 @@ var dashboard = (function ($, undefined) {
 
     var add = function(type) {
         $.ajax({
-            url: endpoint[type] + '/create',
+            url: '/' + type + '/create',
             cache: false,
             dataType: 'json'
         })
         .done(function (resp) {
-            resp_string = form.js_form_build(resp);
-            $('.modal-body').html(resp_string);
+            $('.modal-body').html(modal_form.js_form_build(resp));
+            $('.modal-header').html('<h5 class="modal-title">'+resp.title+'</h5>');
+            $('.modal-header').append(modal_form.js_panel_control(resp.controls.head));
 
-            utility.set_dynamic_button('.modal-body #control-cancel', function () {
-                // empty, destroy7 modalreview(self);
+            $('.modal-footer').html(modal_form.js_panel_control(resp.controls.foot));
+
+
+
+            utility.set_dynamic_button('#control-cancel', function () {
+                $('#genericModal').modal('toggle');
+                utility.reset_dynamic_button('#control-cancel');
+                utility.reset_dynamic_button('#control-save');
+                $('.modal-footer').html('');
+                $('.modal-title').html('');
+                $('.modal-header').html('');
             });
-            utility.set_dynamic_button('.modal-body  #control-save',
-                function () {
+            utility.set_dynamic_button('#control-save', function () {
                     $('.modal-body form').submit();
                 }
             );
-            store(type, id);
-            //show modal dialog
+            store(type);
+            $('#genericModal').modal('toggle');
+
         })
         .fail(function (message) {
             utility.ajax_fail(message);
@@ -62,13 +72,14 @@ var dashboard = (function ($, undefined) {
 
                 if ($(this).valid()) $.ajax({
                         type: "POST",
-                        url: endpoint[type],
+                        url: '/' + type,
                         data: $.param(data),
                         dataType: 'json'
                     })
                     .done(function (resp) {
                         utility.show_message(resp, function () {
                             list(type);
+                            $('#genericModal').modal('toggle');
                         });
                     })
                     .fail(function (message) {
@@ -81,16 +92,23 @@ var dashboard = (function ($, undefined) {
     var edit = function(type, id) {
 
         $.ajax({
-            url: endpoint[type] + '/' + id + '/edit',
+            url: '/' + type + '/' + id + '/edit',
             cache: false,
             dataType: 'json'
         })
         .done(function (resp) {
-            resp_string = form.js_form_build(resp);
-            $('.modal-body').html(resp_string);
+            $('.modal-body').html(modal_form.js_form_build(resp));
+            $('.modal-header').html('<h5 class="modal-title">'+resp.title+'</h5>');
+            $('.modal-header').append(modal_form.js_panel_control(resp.controls.head));
+            $('.modal-footer').html(modal_form.js_panel_control(resp.controls.foot));
 
             utility.set_dynamic_button('.modal-body #control-cancel', function () {
-                // empty, destroy7 modalreview(self);
+                $('#genericModal').modal('toggle');
+                utility.reset_dynamic_button('#control-cancel');
+                utility.reset_dynamic_button('#control-save');
+                $('.modal-footer').html('');
+                $('.modal-title').html('');
+                $('.modal-header').html('');
             });
             utility.set_dynamic_button('.modal-body  #control-save',
                 function () {
@@ -98,7 +116,7 @@ var dashboard = (function ($, undefined) {
                 }
             );
             update(type, id);
-            //show modal dialog
+            $('#genericModal').modal('toggle');
         })
         .fail(function (message) {
             utility.ajax_fail(message);
@@ -117,13 +135,14 @@ var dashboard = (function ($, undefined) {
 
                 if ($(this).valid()) $.ajax({
                         type: "PATCH",
-                        url: endpoint[type] + '/' + id,
+                        url: '/' + type + '/' + id,
                         data: $.param(data),
                         dataType: 'json'
                     })
                     .done(function (resp) {
                         utility.show_message(resp, function () {
                             list(type);
+                            $('#genericModal').modal('toggle');
                         });
                     })
                     .fail(function (message) {
@@ -136,7 +155,7 @@ var dashboard = (function ($, undefined) {
     var destroy = function(type, id) {
         if (confirm()) $.ajax({
             type: "DELETE",
-            url: endpoint[type] + '/' + id,
+            url: '/' + type + '/' + id,
             data: $.param(data),
             dataType: 'json'
         })
@@ -148,22 +167,6 @@ var dashboard = (function ($, undefined) {
         .fail(function (message) {
             utility.ajax_fail(message);
         });
-    };
-
-    var endpoint = {
-        'expense': '\expense',
-        'income': '\income',
-        'payor': '\payor',
-        'payee': '\payee',
-        'account': '\account',
-    };
-
-    var targetdiv = {
-        'expense': '#journal',
-        'income': '#journal',
-        'payor': '#table',
-        'payee': '#table',
-        'account': '#table',
     };
 
     return {
@@ -656,7 +659,11 @@ var dashboard = (function($, undefined) {
 */
 
 
-var form = (function ($, undefined) {
+
+// this version of form.js is optimized for modal, not for card.
+// find and remove all mentions of card
+
+var modal_form = (function ($, undefined) {
 
     var library = {
         input_checkbox: function (attr) {
@@ -918,6 +925,8 @@ var form = (function ($, undefined) {
             return htmlString;
         },
 
+
+
         button_utility: function (attr) {
             htmlString = "<button title='" + attr.title + "' type='button' ";
 
@@ -943,7 +952,7 @@ var form = (function ($, undefined) {
 
     var panel_control = function (list) {
         htmlString = '';
-        htmlString += "<div class='card-control-panel'>";
+        htmlString += "<div class='modal-control-panel'>";
         htmlString += button_control(list);
         htmlString += "</div>";
         return htmlString;
@@ -961,9 +970,9 @@ var form = (function ($, undefined) {
 
     var panel_utility = function (list) {
         htmlString = '';
-        htmlString += "<div class='card-utility-panel'>";
+        htmlString += "<div class='modal-utility-panel'>";
         htmlString += button_utility(list);
-        htmlString += "</div class='card-utility-panel'>";
+        htmlString += "</div class='modal-utility-panel'>";
         return htmlString;
     };
 
@@ -975,73 +984,14 @@ var form = (function ($, undefined) {
         return htmlString;
     };
 
-    var header = function (content) {
-        htmlString = "<div class='card-header'>";
-
-        if (content.hasOwnProperty('controls') && content.controls.hasOwnProperty('head')) {
-            htmlString += panel_control(content.controls.head);
-        }
-        if (content.hasOwnProperty('title')) { // title
-            htmlString += "<div class='card-title'><h4>" + content.title + "</h4></div>";
-        }
-        htmlString += "</div class='card-header' >";
-        return htmlString;
-    };
-
-    var footer = function (content) {
-        htmlString = "<div class='card-footer'>";
-        if (content.hasOwnProperty('controls') && content.controls.hasOwnProperty('foot')) {
-            htmlString += panel_control(content.controls.foot);
-        }
-        htmlString += "<div style='height:36px;'></div></div class='card-footer'>";
-        return htmlString;
-
-    };
-
     var table_build = function (content) {
 
-        htmlString = "<div class='card'>";
-        /* card header */
-        htmlString += header(content);
 
         /* card body -- table here */
-        htmlString += "<div class='card-body'><div class='index-table col-lg-12'>";
+        htmlString += "<div class='index-table col-lg-12'>";
         htmlString += "<table id='" + content.table_name + "' class='hover display-table' style='width:100%'>";
-        htmlString += "<tbody></tbody><tfoot></tfoot></table></div></div>";
+        htmlString += "<tbody></tbody><tfoot></tfoot></table></div>";
 
-        /* card footer */
-        htmlString += footer(content);
-        htmlString += "</div>";
-        return htmlString;
-    };
-
-    var form_build = function (content) {
-        htmlString = "<div class='row'><div class='" + content.form_div_class + "'>" +
-            "<div id='" + content.form_name + "_div' class='card'>";
-        htmlString += header(content); // card header
-        htmlString += "<div class='card-body'>"; // card body
-
-        htmlString += form_slug_build(content);
-
-        if (content.hasOwnProperty('utilities')) {
-            htmlString += panel_utility(content.utilities);
-        }
-
-        if (content.hasOwnProperty('actions')) {
-            htmlString += panel_utility(content.actions);
-        }
-
-        htmlString += "</div>";
-        htmlString += footer(content); // card footer
-        htmlString += "</div></div>";
-
-        if (content.hasOwnProperty('tool_div_class')) {
-            htmlString += "<div class='" + content.tool_div_class + "'>" +
-                "<section id='" + content.form_name + "_content'></section>" +
-                "<section id='" + content.form_name + "_dialog'></section>" +
-                "</div>";
-        }
-        htmlString += "</div></div></div>";
         return htmlString;
     };
 
@@ -1049,7 +999,7 @@ var form = (function ($, undefined) {
         return library[element.type](element.parameters);
     };
 
-    var form_slug_build = function (content) {
+    var form_build = function (content) {
         htmlString = "<form id='" + content.form_name + "_form' class='form' data-mode='" + content.mode + "' ";
         if (content.hasOwnProperty('upload_form')) {
             htmlString += "enctype='multipart/form-data'> ";
@@ -1085,9 +1035,9 @@ var form = (function ($, undefined) {
 
     return {
         js_form_element: form_element,
+        js_panel_control: panel_control,
         js_button_control: button_control,
         js_table_build: table_build,
         js_form_build: form_build,
-        js_form_slug_build: form_slug_build,
     };
 })(jQuery);

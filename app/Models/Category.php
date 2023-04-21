@@ -17,6 +17,9 @@ class Category extends Model
     use SoftDeletes;
     use Orderable;
 
+
+    protected $label = 'Category';
+
     public function getList(string $q = '') {
         $result = Category::where('user_id', Auth::user()->id)-> orderBy('display_order')->get()->toArray();
         return $result;

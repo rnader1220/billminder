@@ -26,8 +26,7 @@ class CategoryController extends Controller
     public function create()
     {
         $record = new Category();
-        $form = $record->hydrateForm();
-        return $form;
+        return $record->getForm('create');
     }
 
     /**
@@ -52,8 +51,7 @@ class CategoryController extends Controller
     public function show($id)
     {
         $record = Category::find($id);
-        $form = $record->hydrateForm();
-        return $form;
+        return $record->getForm('show');
     }
 
     /**
@@ -65,8 +63,7 @@ class CategoryController extends Controller
     public function edit($id)
     {
         $record = Category::find($id);
-        $form = $record->hydrateForm();
-        return $form;
+        return $record->getForm('edit');
    }
 
     /**

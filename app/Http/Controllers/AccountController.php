@@ -26,8 +26,7 @@ class AccountController extends Controller
     public function create()
     {
         $record = new Account();
-        $form = $record->hydrateForm();
-        return $form;
+        return $record->getForm('create');
     }
 
     /**
@@ -52,8 +51,7 @@ class AccountController extends Controller
     public function show($id)
     {
         $record = Account::find($id);
-        $form = $record->hydrateForm();
-        return $form;
+        return $record->getForm('show');
     }
 
     /**
@@ -65,9 +63,8 @@ class AccountController extends Controller
     public function edit($id)
     {
         $record = Account::find($id);
-        $form = $record->hydrateForm();
-        return $form;
-   }
+        return $record->getForm('edit');
+    }
 
     /**
      * Update the specified resource in storage.

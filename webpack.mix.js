@@ -15,7 +15,7 @@ mix.scripts([
     'resources/app/dashboard.js',
     'resources/app/utility.js',
     'resources/app/library.js',
-    'resources/app/form.js',
+    'resources/app/modal_form.js',
 ], 'public/js/billminder.js').version();
 
 mix.styles([

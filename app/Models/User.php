@@ -21,6 +21,9 @@ class User extends Authenticatable
     use TwoFactorAuthenticatable;
     use TableMaint;
 
+
+    protected $label = 'User';
+
     /**
      * The attributes that are mass assignable.
      *

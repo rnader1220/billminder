@@ -2,6 +2,7 @@
 namespace App\Traits;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 trait TableMaint
 {
@@ -32,7 +33,7 @@ trait TableMaint
         return $view;
     }
 
-    public function saveRecord($request) {
+    public function saveRecord(Request $request) {
         $success = true;
         $detail = '';
         $action = (isset($this->id)?'Updated':'Stored');
@@ -44,12 +45,12 @@ trait TableMaint
 
         //dd($this);
 
-        //try {
+        try {
             $this->save();
-        //} catch (\Exception $e) {
-        //    $success = false;
-        //    $detail = $e->getMessage();
-        //}
+        } catch (\Exception $e) {
+            $success = false;
+            $detail = $e->getMessage();
+        }
 
         return $this->responseMessage($action, $success, $detail, $this->id);
     }

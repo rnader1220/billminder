@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use App\Traits\TableMaint;
-use Hamcrest\Type\IsBoolean;
+use Carbon\Carbon;
 
 class Entry extends BaseModel
 {
@@ -54,6 +55,33 @@ class Entry extends BaseModel
         return$this->getForm($mode);
     }
 
+    public function cycle() {
+        $newdate = Carbon::create($this->next_bill_date);
+        switch($this->cycle) {
+            case -1:
+                $this->next_bill_date = $newdate->addWeek();
+                break;
+            case -2:
+                $this->next_bill_date = $newdate->addWeeks(2);
+                break;
+            case -3:
+                $this->next_bill_date = $newdate->addMonth();
+                break;
+            case -4:
+                $this->next_bill_date = $newdate->addMonths(3);
+                break;
+            case -5:
+                $this->next_bill_date = $newdate->addYear();
+                break;
+            default:
+                $this->next_bill_date = null;
+                break;
+        }
+        $this->estimated_date = 1;
+        if(!$this->fixed_amount) {
+            $this->estimated_amount = 1;
+        }
+    }
 
     protected function customUpdate(array &$data)
     {
@@ -110,7 +138,7 @@ class Entry extends BaseModel
                 'type' => 'input_text',
                 'parameters' =>
                 [
-                    'label' => "Entry Name",
+                    'label' => "Name",
                     'datapoint' => 'name',
                     'grid_class' => 'col-sm-12 col-md-8 col-lg-6'
                 ]

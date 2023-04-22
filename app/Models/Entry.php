@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Traits\TableMaint;
+use Hamcrest\Type\IsBoolean;
 
 class Entry extends BaseModel
 {
@@ -15,9 +17,21 @@ class Entry extends BaseModel
     use SoftDeletes;
 
     public static function getList(string $q = '') {
-        $result = Entry::where('user_id', Auth::user()->id)
-        ->orderBy('next_due_date')
-        ->whereNull('deleted_at')
+        $result = Entry::select('entries.id', 'entries.next_due_date', 'entries.amount', 'entries.name',
+            DB::raw('categories.label as category'),
+            DB::raw(
+                "case when income = 1 then 'income' when next_due_date < NOW() then 'late' " .
+                "when next_due_date < (select min(next_due_date) from entries where user_id = 2 and income=1 and deleted_at is null) then 'due' " .
+                "else 'expense' end as status"
+            )
+        )
+        ->leftjoin('categories', function($join) {
+            $join->on('categories.id', '=', 'entries.category_id')
+            ->whereNull('categories.deleted_at');
+        })
+        ->where('entries.user_id', Auth::user()->id)
+        ->orderBy('entries.next_due_date')
+        ->whereNull('entries.deleted_at')
         ->get()
         ->toArray();
         return $result;
@@ -31,13 +45,25 @@ class Entry extends BaseModel
 
     }
 
+    public function localGetForm($mode) {
+        $this->label = ($this->income?'Income':'Expense');
+        if($this->income) {
+            $this->form[0][13]['parameters']['label'] = $this->form[0][13]['parameters']['label_income'];
+            $this->form[0][14]['parameters']['label'] = $this->form[0][14]['parameters']['label_income'];
+        }
+        return$this->getForm($mode);
+    }
+
+
     protected function customUpdate(array &$data)
     {
-        $data['income'] = (isset($data['income'])?1:0);
         $data['autopay'] = (isset($data['autopay'])?1:0);
         $data['estimated_amount'] = (isset($data['estimated_amount'])?1:0);
         $data['fixed_amount'] = (isset($data['fixed_amount'])?1:0);
         $data['estimated_date'] = (isset($data['estimated_date'])?1:0);
+        if(is_bool($data['income'])) {
+            $data['income'] = ($data['income']?1:0);
+        }
     }
 
 
@@ -73,12 +99,20 @@ class Entry extends BaseModel
     protected $form = [
         [
             [
+                'type' => 'input_hidden',
+                'parameters' =>
+                [
+                    'label' => "Income?",
+                    'datapoint' => 'income',
+                ],
+            ],
+            [
                 'type' => 'input_text',
                 'parameters' =>
                 [
                     'label' => "Entry Name",
                     'datapoint' => 'name',
-                    'grid_class' => 'col-md-6'
+                    'grid_class' => 'col-sm-12 col-md-8 col-lg-6'
                 ]
             ],
             [
@@ -87,25 +121,16 @@ class Entry extends BaseModel
                 [
                     'label' => "Current Amount",
                     'datapoint' => 'amount',
-                    'grid_class' => 'col-lg-3'
+                    'grid_class' => 'col-sm-6 col-md-4 col-lg-3'
                 ],
             ],
             [
                 'type' => 'input_checkbox',
                 'parameters' =>
                 [
-                    'label' => "Estimated?",
+                    'label' => "Estimated Amt?",
                     'datapoint' => 'estimated_amount',
-                    'grid_class' => 'col-lg-3'
-                ],
-            ],
-            [
-                'type' => 'input_checkbox',
-                'parameters' =>
-                [
-                    'label' => "Income?",
-                    'datapoint' => 'income',
-                    'grid_class' => 'col-lg-3'
+                    'grid_class' => 'col-sm-6 col-md-4 col-lg-3'
                 ],
             ],
             [
@@ -114,20 +139,24 @@ class Entry extends BaseModel
                 [
                     'label' => "AutoPay",
                     'datapoint' => 'autopay',
-                    'grid_class' => 'col-md-3'
+                    'grid_class' => 'col-sm-6 col-md-4 col-lg-3'
                 ]
             ],
             [
                 'type' => 'select',
                 'parameters' =>
                 [
-                    'label' => "Billing Cycle",
+                    'label' => "Frequency",
                     'datapoint' => 'cycle',
-                    'grid_class' => 'col-md-3',
+                    'grid_class' => 'col-sm-6 col-md-4 col-lg-3',
+                    'allow_null' => true,
                     'list' => [
-                        ['value' => -1, 'label' => 'monthly'],
-                        ['value' => -2, 'label' => 'quarterly'],
-                        ['value' => -3, 'label' => 'annual'],
+                        ['value' => -1, 'label' => 'weekly'],
+                        ['value' => -2, 'label' => 'biweekly'],
+                        ['value' => -3, 'label' => 'monthly'],
+                        ['value' => -4, 'label' => 'quarterly'],
+                        ['value' => -5, 'label' => 'annual'],
+                        ['value' => -99, 'label' => 'manual'],
                     ]
                 ]
             ],
@@ -137,16 +166,16 @@ class Entry extends BaseModel
                 [
                     'label' => "Next Due Date",
                     'datapoint' => 'next_due_date',
-                    'grid_class' => 'col-lg-3'
+                    'grid_class' => 'col-md-6 col-md-6 col-lg-3'
                 ],
             ],
             [
                 'type' => 'input_checkbox',
                 'parameters' =>
                 [
-                    'label' => "Estimated?",
+                    'label' => "Estimated Date?",
                     'datapoint' => 'estimated_date',
-                    'grid_class' => 'col-lg-3'
+                    'grid_class' => 'col-sm-6 col-md-6 col-lg-3'
                 ],
             ],
             [
@@ -155,7 +184,7 @@ class Entry extends BaseModel
                 [
                     'label' => "Fixed Amount?",
                     'datapoint' => 'fixed',
-                    'grid_class' => 'col-lg-6'
+                    'grid_class' => 'col-sm-6 col-md-4 col-lg-3'
                 ],
             ],
 
@@ -163,18 +192,18 @@ class Entry extends BaseModel
                 'type' => 'input_text',
                 'parameters' =>
                 [
-                    'label' => "Payments Remaining",
+                    'label' => "Payments Left",
                     'datapoint' => 'payments_remaining',
-                    'grid_class' => 'col-lg-6'
+                    'grid_class' => 'col-sm-6 col-md-4 col-lg-3'
                 ],
             ],
             [
                 'type' => 'input_text',
                 'parameters' =>
                 [
-                    'label' => "Balance Remaining",
+                    'label' => "Balance Left",
                     'datapoint' => 'balance_remaining',
-                    'grid_class' => 'col-lg-6'
+                    'grid_class' => 'col-sm-6 col-md-4 col-lg-3'
                 ],
             ],
             [
@@ -183,7 +212,7 @@ class Entry extends BaseModel
                 [
                     'label' => "Description",
                     'datapoint' => 'description',
-                    'grid_class' => 'col-md-12'
+                    'grid_class' => 'col-12'
                 ]
             ],
             [
@@ -193,7 +222,7 @@ class Entry extends BaseModel
                     'label' => "Category",
                     'datapoint' => 'category_id',
                     'allow_null' => true,
-                    'grid_class' => 'col-md-4',
+                    'grid_class' => 'col-sm-6 col-md-4 col-lg-3',
                     'list' => [],
                 ]
             ],
@@ -205,7 +234,7 @@ class Entry extends BaseModel
                     'label_income' => "To Account",
                     'allow_null' => true,
                     'datapoint' => 'account_id',
-                    'grid_class' => 'col-md-4',
+                    'grid_class' => 'col-sm-6 col-md-4 col-lg-3',
                     'list' => [],
                 ]
             ],
@@ -217,7 +246,7 @@ class Entry extends BaseModel
                     'label_income' => "Pay From",
                     'allow_null' => true,
                     'datapoint' => 'party_id',
-                    'grid_class' => 'col-md-4',
+                    'grid_class' => 'col-sm-6 col-md-4 col-lg-3',
                     'list' => [],
                 ]
             ],

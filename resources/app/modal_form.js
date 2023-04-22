@@ -113,7 +113,7 @@ var modal_form = (function ($, undefined) {
             if (attr.hasOwnProperty('value')) {
                 htmlString += " value='" + attr.value + "' ";
             }
-0
+
             if (attr.hasOwnProperty('numeric')) {
                 htmlString += " style='text-align:right' ";
             }
@@ -195,9 +195,9 @@ var modal_form = (function ($, undefined) {
                 }
                 htmlString += "value = '-99'>";
                 if (attr.hasOwnProperty('placeholder') ) {
-                    htmlString += "-- " + attr.placeholder + " --";
+                    htmlString += "- " + attr.placeholder + " -";
                 } else {
-                    htmlString += "-- none selected --";
+                    htmlString += "- not selected -";
                 }
                 htmlString += "</option>\n";
 

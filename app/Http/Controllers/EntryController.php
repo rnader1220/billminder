@@ -13,10 +13,11 @@ class EntryController extends Controller
         return $list;
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $record = new Entry();
-        return $record->getForm('create');
+        $record->income = ($request['income']=='true'?1:0);
+        return $record->localGetForm('create');
     }
 
     public function store(Request $request)
@@ -29,13 +30,13 @@ class EntryController extends Controller
     public function show($id)
     {
         $record = Entry::find($id);
-        return $record->getForm('show');
+        return $record->localGetForm('show');
     }
 
     public function edit($id)
     {
         $record = Entry::find($id);
-        return $record->getForm('edit');
+        return $record->localGetForm('edit');
     }
 
     public function update(Request $request, $id)

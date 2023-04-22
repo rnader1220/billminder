@@ -1,42 +1,86 @@
 var dashboard = (function ($, undefined) {
 
+
     var initialize = function() {
+        listentry();
+    };
+
+    var listentry = function() {
+
+        if($('#account-div').data('open') == true) {
+            $('#account-div').slideUp(300, function() {
+                $('#account-div').html('');
+                $('#account-div').data('open', false);
+            });
+        }
+
+        if($('#category-div').data('open') == true) {
+            $('#category-div').slideUp(300, function() {
+                $('#category-div').html('');
+                $('#category-div').data('open', false);
+            });
+        }
         list('entry');
     };
 
-
-    var list = function(dtype) {
-        if(dtype == 'entry') $('#entry-div').slideUp(300, function() {$('#entry-div').html('');});
-        $('#account-div').slideUp(300, function() {$('#account-div').html('');});
-        $('#category-div').slideUp(300, function() {$('#category-div').html('');});
-        setTimeout(function () {
-            $.ajax({
-                url: '/' + dtype,
-                cache: false,
-                data: {
-                    'q': $('#q').val(),
-                },
-                dataType: 'json'
-            })
-            .done(function(response) {
-                $('#' + dtype + '-div').html('');
-                response.forEach(function (el) {
-                    $('#' + dtype + '-div').append(library.drawElement(dtype, el));
-                });
-                $('#' + dtype + '-div').slideDown(300);
-            })
-            .fail(function(message) {
-                utility.ajax_fail(message);
+    var listaccount = function() {
+        if($('#account-div').data('open') == true) {
+            $('#account-div').slideUp(300, function() {
+                $('#account-div').html('').data('open', false);
             });
-        }, 600);
+        } else {
+            if($('#category-div').data('open') == true) {
+                $('#category-div').slideUp(300, function() {
+                    $('#category-div').html('').data('open', false);
+                });
+            }
+            list('account');
+        }
+    };
 
+    var listcategory = function() {
+        if($('#category-div').data('open') == true) {
+            $('#category-div').slideUp(300, function() {
+                $('#category-div').html('').data('open', false);
+            });
+        } else {
+            if($('#account-div').data('open') == true) {
+                $('#account-div').slideUp(300, function() {
+                    $('#account-div').html('').data('open', false);
+                });
+            }
+            list('category');
+        }
     };
 
 
 
-    var add = function(type) {
+    var list = function(dtype) {
         $.ajax({
-            url: '/' + type + '/create',
+            url: '/' + dtype,
+            cache: false,
+            data: {
+                'q': $('#q').val(),
+            },
+            dataType: 'json'
+        })
+        .done(function(response) {
+            $('#' + dtype + '-div').html('');
+            response.forEach(function (el) {
+                $('#' + dtype + '-div').append(library.drawElement(dtype, el));
+            });
+            $('#' + dtype + '-div').data('open', true);
+            $('#' + dtype + '-div').slideDown(300);
+        })
+        .fail(function(message) {
+            utility.ajax_fail(message);
+        });
+    };
+
+
+    var add = function(type, income) {
+        $.ajax({
+            url: '/' + type + '/create?income='+income,
             cache: false,
             dataType: 'json'
         })
@@ -133,7 +177,7 @@ var dashboard = (function ($, undefined) {
                 destroy(type, id);
             });
 
-
+            $('#genericModal form :input').prop('disabled', true);
             $('#genericModal').modal('toggle');
         })
         .fail(function (message) {
@@ -253,7 +297,9 @@ var dashboard = (function ($, undefined) {
 
     return {
         initialize: initialize,
-        list: list,
+        listentry: listentry,
+        listaccount: listaccount,
+        listcategory: listcategory,
         add: add,
         edit: edit,
         show: show,

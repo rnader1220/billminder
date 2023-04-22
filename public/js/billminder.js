@@ -1,43 +1,86 @@
 var dashboard = (function ($, undefined) {
 
+
     var initialize = function() {
+        listentry();
+    };
+
+    var listentry = function() {
+
+        if($('#account-div').data('open') == true) {
+            $('#account-div').slideUp(300, function() {
+                $('#account-div').html('');
+                $('#account-div').data('open', false);
+            });
+        }
+
+        if($('#category-div').data('open') == true) {
+            $('#category-div').slideUp(300, function() {
+                $('#category-div').html('');
+                $('#category-div').data('open', false);
+            });
+        }
         list('entry');
     };
 
-
-    var list = function(dtype) {
-        if(dtype == 'entry') $('#entry-div').slideUp(300, function() {$('#entry-div').html('');});
-        $('#account-div').slideUp(300, function() {$('#account-div').html('');});
-        $('#party-div').slideUp(300, function() {$('#party-div').html('');});
-        $('#category-div').slideUp(300, function() {$('#category-div').html('');});
-        setTimeout(function () {
-            $.ajax({
-                url: '/' + dtype,
-                cache: false,
-                data: {
-                    'q': $('#q').val(),
-                },
-                dataType: 'json'
-            })
-            .done(function(response) {
-                $('#' + dtype + '-div').html('');
-                response.forEach(function (el) {
-                    $('#' + dtype + '-div').append(library.drawElement(dtype, el));
-                });
-                $('#' + dtype + '-div').slideDown(300);
-            })
-            .fail(function(message) {
-                utility.ajax_fail(message);
+    var listaccount = function() {
+        if($('#account-div').data('open') == true) {
+            $('#account-div').slideUp(300, function() {
+                $('#account-div').html('').data('open', false);
             });
-        }, 600);
+        } else {
+            if($('#category-div').data('open') == true) {
+                $('#category-div').slideUp(300, function() {
+                    $('#category-div').html('').data('open', false);
+                });
+            }
+            list('account');
+        }
+    };
 
+    var listcategory = function() {
+        if($('#category-div').data('open') == true) {
+            $('#category-div').slideUp(300, function() {
+                $('#category-div').html('').data('open', false);
+            });
+        } else {
+            if($('#account-div').data('open') == true) {
+                $('#account-div').slideUp(300, function() {
+                    $('#account-div').html('').data('open', false);
+                });
+            }
+            list('category');
+        }
     };
 
 
 
-    var add = function(type) {
+    var list = function(dtype) {
         $.ajax({
-            url: '/' + type + '/create',
+            url: '/' + dtype,
+            cache: false,
+            data: {
+                'q': $('#q').val(),
+            },
+            dataType: 'json'
+        })
+        .done(function(response) {
+            $('#' + dtype + '-div').html('');
+            response.forEach(function (el) {
+                $('#' + dtype + '-div').append(library.drawElement(dtype, el));
+            });
+            $('#' + dtype + '-div').data('open', true);
+            $('#' + dtype + '-div').slideDown(300);
+        })
+        .fail(function(message) {
+            utility.ajax_fail(message);
+        });
+    };
+
+
+    var add = function(type, income) {
+        $.ajax({
+            url: '/' + type + '/create?income='+income,
             cache: false,
             dataType: 'json'
         })
@@ -134,7 +177,7 @@ var dashboard = (function ($, undefined) {
                 destroy(type, id);
             });
 
-
+            $('#genericModal form :input').prop('disabled', true);
             $('#genericModal').modal('toggle');
         })
         .fail(function (message) {
@@ -254,7 +297,9 @@ var dashboard = (function ($, undefined) {
 
     return {
         initialize: initialize,
-        list: list,
+        listentry: listentry,
+        listaccount: listaccount,
+        listcategory: listcategory,
         add: add,
         edit: edit,
         show: show,
@@ -704,39 +749,41 @@ var dashboard = (function($, undefined) {
 var library = (function ($, undefined) {
 
     var drawEntry = function(el) {
-        html = "<div class='row'><div class='col-12 mb-2'><div class='bg-primary border border-primary rounded-2' role='button' onclick=\"dashboard.show('entry', "+el.id+");\">";
+        html = "<div class='row'><div class='col-12 mb-2'><div class='app-draw-row entry-"+ el.status+"' onclick=\"dashboard.show('entry', "+el.id+");\">";
         html += "<div class='row'>";
-        html += "<div class='col-md-1 centered'>";
-        html += "<i class='fa-regular fa-el.icon'></i>";
+        html += "<div class='col-xs-2 col-md-1 centered'>";
+        html += ""+entryIcon(el.status);
         html += "</div>";
-        html += "<div class='col-md-3' style='text-align:right'>";
+        html += "<div class='col-xs-4 col-md-2' style='text-align:right'>";
         html += dateFormat(el.next_due_date);
         html += "</div>";
 
-        html += "<div class='col-md-2' style='text-align:right'>";
+        html += "<div class='col-xs-4 col-md-2' style='text-align:right'>";
         html += el.amount;
         html += "</div>";
 
-        html += "<div class='col-md-6' style='text-align:left'>";
+        html += "<div class='col-xs-6 col-md-4' style='text-align:left'>";
         html += el.name;
         html += "</div>";
+        html += "<div class='col-xs-6 col-md-3' style='text-align:left'>";
+        html += el.category;
+        html += "</div>";
+
         html += '</div></div></div>';
         return html;
+    };
+
+    var entryIcon = function(status) {
+        switch (status) {
+            case 'income': return '<i class="fa-solid fa-money-bill-wave"></i>';
+            case 'late': return '<i class="fa-solid fa-triangle-exclamation"></i>';
+            case 'due': return '<i class="fa-solid fa-alarm-clock"></i>';
+            case 'expense': return '<i class="fa-solid fa-file-invoice-dollar"></i>';
+        }
     };
 
     var drawAccount = function(el) {
-        html = "<div class='row'><div class='col-12 mb-2'><div class='bg-primary border border-primary rounded-2' role='button' onclick=\"dashboard.show('account', "+el.id+");\">";
-        html += "<div class='row'>";
-        html += "<div class='col-md-12 centered'>";
-        html += el.name;
-        html += "</div>";
-        html += '</div>';
-        html += '</div></div></div>';
-        return html;
-    };
-
-    var drawParty = function(el) {
-        html = "<div class='row'><div class='col-12 mb-2'><div class='bg-primary border border-primary rounded-2' role='button' onclick=\"dashboard.show('party', "+el.id+");\">";
+        html = "<div class='row'><div class='col-12 mb-2'><div class='app-draw-row account' onclick=\"dashboard.show('account', "+el.id+");\">";
         html += "<div class='row'>";
         html += "<div class='col-md-12 centered'>";
         html += el.name;
@@ -747,7 +794,7 @@ var library = (function ($, undefined) {
     };
 
     var drawCategory = function(el) {
-        html = "<div class='row'><div class='col-12 mb-2'><div class='bg-primary border border-primary rounded-2' role='button' onclick=\"dashboard.show('category', "+el.id+");\">";
+        html = "<div class='row'><div class='col-12 mb-2'><div class='app-draw-row category' onclick=\"dashboard.show('category', "+el.id+");\">";
         html += "<div class='row'>";
         html += "<div class='col-md-12 centered'>";
         html += el.label;
@@ -759,7 +806,7 @@ var library = (function ($, undefined) {
 
     var dateFormat = function(value) {
         var dateval = new Date(value);
-        return dateval.toDateString();
+        return dateval.toDateString().substring(4,10);
     };
 
     var drawButton = function(attr) {
@@ -910,7 +957,7 @@ var modal_form = (function ($, undefined) {
             if (attr.hasOwnProperty('value')) {
                 htmlString += " value='" + attr.value + "' ";
             }
-0
+
             if (attr.hasOwnProperty('numeric')) {
                 htmlString += " style='text-align:right' ";
             }
@@ -992,9 +1039,9 @@ var modal_form = (function ($, undefined) {
                 }
                 htmlString += "value = '-99'>";
                 if (attr.hasOwnProperty('placeholder') ) {
-                    htmlString += "-- " + attr.placeholder + " --";
+                    htmlString += "- " + attr.placeholder + " -";
                 } else {
-                    htmlString += "-- none selected --";
+                    htmlString += "- not selected -";
                 }
                 htmlString += "</option>\n";
 

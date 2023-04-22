@@ -12,6 +12,14 @@ body {
     --main-text-color-desc: grey;
     --main-border-color: silver;
     --main-back-color-deac:  silver;
+    --draw-entry-income: #90ff90;
+    --draw-entry-expense: #BCD4E6;
+    --draw-entry-late: #FF7F50;
+    --draw-entry-due: #fdefb2;
+    --draw-account: #c0c0c0;
+    --draw-category: #c0c0c0;
+
+
     --shadow-color-a: rgba(199, 199, 199, 0.5);
     --shadow-color-b: rgba(231, 231, 231, 0.5);
 }
@@ -26,6 +34,15 @@ body.dark-theme {
     --main-text-color-desc: silver;
     --main-back-color-deac:  #404040;
     --main-border-color: gray;
+
+    --draw-entry-income: #004000;
+    --draw-entry-expense: #4C516D;
+    --draw-entry-late: #C6011F;
+    --draw-entry-due: #978942;
+    --draw-account: #303030;
+    --draw-category: #303030;
+
+
     --shadow-color-a: rgba(8, 8, 8, 0.5);
     --shadow-color-b: rgba(12, 12, 12, 0.5);
     }
@@ -63,7 +80,7 @@ body.dashboard {
 .modal-title,
 .card-title {
     color:var(--main-text-color);
-    background-color:var(--main-back-color);
+    background-color:transparent;
     float:left;
     margin-right:32px
 }
@@ -76,7 +93,7 @@ body.dashboard {
 .control-label,
 .card-control-panel {
     color: var(--main-text-color);
-    background-color: var(--main-back-color);
+    background-color: transparent;
 }
 
 .card-borderless,
@@ -140,6 +157,11 @@ body.dashboard {
     -webkit-transition: .4s;
     transition: .4s;
     border-radius: 50%;
+  }
+
+  .form-control:disabled {
+    background-color: transparent;
+    border: 0;
   }
 
   input:checked + .cb3slider {
@@ -406,4 +428,38 @@ body.dashboard {
 
 .centered {
     text-align:center;
+}
+
+.app-draw-row {
+    width:100%;
+    color: var(--main-text-color);
+    border-radius: 6px;
+    border: solid 1px var(--shadow-color-b);
+    padding:4px;
+    margin-bottom:4px;
+    box-shadow: 0 4px 8px 0 var(--shadow-color-a), 0 4px 20px 0 var(--shadow-color-b);
+}
+
+.app-draw-row.account {
+    background-color: var(--draw-account);
+}
+.app-draw-row.category {
+    background-color: var(--draw-category);
+}
+.app-draw-row.entry-late {
+    font-weight: bold;
+    background-color: var(--draw-entry-late);
+}
+
+.app-draw-row.entry-income {
+    background-color: var(--draw-entry-income);
+}
+
+.app-draw-row.entry-due {
+    background-color: var(--draw-entry-due);
+}
+
+.app-draw-row.entry-expense {
+    background-color: var(--draw-entry-expense);
+
 }

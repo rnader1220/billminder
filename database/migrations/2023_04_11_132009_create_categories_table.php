@@ -19,7 +19,6 @@ class CreateCategoriesTable extends Migration
             $table->string('label');
             $table->string('description')->nullable();
             $table->boolean('expense')->default(false);
-            $table->integer('display_order');
             $table->softDeletes();
             $table->timestamps();
         });

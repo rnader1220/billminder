@@ -8,23 +8,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Traits\TableMaint;
-use App\Traits\Orderable;
 
 class Account extends BaseModel
 {
     use HasFactory;
     use TableMaint;
     use SoftDeletes;
-    use Orderable;
-
-
-	protected $order_cohort = ['user_id'];
-	protected $order_column = 'display_order';
 
     public static function getList(string $q = '') {
         $result = Account::where('user_id', Auth::user()->id)
         ->whereNull('deleted_at')
-        ->orderBy('display_order')
+        ->orderBy('name')
         ->get()
         ->toArray();
         return $result;
@@ -34,21 +28,15 @@ class Account extends BaseModel
         $result = Account::select(DB::raw('name as label'), DB::raw('id as value'))
             ->where('user_id', Auth::user()->id)
             ->whereNull('deleted_at')
-            ->orderBy('display_order')
+            ->orderBy('name')
             ->get()
             ->toArray();
         return $result;
     }
 
-    public function __construct() {
-        parent::__construct();
-        $this->form[0][3]['parameters']['list'] = $this->getSortOrderList();
-    }
-
     protected $fillable = [
         'name',
         'balance',
-        'display_order',
         'bank_account',
         'description',
         'account_number',
@@ -94,16 +82,6 @@ class Account extends BaseModel
                     'datapoint' => 'bank_account',
                     'grid_class' => 'col-lg-3'
                 ],
-            ],
-            [
-                'type' => 'select',
-                'parameters' =>
-                [
-                    'label' => "Display Order",
-                    'datapoint' => 'display_order',
-                    'grid_class' => 'col-lg-3',
-                    'list' => []
-                ]
             ],
             [
                 'type' => 'textarea',

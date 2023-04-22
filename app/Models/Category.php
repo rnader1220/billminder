@@ -8,29 +8,24 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Traits\TableMaint;
-use App\Traits\Orderable;
 
 class Category extends BaseModel
 {
     use HasFactory;
     use TableMaint;
     use SoftDeletes;
-    use Orderable;
 
-	protected $order_cohort = ['user_id'];
-	protected $order_column = 'display_order';
 
 
     protected $fillable = [
         'label',
-        'display_order',
         'description',
     ];
 
     public function getList(string $q = '') {
         $result = Category::where('user_id', Auth::user()->id)
-        ->orderBy('display_order')
         ->whereNull('deleted_at')
+        ->orderBy('label')
         ->get()
         ->toArray();
         return $result;
@@ -40,15 +35,10 @@ class Category extends BaseModel
         $result = Category::select('label', DB::raw('id as value'))
             ->where('user_id', Auth::user()->id)
             ->whereNull('deleted_at')
-            ->orderBy('display_order')
+            ->orderBy('label')
             ->get()
             ->toArray();
         return $result;
-    }
-
-    public function __construct() {
-        parent::__construct();
-        $this->form[0][1]['parameters']['list'] = $this->getSortOrderList();
     }
 
     protected $form = [
@@ -60,16 +50,6 @@ class Category extends BaseModel
                     'label' => "Category Label",
                     'datapoint' => 'label',
                     'grid_class' => 'col-md-9'
-                ]
-            ],
-            [
-                'type' => 'select',
-                'parameters' =>
-                [
-                    'label' => "Display Order",
-                    'datapoint' => 'display_order',
-                    'grid_class' => 'col-lg-3',
-                    'list' => []
                 ]
             ],
             [

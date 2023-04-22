@@ -24,6 +24,11 @@ trait TableMaint
             'form_div_class' => "col-md-12",
             'form' => $this->hydrateForm()
         ];
+        if($mode == 'show') {
+            $view['utilities'] = $this->getUtilities();
+            $view['actions'] = $this->getActions();
+
+        }
         return $view;
     }
 
@@ -74,36 +79,27 @@ trait TableMaint
 
 
     protected $controls = [
-        'list' => [
-            'head' => [
-                ['title' => 'Add New %name%', 'class' => 'btn-success', 'id' => 'control-create', 'icon' =>'far fa-plus'],
-            ],
-            'foot' => [
-                ['title' => 'Return', 'class' => 'btn-return', 'id' => 'control-close', 'icon' =>'far fa-undo-alt'],
-            ]
-
-        ],
         'view' => [
             'head' => [
                 ['title' => 'Edit This %name%', 'class' => 'btn-warning', 'id' => 'control-edit', 'icon' =>'far fa-edit'],
                 ['title' => 'Delete This %name%', 'class' => 'btn-danger', 'id' => 'control-delete', 'icon' =>'far fa-trash'],
             ],
             'foot' => [
-                ['title' => 'Return To List', 'class' => 'btn-return', 'id' => 'control-close', 'icon' =>'far fa-undo-alt'],
+                ['title' => 'Close', 'class' => 'btn-secondary', 'id' => 'control-cancel', 'icon' =>'far fa-undo-alt'],
             ]
         ],
         'edit' => [
             'head' => [],
             'foot' => [
                 ['title' => 'Save %name% Changes', 'class' => 'btn-success', 'id' => 'control-save', 'icon' =>'far fa-save'],
-                ['title' => 'Cancel Edit %name%', 'class' => 'btn-return', 'id' => 'control-cancel', 'icon' =>'far fa-undo-alt'],
+                ['title' => 'Cancel Edit %name%', 'class' => 'btn-secondary', 'id' => 'control-cancel', 'icon' =>'far fa-undo-alt'],
             ]
         ],
         'create' => [
             'head' => [],
             'foot' => [
                 ['title' => 'Save New %name%', 'class' => 'btn-success', 'id' => 'control-save', 'icon' =>'far fa-save'],
-                ['title' => 'Cancel New %name%', 'class' => 'btn-return', 'id' => 'control-cancel', 'icon' =>'far fa-undo-alt'],
+                ['title' => 'Cancel New %name%', 'class' => 'btn-secondary', 'id' => 'control-cancel', 'icon' =>'far fa-undo-alt'],
             ]
         ]
     ];
@@ -111,12 +107,18 @@ trait TableMaint
 
     public function getUtilities(): array
     {
-        return $this->utilities;
+        if(isset($this->utilities)){
+            return $this->utilities;
+        }
+        return [];
     }
 
     public function getActions(): array
     {
-        return $this->actions;
+        if(isset($this->actions)){
+            return $this->actions;
+        }
+        return [];
     }
 
 

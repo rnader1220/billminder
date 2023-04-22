@@ -124,8 +124,14 @@ var dashboard = (function ($, undefined) {
                 $('.modal-header').html('');
             });
             utility.set_dynamic_button('#control-edit', function () {
+                $('#genericModal').modal('toggle');
+                edit(type, id);
             });
-            utility.set_dynamic_button('#control-edit', function () {
+            utility.set_dynamic_button('#control-cycle', function () {
+                cycle(type, id);
+            });
+            utility.set_dynamic_button('#control-delete', function () {
+                destroy(type, id);
             });
 
 
@@ -156,6 +162,7 @@ var dashboard = (function ($, undefined) {
                 $('.modal-footer').html('');
                 $('.modal-title').html('');
                 $('.modal-header').html('');
+                show(type, id);
             });
             utility.set_dynamic_button('#control-save',
                 function () {
@@ -199,7 +206,36 @@ var dashboard = (function ($, undefined) {
         }).validate(type.update_rules);
     };
 
+
+    var cycle = function(type, id) {
+        var data = [{
+            name: "_token",
+            value: $("meta[name='csrf-token']").attr("content")
+        }]; // convert form to array
+
+        if (confirm()) $.ajax({
+            type: "patch",
+            url: '/' + type + '/' + id + '/cycle',
+            data: $.param(data),
+            dataType: 'json'
+        })
+        .done(function (resp) {
+            utility.show_message(resp, function () {
+                list(type);
+            });
+        })
+        .fail(function (message) {
+            utility.ajax_fail(message);
+        });
+    };
+
+
     var destroy = function(type, id) {
+        var data = [{
+            name: "_token",
+            value: $("meta[name='csrf-token']").attr("content")
+        }]; // convert form to array
+
         if (confirm()) $.ajax({
             type: "DELETE",
             url: '/' + type + '/' + id,

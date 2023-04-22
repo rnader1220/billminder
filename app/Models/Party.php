@@ -22,6 +22,7 @@ class Party extends BaseModel
 
     public static function getList(string $q = '') {
         $result = Party::where('user_id', Auth::user()->id)
+            ->whereNull('deleted_at')
             ->orderBy('display_order')
             ->get()
             ->toArray();
@@ -31,6 +32,7 @@ class Party extends BaseModel
     public static function getSelectList(string $q = '') {
         $result = Party::select(DB::raw('name as label'), DB::raw('id as value'))
             ->where('user_id', Auth::user()->id)
+            ->whereNull('deleted_at')
             ->orderBy('display_order')
             ->get()
             ->toArray();

@@ -15,7 +15,10 @@ class Entry extends BaseModel
     use SoftDeletes;
 
     public static function getList(string $q = '') {
-        $result = Entry::where('user_id', Auth::user()->id)-> orderBy('next_due_date')->get()->toArray();
+        $result = Entry::where('user_id', Auth::user()->id)
+        ->orderBy('next_due_date')->whereNull('deleted_at')
+        ->get()
+        ->toArray();
         return $result;
     }
 
@@ -36,6 +39,7 @@ class Entry extends BaseModel
         $data['estimated_date'] = (isset($data['estimated_date'])?1:0);
     }
 
+
     protected $fillable = [
         'name',
         'amount',
@@ -53,6 +57,17 @@ class Entry extends BaseModel
         'account_id',
         'party_id',
     ];
+
+    protected $utilities = [
+        [
+            'label' => 'Cycle',
+            'title' => 'Cycle This Entry',
+            'button_class' => 'btn-primary m-1',
+            'icon' => 'fas fa-rotate',
+            'id' => 'control-cycle',
+        ],
+    ];
+
 
     protected $form = [
         [

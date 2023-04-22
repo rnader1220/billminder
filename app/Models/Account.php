@@ -23,6 +23,7 @@ class Account extends BaseModel
 
     public static function getList(string $q = '') {
         $result = Account::where('user_id', Auth::user()->id)
+        ->whereNull('deleted_at')
         ->orderBy('display_order')
         ->get()
         ->toArray();
@@ -32,6 +33,7 @@ class Account extends BaseModel
     public static function getSelectList(string $q = '') {
         $result = Account::select(DB::raw('name as label'), DB::raw('id as value'))
             ->where('user_id', Auth::user()->id)
+            ->whereNull('deleted_at')
             ->orderBy('display_order')
             ->get()
             ->toArray();

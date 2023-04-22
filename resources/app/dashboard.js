@@ -124,6 +124,7 @@ var dashboard = (function ($, undefined) {
                 $('.modal-header').html('');
             });
             utility.set_dynamic_button('#control-edit', function () {
+                $('#genericModal').modal('toggle');
                 edit(type, id);
             });
             utility.set_dynamic_button('#control-cycle', function () {
@@ -161,6 +162,7 @@ var dashboard = (function ($, undefined) {
                 $('.modal-footer').html('');
                 $('.modal-title').html('');
                 $('.modal-header').html('');
+                show(type, id);
             });
             utility.set_dynamic_button('#control-save',
                 function () {

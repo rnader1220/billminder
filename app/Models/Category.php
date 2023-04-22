@@ -30,6 +30,7 @@ class Category extends BaseModel
     public function getList(string $q = '') {
         $result = Category::where('user_id', Auth::user()->id)
         ->orderBy('display_order')
+        ->whereNull('deleted_at')
         ->get()
         ->toArray();
         return $result;
@@ -38,6 +39,7 @@ class Category extends BaseModel
     public static function getSelectList(string $q = '') {
         $result = Category::select('label', DB::raw('id as value'))
             ->where('user_id', Auth::user()->id)
+            ->whereNull('deleted_at')
             ->orderBy('display_order')
             ->get()
             ->toArray();

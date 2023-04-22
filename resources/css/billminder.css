@@ -356,6 +356,12 @@ body.dashboard {
     box-shadow: 0 4px 8px 0 var(--shadow-color-a), 0 4px 20px 0 var(--shadow-color-b);
 }
 
+.link-app-primary .display-title,
+.btn-app-primary .display-title {
+    font-size: 1.10em;
+    font-weight: 700;
+}
+
 .form-element-app-primary {
     color: var(--main-text-color);
     background-color: var(--main-back-color);
@@ -398,3 +404,6 @@ body.dashboard {
 
 }
 
+.centered {
+    text-align:center;
+}

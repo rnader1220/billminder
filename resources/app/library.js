@@ -1,9 +1,9 @@
 var library = (function ($, undefined) {
 
     var drawEntry = function(el) {
-        html = "<div class='bg-primary border border-primary rounded-2' role='button' onclick=\"dashboard.show('entry', "+el.id+");\">";
+        html = "<div class='row'><div class='col-12 mb-2'><div class='bg-primary border border-primary rounded-2' role='button' onclick=\"dashboard.show('entry', "+el.id+");\">";
         html += "<div class='row'>";
-        html += "<div class='col-md-1' style='text-align:center'>";
+        html += "<div class='col-md-1 centered'>";
         html += "<i class='fa-regular fa-el.icon'></i>";
         html += "</div>";
         html += "<div class='col-md-3' style='text-align:right'>";
@@ -17,42 +17,29 @@ var library = (function ($, undefined) {
         html += "<div class='col-md-6' style='text-align:left'>";
         html += el.name;
         html += "</div>";
-
-        html += '</div>';
-        html += '</div>';
+        html += '</div></div></div>';
         return html;
     };
 
     var drawAccount = function(el) {
-        html = "<div class='bg-primary border border-primary rounded-2' role='button' onclick=\"dashboard.show('account', "+el.id+");\">";
+        html = "<div class='row'><div class='col-12 mb-2'><div class='bg-primary border border-primary rounded-2' role='button' onclick=\"dashboard.show('account', "+el.id+");\">";
         html += "<div class='row'>";
-        html += "<div class='col-md-12'>";
+        html += "<div class='col-md-12 centered'>";
         html += el.name;
         html += "</div>";
         html += '</div>';
-        html += '</div>';
-        return html;
-    };
-
-    var drawParty = function(el) {
-        html = "<div class='bg-primary border border-primary rounded-2' role='button' onclick=\"dashboard.show('party', "+el.id+");\">";
-        html += "<div class='row'>";
-        html += "<div class='col-md-12'>";
-        html += el.name;
-        html += "</div>";
-        html += '</div>';
-        html += '</div>';
+        html += '</div></div></div>';
         return html;
     };
 
     var drawCategory = function(el) {
-        html = "<div class='bg-primary border border-primary rounded-2' role='button' onclick=\"dashboard.show('category', "+el.id+");\">";
+        html = "<div class='row'><div class='col-12 mb-2'><div class='bg-primary border border-primary rounded-2' role='button' onclick=\"dashboard.show('category', "+el.id+");\">";
         html += "<div class='row'>";
-        html += "<div class='col-md-12'>";
+        html += "<div class='col-md-12 centered'>";
         html += el.label;
         html += "</div>";
         html += '</div>';
-        html += '</div>';
+        html += '</div></div></div>';
         return html;
     };
 

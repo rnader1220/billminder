@@ -8,7 +8,6 @@ var dashboard = (function ($, undefined) {
     var list = function(dtype) {
         if(dtype == 'entry') $('#entry-div').slideUp(300, function() {$('#entry-div').html('');});
         $('#account-div').slideUp(300, function() {$('#account-div').html('');});
-        $('#party-div').slideUp(300, function() {$('#party-div').html('');});
         $('#category-div').slideUp(300, function() {$('#category-div').html('');});
         setTimeout(function () {
             $.ajax({

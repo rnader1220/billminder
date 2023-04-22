@@ -16,7 +16,8 @@ class Entry extends BaseModel
 
     public static function getList(string $q = '') {
         $result = Entry::where('user_id', Auth::user()->id)
-        ->orderBy('next_due_date')->whereNull('deleted_at')
+        ->orderBy('next_due_date')
+        ->whereNull('deleted_at')
         ->get()
         ->toArray();
         return $result;
@@ -26,7 +27,7 @@ class Entry extends BaseModel
         parent::__construct();
         $this->form[0][12]['parameters']['list'] = Category::getSelectList();
         $this->form[0][13]['parameters']['list'] = Account::getSelectList();
-        $this->form[0][14]['parameters']['list'] = Party::getSelectList();
+        $this->form[0][14]['parameters']['list'] = Account::getSelectList();
 
     }
 

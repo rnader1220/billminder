@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use ESolution\DBEncryption\Traits\EncryptedAttribute;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +15,24 @@ class Register extends BaseModel
     use HasFactory;
     use TableMaint;
     use SoftDeletes;
+    use EncryptedAttribute;
 
+    protected $fillable = [
+        'name',
+        'amount',
+        'income',
+        'paid_date',
+        'fixed',
+        'description',
+        'category_id',
+        'account_id',
+        'party_id',
+    ];
+
+    protected $encryptable = [
+        'name',
+        'description',
+    ];
 
     public static function getList(string $q = '') {
         $result = Entry::select('register.id', 'register.paid_date', 'register.amount', 'register.name',
@@ -60,19 +78,6 @@ class Register extends BaseModel
         $entry = Entry::find($this->entry_id);
         return $entry->postCycle();
     }
-
-    protected $fillable = [
-        'name',
-        'amount',
-        'income',
-        'paid_date',
-        'fixed',
-        'description',
-        'category_id',
-        'account_id',
-        'party_id',
-    ];
-
 
     protected $form = [
         [

@@ -3,24 +3,31 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use ESolution\DBEncryption\Traits\EncryptedAttribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Traits\TableMaint;
 
+
 class Category extends BaseModel
 {
     use HasFactory;
     use TableMaint;
     use SoftDeletes;
-
-
+    use EncryptedAttribute;
 
     protected $fillable = [
         'label',
         'description',
     ];
+
+    protected $encryptable = [
+        'label',
+        'description',
+    ];
+
 
     public function getList(string $q = '') {
         $result = Category::where('user_id', Auth::user()->id)

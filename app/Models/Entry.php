@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use ESolution\DBEncryption\Traits\EncryptedAttribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use ESolution\DBEncryption\Encrypter;
 use App\Traits\TableMaint;
 use Carbon\Carbon;
 
@@ -16,6 +18,30 @@ class Entry extends BaseModel
     use HasFactory;
     use TableMaint;
     use SoftDeletes;
+    use EncryptedAttribute;
+
+    protected $encryptable = [
+        'name',
+        'description',
+    ];
+
+    protected $fillable = [
+        'name',
+        'amount',
+        'estimated_amount',
+        'income',
+        'autopay',
+        'cycle',
+        'next_due_date',
+        'estimated_date',
+        'fixed',
+        'payments_remaining',
+        'balance_remaining',
+        'description',
+        'category_id',
+        'account_id',
+        'party_id',
+    ];
 
     public static function getList(string $q = '') {
         $result = Entry::select('entries.id', 'entries.next_due_date', 'entries.amount', 'entries.name',
@@ -35,6 +61,11 @@ class Entry extends BaseModel
         ->whereNull('entries.deleted_at')
         ->get()
         ->toArray();
+
+        foreach($result as $index => $row) {
+            $result[$index]['category'] = Encrypter::decrypt($row['category']);
+        }
+
         return $result;
     }
 
@@ -108,25 +139,6 @@ class Entry extends BaseModel
             $data['income'] = ($data['income']?1:0);
         }
     }
-
-
-    protected $fillable = [
-        'name',
-        'amount',
-        'estimated_amount',
-        'income',
-        'autopay',
-        'cycle',
-        'next_due_date',
-        'estimated_date',
-        'fixed',
-        'payments_remaining',
-        'balance_remaining',
-        'description',
-        'category_id',
-        'account_id',
-        'party_id',
-    ];
 
     protected $actions = [
         [

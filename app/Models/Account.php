@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use ESolution\DBEncryption\Encrypter;
 use App\Traits\TableMaint;
 
 
@@ -17,7 +18,6 @@ class Account extends BaseModel
     use TableMaint;
     use SoftDeletes;
     use EncryptedAttribute;
-
 
     public static function getList(string $q = '') {
         $result = Account::where('user_id', Auth::user()->id)
@@ -29,12 +29,18 @@ class Account extends BaseModel
     }
 
     public static function getSelectList(string $q = '') {
-        $result = Account::select(DB::raw('name as label'), DB::raw('id as value'))
+        $result = Account::select('website', 'name', 'id as value', 'website')
             ->where('user_id', Auth::user()->id)
             ->whereNull('deleted_at')
             ->orderBy('name')
             ->get()
             ->toArray();
+
+
+        foreach($result as $index => $row) {
+            $result[$index]['label'] = $row['name'];
+            unset($row['name']);
+        }
         return $result;
     }
 
@@ -61,7 +67,6 @@ class Account extends BaseModel
     ];
 
     protected $hidden = [
-        'website',
         'username',
         'password',
     ];
@@ -131,7 +136,7 @@ class Account extends BaseModel
                 ]
             ],
             [
-                'type' => 'input_text',
+                'type' => 'input_url',
                 'parameters' =>
                 [
                     'label' => "Website URL",

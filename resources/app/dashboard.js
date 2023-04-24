@@ -134,16 +134,12 @@ var dashboard = (function ($, undefined) {
         .done(function (resp) {
             showModalForm(type, id, resp,
                 function() {},
-                function() {disableForm();}
+                function() {}
                 );
         })
         .fail(function (message) {
             utility.ajax_fail(message);
         });
-    };
-
-    var disableForm = function() {
-        $('#genericModal form :input').prop('disabled', true);
     };
 
     var showModalForm = function(type, id, resp, cb_cancel, cb_submit) {
@@ -199,7 +195,7 @@ var dashboard = (function ($, undefined) {
             switch(resp.action) {
                 case 'show':  showModalForm(type, null, resp,
                     function() {},
-                    function() {disableForm();}
+                    function() {}
                 ); break;
                 case 'create':
                     showModalForm(type, null, resp,

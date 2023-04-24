@@ -3,17 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use ESolution\DBEncryption\Traits\EncryptedAttribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Traits\TableMaint;
 
+
 class Account extends BaseModel
 {
     use HasFactory;
     use TableMaint;
     use SoftDeletes;
+    use EncryptedAttribute;
+
 
     public static function getList(string $q = '') {
         $result = Account::where('user_id', Auth::user()->id)
@@ -46,11 +50,27 @@ class Account extends BaseModel
         'password',
     ];
 
+    protected $encryptable = [
+        'name',
+        'description',
+        'account_number',
+        'routing_number',
+        'website',
+        'username',
+        'password'
+    ];
+
     protected $hidden = [
         'website',
         'username',
         'password',
     ];
+
+
+    protected $actions = [
+
+    ];
+
 
     protected $form = [
         [

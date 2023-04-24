@@ -83,6 +83,7 @@ class RegisterController extends Controller
         //
     }
 
+
     public function getCycle($entry_id)
     {
         $record = new Register();

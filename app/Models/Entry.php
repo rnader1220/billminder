@@ -55,32 +55,47 @@ class Entry extends BaseModel
         return$this->getForm($mode);
     }
 
-    public function cycle() {
-        $newdate = Carbon::create($this->next_bill_date);
+    public function postCycle() {
+        $success = true;
+        $detail = '';
+
+        $newdate = Carbon::create($this->next_due_date);
         switch($this->cycle) {
             case -1:
-                $this->next_bill_date = $newdate->addWeek();
+                $this->next_due_date = $newdate->addWeek();
                 break;
             case -2:
-                $this->next_bill_date = $newdate->addWeeks(2);
+                $this->next_due_date = $newdate->addWeeks(2);
                 break;
             case -3:
-                $this->next_bill_date = $newdate->addMonth();
+                $this->next_due_date = $newdate->addMonth();
                 break;
             case -4:
-                $this->next_bill_date = $newdate->addMonths(3);
+                $this->next_due_date = $newdate->addMonths(3);
                 break;
             case -5:
-                $this->next_bill_date = $newdate->addYear();
+                $this->next_due_date = $newdate->addYear();
                 break;
             default:
-                $this->next_bill_date = null;
+                $this->next_due_date = null;
                 break;
         }
         $this->estimated_date = 1;
         if(!$this->fixed_amount) {
             $this->estimated_amount = 1;
         }
+
+
+        try {
+            $this->save();
+        } catch (\Exception $e) {
+            $success = false;
+            $detail = $e->getMessage();
+        }
+
+        return $this->responseMessage('Cycled', $success, $detail, $this->id);
+
+
     }
 
     protected function customUpdate(array &$data)
@@ -113,13 +128,14 @@ class Entry extends BaseModel
         'party_id',
     ];
 
-    protected $utilities = [
+    protected $actions = [
         [
             'label' => 'Cycle',
             'title' => 'Cycle This Entry',
             'button_class' => 'btn-primary m-1',
             'icon' => 'fas fa-rotate',
-            'id' => 'control-cycle',
+            'id' => 'utility-cycle',
+            'action' => 'cycle',
         ],
     ];
 

@@ -26,7 +26,6 @@ trait TableMaint
             'form' => $this->hydrateForm()
         ];
         if($mode == 'show') {
-            $view['utilities'] = $this->getUtilities();
             $view['actions'] = $this->getActions();
 
         }
@@ -106,14 +105,6 @@ trait TableMaint
     ];
 
 
-    public function getUtilities(): array
-    {
-        if(isset($this->utilities)){
-            return $this->utilities;
-        }
-        return [];
-    }
-
     public function getActions(): array
     {
         if(isset($this->actions)){
@@ -121,7 +112,6 @@ trait TableMaint
         }
         return [];
     }
-
 
     public function dialogTitle(string $mode, string $label): string
     {

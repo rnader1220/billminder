@@ -270,23 +270,26 @@ var modal_form = (function ($, undefined) {
             return htmlString;
         },
 
-
-
-        button_utility: function (attr) {
-            htmlString = "<button title='" + attr.title + "' type='button' ";
-
+        button_action: function (attr) {
+            htmlString = "<button title='" + attr.title + "' style='display: none' type='button'";
             if (attr.hasOwnProperty('disabled')) {
-                htmlString += 'disabled';
+                htmlString += ' disabled';
             }
-            htmlString += "class='btn " + attr.button_class + " btn-utility' id='" + attr.id + "'>";
-
+            if (attr.hasOwnProperty('action')) {
+                htmlString += " data-action='" + attr.action + "'";
+            }
+            if (attr.hasOwnProperty('data')) {
+                htmlString += ' ' + attr.data;
+            }
+            htmlString += " class='btn " + attr.button_class + " btn-action' id='" + attr.id + "'>";
             if (attr.hasOwnProperty('icon')) {
-                htmlString += "<span class='" + attr.icon + "'></span>";
+                htmlString += " <span class='" + attr.icon + "'></span>";
             }
             if (attr.hasOwnProperty('label')) {
-                htmlString += "<span>&nbsp;" + attr.label + "</span>";
+                htmlString += " <span>&nbsp;" + attr.label + "</span>";
             }
-            htmlString += '</button>';
+            htmlString += ' </button>';
+
             if (attr.hasOwnProperty('grid_class')) {
                 htmlString = "<div class='" + attr.grid_class + "'>" + htmlString + "</div>";
             }
@@ -313,30 +316,27 @@ var modal_form = (function ($, undefined) {
         return htmlString;
     };
 
-    var panel_utility = function (list) {
+    var panel_action = function (list) {
         htmlString = '';
-        htmlString += "<div class='modal-utility-panel'>";
-        htmlString += button_utility(list);
-        htmlString += "</div class='modal-utility-panel'>";
+        htmlString += "<div data='yes' class='modal-action-panel'>";
+        list.forEach(function (element) {
+            htmlString += library.button_action(element);
+        });
+        htmlString += "</div class='modal-action-panel'>";
         return htmlString;
     };
 
-    var button_utility = function (list) {
+    var button_action = function (element) {
         htmlString = '';
-        list.forEach(function (element) {
-            htmlString += library.button_utility(element);
-        });
+        htmlString += library.button_action(element);
         return htmlString;
     };
 
     var table_build = function (content) {
-
-
         /* card body -- table here */
         htmlString += "<div class='index-table col-lg-12'>";
         htmlString += "<table id='" + content.table_name + "' class='hover display-table' style='width:100%'>";
         htmlString += "<tbody></tbody><tfoot></tfoot></table></div>";
-
         return htmlString;
     };
 
@@ -381,7 +381,9 @@ var modal_form = (function ($, undefined) {
     return {
         js_form_element: form_element,
         js_panel_control: panel_control,
+        js_panel_action: panel_action,
         js_button_control: button_control,
+        js_button_action: button_action,
         js_table_build: table_build,
         js_form_build: form_build,
     };

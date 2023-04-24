@@ -53,8 +53,6 @@ var dashboard = (function ($, undefined) {
         }
     };
 
-
-
     var list = function(dtype) {
         $.ajax({
             url: '/' + dtype,
@@ -77,37 +75,20 @@ var dashboard = (function ($, undefined) {
         });
     };
 
-
     var add = function(type, income) {
+        url = '/' + type + '/create';
+        if(typeof(income) != 'undefined')
+            url += '?income='+income;
         $.ajax({
-            url: '/' + type + '/create?income='+income,
+            url: url,
             cache: false,
             dataType: 'json'
         })
         .done(function (resp) {
-            $('.modal-body').html(modal_form.js_form_build(resp));
-            $('.modal-header').html('<h5 class="modal-title">'+resp.title+'</h5>');
-            $('.modal-header').append(modal_form.js_panel_control(resp.controls.head));
-
-            $('.modal-footer').html(modal_form.js_panel_control(resp.controls.foot));
-
-
-
-            utility.set_dynamic_button('#control-cancel', function () {
-                $('#genericModal').modal('toggle');
-                utility.reset_dynamic_button('#control-cancel');
-                utility.reset_dynamic_button('#control-save');
-                $('.modal-footer').html('');
-                $('.modal-title').html('');
-                $('.modal-header').html('');
-            });
-            utility.set_dynamic_button('#control-save', function () {
-                    $('.modal-body form').submit();
-                }
-            );
-            store(type);
-            $('#genericModal').modal('toggle');
-
+            showModalForm(type, null, resp,
+                function() {},
+                function() {store(type);}
+                );
         })
         .fail(function (message) {
             utility.ajax_fail(message);
@@ -134,7 +115,7 @@ var dashboard = (function ($, undefined) {
                     .done(function (resp) {
                         utility.show_message(resp, function () {
                             list(type);
-                            $('#genericModal').modal('toggle');
+                            $('#genericModal').modal('hide'); //'toggle'
                         });
                     })
                     .fail(function (message) {
@@ -144,76 +125,183 @@ var dashboard = (function ($, undefined) {
         }).validate(type.update_rules);
     };
 
-
     var show = function(type, id) {
-
         $.ajax({
             url: '/' + type + '/' + id,
             cache: false,
             dataType: 'json'
         })
         .done(function (resp) {
-            $('.modal-body').html(modal_form.js_form_build(resp));
-            $('.modal-header').html('<h5 class="modal-title">'+resp.title+'</h5>');
-            $('.modal-header').append(modal_form.js_panel_control(resp.controls.head));
-            $('.modal-footer').html(modal_form.js_panel_control(resp.controls.foot));
-
-            utility.set_dynamic_button('#control-cancel', function () {
-                $('#genericModal').modal('toggle');
-                utility.reset_dynamic_button('#control-cancel');
-                utility.reset_dynamic_button('#control-save');
-                $('.modal-footer').html('');
-                $('.modal-title').html('');
-                $('.modal-header').html('');
-            });
-            utility.set_dynamic_button('#control-edit', function () {
-                $('#genericModal').modal('toggle');
-                edit(type, id);
-            });
-            utility.set_dynamic_button('#control-cycle', function () {
-                cycle(type, id);
-            });
-            utility.set_dynamic_button('#control-delete', function () {
-                destroy(type, id);
-            });
-
-            $('#genericModal form :input').prop('disabled', true);
-            $('#genericModal').modal('toggle');
+            showModalForm(type, id, resp,
+                function() {},
+                function() {disableForm();}
+                );
         })
         .fail(function (message) {
             utility.ajax_fail(message);
         });
     };
 
-    var edit = function(type, id) {
+    var disableForm = function() {
+        $('#genericModal form :input').prop('disabled', true);
+    };
 
+    var showModalForm = function(type, id, resp, cb_cancel, cb_submit) {
+        $('.modal-body').html(modal_form.js_form_build(resp));
+        $('.modal-header').html('<h5 class="modal-title">'+resp.title+'</h5>');
+        $('.modal-header').append(modal_form.js_panel_control(resp.controls.head));
+        $('.modal-footer').html('');
+        if(typeof(resp.actions) == 'object') {
+            $('.modal-footer').append(modal_form.js_panel_action(resp.actions));
+        }
+        $('.modal-footer').append(modal_form.js_panel_control(resp.controls.foot));
+        $('#genericModal').modal('show'); //'toggle'
+
+        utility.set_dynamic_button('#control-cancel', function () {
+            $('#genericModal').modal('hide'); //'toggle'
+            utility.reset_dynamic_button('#control-cancel');
+            utility.reset_dynamic_button('#control-save');
+            $('.modal-footer').html('');
+            $('.modal-title').html('');
+            $('.modal-header').html('');
+            if(typeof(cb_cancel) == 'function') cb_cancel();
+        });
+
+        utility.set_dynamic_button('.btn-action', function() {
+            actionGet(this, type, id);
+        });
+
+        utility.set_dynamic_button('#control-save', function () {
+            $('.modal-body form').submit();
+        });
+
+        utility.set_dynamic_button('#control-edit', function () {
+            //$('#genericModal').modal('toggle');
+            edit(type, id);
+        });
+
+        utility.set_dynamic_button('#control-delete', function () {
+            destroy(type, id);
+        });
+
+        if(typeof(cb_submit) == 'function') cb_submit();
+    };
+
+    var actionGet = function(self, type, id) {
+        action = $(self).data('action');
+        $.ajax({
+            url: '/' + type + '/' + id + '/action?action=' + action ,
+            cache: false,
+            dataType: 'json'
+        })
+        .done(function (resp) {
+            //$('#genericModal').modal('toggle');
+            switch(resp.action) {
+                case 'show':  showModalForm(type, null, resp,
+                    function() {},
+                    function() {disableForm();}
+                ); break;
+                case 'create':
+                    showModalForm(type, null, resp,
+                        function() {},
+                        function() {actionPost(action, type, id);}
+                    );
+                    break;
+                case 'edit':  showModalForm(type, null, resp,
+                    function() {},
+                    function() {actionPatch(action, type, id);}
+                ); break;
+                default: utility.show_message(resp, function () {
+                    list(type);
+                }); break;
+            }
+
+        })
+        .fail(function (message) {
+            utility.ajax_fail(message);
+        });
+    };
+
+    var actionPost = function(action, type, id) {
+        $('.modal-body form').on('submit', function (e) {
+
+            e.preventDefault();
+            var data = $('form').serializeArray(); // convert form to array
+                    data.push({
+                        name: "_token",
+                        value: $("meta[name='csrf-token']").attr("content")
+                    });
+
+            $.ajax({
+                url: '/' + type + '/' + id + '/action?action=' + action ,
+                cache: false,
+                type: "POST",
+                data: $.param(data),
+                dataType: 'json'
+            })
+            .done(function (resp) {
+                $('#genericModal').modal('hide'); //'toggle
+                utility.show_message(resp, function () {
+                    list(type);
+                });
+
+            })
+            .fail(function (message) {
+                utility.ajax_fail(message);
+            });
+        });
+    };
+
+    var actionPatch = function(action, type, id) {
+        $('.modal-body form').on('submit', function (e) {
+            e.preventDefault();
+            var data = $('form').serializeArray(); // convert form to array
+            data.push({
+                name: "_token",
+                value: $("meta[name='csrf-token']").attr("content")
+            });
+            $.ajax({
+                url: '/' + type + '/' + id + '/action?action=' + action,
+                cache: false,
+                type: "PATCH",
+                data: $.param(data),
+                dataType: 'json'
+            })
+            .done(function (resp) {
+                //$('#genericModal').modal('toggle');
+                switch(resp.action) {
+                    case 'show':  show(type, id); break;
+                    case 'create':
+                        showModalForm(type, null, resp,
+                            function() {},
+                            function() {actionPost(type);}
+                        );
+                        break;
+                    case 'edit':  edit(type, id); break;
+                    default: utility.show_message(resp, function () {
+                        list(type);
+                        $('#genericModal').modal('hide');
+                    }); break;
+                }
+
+            })
+            .fail(function (message) {
+                utility.ajax_fail(message);
+            });
+        });
+    };
+
+    var edit = function(type, id) {
         $.ajax({
             url: '/' + type + '/' + id + '/edit',
             cache: false,
             dataType: 'json'
         })
         .done(function (resp) {
-            $('.modal-body').html(modal_form.js_form_build(resp));
-            $('.modal-header').html('<h5 class="modal-title">'+resp.title+'</h5>');
-            $('.modal-header').append(modal_form.js_panel_control(resp.controls.head));
-            $('.modal-footer').html(modal_form.js_panel_control(resp.controls.foot));
-
-            utility.set_dynamic_button('#control-cancel', function () {
-                $('#genericModal').modal('toggle');
-                utility.reset_dynamic_button('#control-cancel');
-                utility.reset_dynamic_button('#control-save');
-                $('.modal-footer').html('');
-                $('.modal-title').html('');
-                $('.modal-header').html('');
-                show(type, id);
-            });
-            utility.set_dynamic_button('#control-save',
-                function () {
-                    $('.modal-body form').submit();
-                }
+            showModalForm(type, id, resp,
+                function() {show(type, id);},
+                function() {update(type, id);}
             );
-            update(type, id);
-            $('#genericModal').modal('toggle');
         })
         .fail(function (message) {
             utility.ajax_fail(message);
@@ -239,7 +327,10 @@ var dashboard = (function ($, undefined) {
                     .done(function (resp) {
                         utility.show_message(resp, function () {
                             list(type);
-                            $('#genericModal').modal('toggle');
+                            if(type == 'category') {
+                                list('entry');
+                            }
+                            $('#genericModal').modal('hide'); //'toggle'
                         });
                     })
                     .fail(function (message) {
@@ -288,6 +379,7 @@ var dashboard = (function ($, undefined) {
         .done(function (resp) {
             utility.show_message(resp, function () {
                 list(type);
+                $('#genericModal').modal('hide'); //'toggle'
             });
         })
         .fail(function (message) {
@@ -1114,23 +1206,26 @@ var modal_form = (function ($, undefined) {
             return htmlString;
         },
 
-
-
-        button_utility: function (attr) {
-            htmlString = "<button title='" + attr.title + "' type='button' ";
-
+        button_action: function (attr) {
+            htmlString = "<button title='" + attr.title + "' style='display: none' type='button'";
             if (attr.hasOwnProperty('disabled')) {
-                htmlString += 'disabled';
+                htmlString += ' disabled';
             }
-            htmlString += "class='btn " + attr.button_class + " btn-utility' id='" + attr.id + "'>";
-
+            if (attr.hasOwnProperty('action')) {
+                htmlString += " data-action='" + attr.action + "'";
+            }
+            if (attr.hasOwnProperty('data')) {
+                htmlString += ' ' + attr.data;
+            }
+            htmlString += " class='btn " + attr.button_class + " btn-action' id='" + attr.id + "'>";
             if (attr.hasOwnProperty('icon')) {
-                htmlString += "<span class='" + attr.icon + "'></span>";
+                htmlString += " <span class='" + attr.icon + "'></span>";
             }
             if (attr.hasOwnProperty('label')) {
-                htmlString += "<span>&nbsp;" + attr.label + "</span>";
+                htmlString += " <span>&nbsp;" + attr.label + "</span>";
             }
-            htmlString += '</button>';
+            htmlString += ' </button>';
+
             if (attr.hasOwnProperty('grid_class')) {
                 htmlString = "<div class='" + attr.grid_class + "'>" + htmlString + "</div>";
             }
@@ -1157,30 +1252,27 @@ var modal_form = (function ($, undefined) {
         return htmlString;
     };
 
-    var panel_utility = function (list) {
+    var panel_action = function (list) {
         htmlString = '';
-        htmlString += "<div class='modal-utility-panel'>";
-        htmlString += button_utility(list);
-        htmlString += "</div class='modal-utility-panel'>";
+        htmlString += "<div data='yes' class='modal-action-panel'>";
+        list.forEach(function (element) {
+            htmlString += library.button_action(element);
+        });
+        htmlString += "</div class='modal-action-panel'>";
         return htmlString;
     };
 
-    var button_utility = function (list) {
+    var button_action = function (element) {
         htmlString = '';
-        list.forEach(function (element) {
-            htmlString += library.button_utility(element);
-        });
+        htmlString += library.button_action(element);
         return htmlString;
     };
 
     var table_build = function (content) {
-
-
         /* card body -- table here */
         htmlString += "<div class='index-table col-lg-12'>";
         htmlString += "<table id='" + content.table_name + "' class='hover display-table' style='width:100%'>";
         htmlString += "<tbody></tbody><tfoot></tfoot></table></div>";
-
         return htmlString;
     };
 
@@ -1225,7 +1317,9 @@ var modal_form = (function ($, undefined) {
     return {
         js_form_element: form_element,
         js_panel_control: panel_control,
+        js_panel_action: panel_action,
         js_button_control: button_control,
+        js_button_action: button_action,
         js_table_build: table_build,
         js_form_build: form_build,
     };

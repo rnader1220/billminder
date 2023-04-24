@@ -29,8 +29,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     })->name('dashboard');
     Route::namespace('App\Http\Controllers')->group(function () {
 
-        Route::post('/entry/{entry}/cycle', 'RegisterController@postCycle');
-        Route::get('/entry/{entry}/cycle', 'RegisterController@getCycle');
+
+        Route::any('/entry/{entry}/action', 'EntryController@action');
         Route::get('/entry/list', 'EntryController@index');
         Route::get('/party/list', 'PartyController@index');
         Route::get('/account/list', 'AccountController@index');

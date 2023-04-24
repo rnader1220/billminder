@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Entry;
+use App\Models\Register;
 
 class EntryController extends Controller
 {
@@ -53,11 +54,36 @@ class EntryController extends Controller
         return $response;
     }
 
-    public function cycle($id)
+    public function action(Request $request, $id)
     {
-        $record = Entry::find($id);
-        $response = $record->cycleRecord();
-        return $response;
+        switch($request->method()) {
+            case 'GET':
+                switch($request['action']) {
+                    case 'cycle':
+                        $register = new Register();
+                        $register->entry_id = $id;
+                        return $register->getCycle();
+                        break;
+                }
+                break;
+            case 'POST':
+                switch($request['action']) {
+                    case 'cycle':
+                        $register = new Register();
+                        $register->entry_id = $id;
+                        return $register->storeCycle($request);
+                        break;
+                }
+                break;
+            case 'PATCH':
+                switch($request['action']) {
+                    case 'cycle':
+                        break;
+                }
+                break;
+        }
+
+
     }
 
 }

@@ -3,13 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
+use App\Traits\TableMaint;
 
 class Register extends BaseModel
 {
     use HasFactory;
+    use TableMaint;
+    use SoftDeletes;
 
 
     public static function getList(string $q = '') {
@@ -30,9 +34,9 @@ class Register extends BaseModel
 
     public function __construct() {
         parent::__construct();
-        $this->form[0][8]['parameters']['list'] = Category::getSelectList();
-        $this->form[0][9]['parameters']['list'] = Account::getSelectList();
-        $this->form[0][10]['parameters']['list'] = Account::getSelectList();
+        $this->form[0][6]['parameters']['list'] = Category::getSelectList();
+        $this->form[0][7]['parameters']['list'] = Account::getSelectList();
+        $this->form[0][8]['parameters']['list'] = Account::getSelectList();
 
     }
 
@@ -40,28 +44,21 @@ class Register extends BaseModel
         $entry = Entry::find($this->entry_id)->toArray();
         $this->fill($entry);
         $this->id = null;
-        $this->paid_date = $entry->next_due_date;
-        $this->label = ($this->income?'Income':'Expense');
+        $this->paid_date = $entry['next_due_date'];
+        $this->label = ($this->income?'Income Register':'Expense Register');
         if($this->income) {
-            $this->form[0][9]['parameters']['label'] = $this->form[0][9]['parameters']['label_income'];
-            $this->form[0][10]['parameters']['label'] = $this->form[0][10]['parameters']['label_income'];
+            $this->form[0][7]['parameters']['label'] = $this->form[0][7]['parameters']['label_income'];
+            $this->form[0][8]['parameters']['label'] = $this->form[0][8]['parameters']['label_income'];
         }
-        return$this->getForm('create');
+        $form = $this->getForm('create');
+        $form['action'] = 'create';
+        return $form;
     }
 
     public function storeCycle(Request $request) {
-        $this->storeRecord($request);
+        $this->saveRecord($request);
         $entry = Entry::find($this->entry_id);
-        $entry->cycle();
-    }
-
-    public function localGetForm($mode) {
-        $this->label = ($this->income?'Income':'Expense');
-        if($this->income) {
-            $this->form[0][9]['parameters']['label'] = $this->form[0][9]['parameters']['label_income'];
-            $this->form[0][10]['parameters']['label'] = $this->form[0][10]['parameters']['label_income'];
-        }
-        return$this->getForm($mode);
+        return $entry->postCycle();
     }
 
     protected $fillable = [

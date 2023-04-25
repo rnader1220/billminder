@@ -2,6 +2,7 @@ var dashboard = (function ($, undefined) {
 
 
     var initialize = function() {
+        subscriber();
         listentry();
     };
 
@@ -52,6 +53,24 @@ var dashboard = (function ($, undefined) {
             list('category');
         }
     };
+
+    var subscriber = function() {
+        $.ajax({
+            url: '/profile/subscriber',
+            cache: false,
+            dataType: 'json'
+        })
+        .done(function(response) {
+
+            if(typeof(response.subscribed_at) != 'undefined') {
+                $('.subscribe-div').hide();
+            }
+        })
+        .fail(function(message) {
+            utility.ajax_fail(message);
+        });
+    };
+
 
     var list = function(dtype) {
         $.ajax({

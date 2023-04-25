@@ -32,14 +32,14 @@
                 <div class='row'>
                     <div class='col-lg-8 col-12'>
                         <div class='container-fluid mb-2'><div class='row'>
-                            <div class="col-6"><div class='btn-app-primary centered' role='button' onclick="dashboard.add('entry', false);"><i class='fa-regular fa-plus-large'></i> New Expense</div></div>
-                            <div class="col-6"><div class='btn-app-primary centered' role='button' onclick="dashboard.add('entry', true);"><i class='fa-regular fa-plus-large'></i> New Income</div></div>
+                            <div class="col-6"><div class='btn-app-primary centered' role='button' onclick="dashboard.add('entry', false);"><i class='fa-regular fa-plus-large'></i>&nbsp;&nbsp;New Expense</div></div>
+                            <div class="col-6"><div class='btn-app-primary centered' role='button' onclick="dashboard.add('entry', true);"><i class='fa-regular fa-plus-large'></i>&nbsp;&nbsp;New Income</div></div>
                         </div></div>
                     </div>
                     <div class='col-lg-4 col-12'>
                         <div class='container-fluid mb-2'><div class='row'>
-                            <div class="col-6"><div class='btn-app-primary centered' role='button' onclick="dashboard.show('user');"><i id='category-icon' class='fa-thin fa-id-card'></i> Profile</div></div>
-                            <div class="col-6"><div class='btn-app-primary centered' role='button' onclick="utility.logout();"><i id='category-icon' class='fa-thin fa-person-to-door'></i> Log Out</div></div>
+                            <div class="col-6 offset-md-2 col-md-4"><div class='btn-app-primary centered' role='button' onclick="dashboard.show('profile', 0);"><i id='category-icon' class='fa-thin fa-id-card'></i>&nbsp;&nbsp;Profile</div></div>
+                            <div class="col-6 col-md-4"><div class='btn-app-primary centered' role='button' onclick="utility.logout();"><i id='category-icon' class='fa-thin fa-person-to-door'></i>&nbsp;&nbsp;Log Out</div></div>
                         </div></div>
                     </div>
                 </div>
@@ -50,15 +50,20 @@
 
                     <div class='col-lg-4 col-12'>
                         <div class='container-fluid mb-2'><div class='row'>
-                            <div class="col-9"><div class='btn-app-primary clickable' onclick="dashboard.listaccount();" data-open='false'><span class='display-title'><i id='account-icon' class='fa-regular fa-chevrons-right'></i> Accounts</span></div></div>
-                            <div class="col-3"><div class='btn-app-primary centered clickable' onclick="dashboard.add('account');"><i class='fa-regular fa-plus-large'></i></div></div>
+                            <div class="col-10 offset-md-2 col-md-6"><div class='btn-app-primary clickable' onclick="dashboard.listaccount();" data-open='false'><span class='display-title'><i id='account-icon' class='fa-regular fa-chevrons-right'></i> Accounts</span></div></div>
+                            <div class="col-2"><div class='btn-app-primary centered clickable' onclick="dashboard.add('account');"><i class='fa-regular fa-plus-large'></i></div></div>
                             <div class="container-fluid mb-2" id='account-div' style='display:hidden'></div>
                         </div></div>
 
                         <div class='container-fluid mb-2'><div class='row'>
-                            <div class="col-9"><div class='btn-app-primary clickable' onclick="dashboard.listcategory();" data-open='false'><span class='display-title'><i id='category-icon' class='fa-regular fa-chevrons-right'></i> Categories</span></div></div>
-                            <div class="col-3"><div class='btn-app-primary centered clickable' onclick="dashboard.add('category');"><i class='fa-regular fa-plus-large'></i></div></div>
+                            <div class="col-10 offset-md-2 col-md-6"><div class='btn-app-primary clickable' onclick="dashboard.listcategory();" data-open='false'><span class='display-title'><i id='category-icon' class='fa-regular fa-chevrons-right'></i> Categories</span></div></div>
+                            <div class="col-2"><div class='btn-app-primary centered clickable' onclick="dashboard.add('category');"><i class='fa-regular fa-plus-large'></i></div></div>
                             <div class="container-fluid mb-2" id='category-div' style='display:hidden'></div>
+                        </div></div>
+
+
+                        <div class='container-fluid mb-2 subscribe-div'><div class='row'>
+                            <div class="col-12 offset-md-2 col-md-8"><div class='btn-app-primary clickable' onclick="dashboard.subscribe();"><span class='subscribe-button'><i class='fa-regular fa-face-smiling-hands'></i> Subscribe ($30.00 per year)</span></div></div>
                         </div></div>
 
                     </div>

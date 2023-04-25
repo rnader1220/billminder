@@ -2,6 +2,7 @@ var dashboard = (function ($, undefined) {
 
 
     var initialize = function() {
+        subscriber();
         listentry();
     };
 
@@ -52,6 +53,24 @@ var dashboard = (function ($, undefined) {
             list('category');
         }
     };
+
+    var subscriber = function() {
+        $.ajax({
+            url: '/profile/subscriber',
+            cache: false,
+            dataType: 'json'
+        })
+        .done(function(response) {
+
+            if(typeof(response.subscribed_at) != 'undefined') {
+                $('.subscribe-div').hide();
+            }
+        })
+        .fail(function(message) {
+            utility.ajax_fail(message);
+        });
+    };
+
 
     var list = function(dtype) {
         $.ajax({
@@ -839,21 +858,21 @@ var library = (function ($, undefined) {
     var drawEntry = function(el) {
         html = "<div class='row'><div class='col-12 mb-2'><div class='app-draw-row entry-"+ el.status+"' onclick=\"dashboard.show('entry', "+el.id+");\">";
         html += "<div class='row'>";
-        html += "<div class='col-xs-2 col-md-1 centered'>";
+        html += "<div class='col-2 col-md-1' style='text-align:left'>";
         html += ""+entryIcon(el.status);
         html += "</div>";
-        html += "<div class='col-xs-4 col-md-2' style='text-align:right'>";
+        html += "<div class='col-4 col-md-2' style='text-align:right'>";
         html += dateFormat(el.next_due_date);
         html += "</div>";
 
-        html += "<div class='col-xs-4 col-md-2' style='text-align:right'>";
+        html += "<div class='col-6 col-md-2' style='text-align:right'>";
         html += el.amount;
         html += "</div>";
 
-        html += "<div class='col-xs-6 col-md-4' style='text-align:left'>";
+        html += "<div class='col-6 col-md-4' style='text-align:left'>";
         html += el.name;
         html += "</div>";
-        html += "<div class='col-xs-6 col-md-3' style='text-align:left'>";
+        html += "<div class='col-6 col-md-3' style='text-align:left'>";
         html += el.category;
         html += "</div>";
 
@@ -863,31 +882,17 @@ var library = (function ($, undefined) {
 
     var entryIcon = function(status) {
         switch (status) {
-            case 'income': return '<i class="fa-solid fa-money-bill-wave"></i>';
-            case 'late': return '<i class="fa-solid fa-triangle-exclamation"></i>';
-            case 'due': return '<i class="fa-solid fa-alarm-clock"></i>';
-            case 'expense': return '<i class="fa-solid fa-file-invoice-dollar"></i>';
+            case 'income': return '<i class="fa-solid fa-money-bill-wave fa-fw"></i>';
+            case 'late': return '<i class="fa-solid fa-triangle-exclamation fa-fw"></i>';
+            case 'due': return '<i class="fa-solid fa-alarm-clock fa-fw"></i>';
+            case 'expense': return '<i class="fa-solid fa-file-invoice-dollar fa-fw"></i>';
         }
     };
 
-    var drawAccount = function(el) {
-        html = "<div class='row'><div class='col-12 mb-2'><div class='app-draw-row account' onclick=\"dashboard.show('account', "+el.id+");\">";
-        html += "<div class='row'>";
-        html += "<div class='col-md-12 centered'>";
-        html += el.name;
-        html += "</div>";
-        html += '</div>';
-        html += '</div></div></div>';
-        return html;
-    };
-
-    var drawCategory = function(el) {
-        html = "<div class='row'><div class='col-12 mb-2'><div class='app-draw-row category' onclick=\"dashboard.show('category', "+el.id+");\">";
-        html += "<div class='row'>";
-        html += "<div class='col-md-12 centered'>";
+    var drawSecondary = function(type, el) {
+        html = "<div class='row'><div class='col-12 offset-md-2 col-md-8'>" +
+        "<div class='app-draw-row category ml-2 mr-4 px-2' onclick=\"dashboard.show('"+type+"', "+el.id+");\">";
         html += el.label;
-        html += "</div>";
-        html += '</div>';
         html += '</div></div></div>';
         return html;
     };
@@ -913,16 +918,11 @@ var library = (function ($, undefined) {
         switch(type) {
             case('entry'):
                 return drawEntry(el);
-            case('account'):
-                return drawAccount(el);
-            case('party'):
-                return drawParty(el);
-            case('category'):
-                return drawCategory(el);
+            default:
+                return drawSecondary(type, el);
         }
         return '';
     };
-
 
     return {
         drawElement: drawElement,

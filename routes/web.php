@@ -32,14 +32,14 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 
         Route::any('/entry/{entry}/action', 'EntryController@action');
         Route::get('/entry/list', 'EntryController@index');
-        Route::get('/party/list', 'PartyController@index');
         Route::get('/account/list', 'AccountController@index');
         Route::get('/category/list', 'CategoryController@index');
+
+        Route::get('/profile/subscriber', 'ProfileController@subscriber');
         Route::get('/profile/list', 'ProfileController@index');
 
 
         Route::resource('/entry', 'EntryController');
-        Route::resource('/party', 'PartyController');
         Route::resource('/account', 'AccountController');
         Route::resource('/category', 'CategoryController');
         Route::resource('/profile', 'ProfileController');

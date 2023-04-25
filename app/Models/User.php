@@ -61,4 +61,39 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+
+    protected $form = [
+        [
+            [
+                'type' => 'input_text',
+                'parameters' =>
+                [
+                    'label' => "User Name",
+                    'datapoint' => 'name',
+                    'grid_class' => 'col-md-9'
+                ]
+            ],
+            [
+                'type' => 'input_text',
+                'parameters' =>
+                [
+                    'label' => "Email Address",
+                    'datapoint' => 'email',
+                    'grid_class' => 'col-md-12'
+                ]
+            ],
+            [
+                'type' => 'static_text',
+                'parameters' =>
+                [
+                    'text' => "To change your password, log out and click on 'Request a New Password' link",
+                    'datapoint' => 'id',
+                    'grid_class' => 'col-md-12'
+                ]
+
+            ]
+
+        ],
+    ];
 }

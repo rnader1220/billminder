@@ -25,6 +25,9 @@ class Account extends BaseModel
         ->orderBy('name')
         ->get()
         ->toArray();
+        foreach($result as $index => $row) {
+            $result[$index]['label'] = $row['name'];
+        }
         return $result;
     }
 
@@ -36,10 +39,8 @@ class Account extends BaseModel
             ->get()
             ->toArray();
 
-
         foreach($result as $index => $row) {
             $result[$index]['label'] = $row['name'];
-            unset($row['name']);
         }
         return $result;
     }

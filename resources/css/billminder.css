@@ -77,6 +77,13 @@ body.dashboard {
     color: inherit
 }
 
+
+.modal-header,
+.modal-footer {
+    height:72px;
+    max-height:72px;
+}
+
 .modal-title,
 .card-title {
     color:var(--main-text-color);
@@ -159,10 +166,24 @@ body.dashboard {
     border-radius: 50%;
   }
 
+  .form-control {
+    color: var(--main-text-color);
+    background-color: var(--main-back-color);
+    border: solid 1px var(--shadow-color-b);
+  }
   .form-control:disabled {
     background-color: transparent;
-    border: 0;
+    color:  var(--main-text-color);
+    border: solid 1px var(--shadow-color-b);
   }
+
+  .form-control:focus {
+    color: var(--main-text-color);
+    background-color: var(--main-back-alt-color);
+    border: solid 1px var(--shadow-color-a);
+  }
+
+
 
   input:checked + .cb3slider {
     background-color: #2196F3;

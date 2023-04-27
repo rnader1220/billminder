@@ -4,11 +4,27 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Subscription;
-use App\Models\Package;
+use Illuminate\Support\Facades\Auth;
 
 class SubscriptionController extends Controller
 {
     //
+
+
+    public function payment(Request $request) {
+		$record = Subscription::firstOrNew(['user_id' => Auth::user()->id]);
+        return $record->updatePayment($request);
+	}
+
+    public function subscribe(Request $request) {
+		$record = Subscription::firstOrNew(['user_id' => Auth::user()->id]);
+        return $record->newSubscription($request);
+	}
+
+    public function cancel(Request $request) {
+		$record = Subscription::firstOrNew(['user_id' => Auth::user()->id]);
+        return $record->cancelSubscription($request);
+	}
 
 
 
@@ -49,13 +65,6 @@ class SubscriptionController extends Controller
 		]);
 	} */
 
-/* 	public function payment(Request $request) {
-		JoinHelper::payment($request);
-		return view('website.checkout.complete', [
-			'page' => PageHelper::displayPage('cart_complete'),
-			'cart_count' => 0, //JoinHelper::count()
-		]);
-	} */
 
 	/* maybe maybe ?? or just go straight to checkout */
 /*     public function showcart()

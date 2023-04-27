@@ -61,9 +61,8 @@ var dashboard = (function ($, undefined) {
             dataType: 'json'
         })
         .done(function(response) {
-
-            if(typeof(response.subscribed_at) != 'undefined') {
-                $('.subscribe-div').hide();
+            if(typeof(response.subscribed_at) != 'string') {
+                $('.subscribe-div').show();
             }
         })
         .fail(function(message) {
@@ -105,7 +104,7 @@ var dashboard = (function ($, undefined) {
         })
         .done(function (resp) {
             showModalForm(type, null, resp,
-                function() {},
+                function() {hideModal();},
                 function() {store(type);}
                 );
         })
@@ -119,7 +118,7 @@ var dashboard = (function ($, undefined) {
         $('.modal-body form').on('submit', function (e) {
             e.preventDefault();
             if (true) {
-                var data = $(this).serializeArray(); // convert form to array
+                var data = $(this).serializeArray();
                 data.push({
                     name: "_token",
                     value: $("meta[name='csrf-token']").attr("content")
@@ -133,8 +132,8 @@ var dashboard = (function ($, undefined) {
                     })
                     .done(function (resp) {
                         utility.show_message(resp, function () {
+                            hideModal();
                             list(type);
-                            $('#genericModal').modal('hide'); //'toggle'
                         });
                     })
                     .fail(function (message) {
@@ -152,7 +151,7 @@ var dashboard = (function ($, undefined) {
         })
         .done(function (resp) {
             showModalForm(type, id, resp,
-                function() {},
+                function() {hideModal();},
                 function() {}
                 );
         })
@@ -170,15 +169,12 @@ var dashboard = (function ($, undefined) {
             $('.modal-footer').append(modal_form.js_panel_action(resp.actions));
         }
         $('.modal-footer').append(modal_form.js_panel_control(resp.controls.foot));
-        $('#genericModal').modal('show'); //'toggle'
+        if(!$('#myModal').is(':visible')) {
+            $('#genericModal').modal('show');
 
+        }
         utility.set_dynamic_button('#control-cancel', function () {
-            $('#genericModal').modal('hide'); //'toggle'
-            utility.reset_dynamic_button('#control-cancel');
-            utility.reset_dynamic_button('#control-save');
-            $('.modal-footer').html('');
-            $('.modal-title').html('');
-            $('.modal-header').html('');
+
             if(typeof(cb_cancel) == 'function') cb_cancel();
         });
 
@@ -191,7 +187,6 @@ var dashboard = (function ($, undefined) {
         });
 
         utility.set_dynamic_button('#control-edit', function () {
-            //$('#genericModal').modal('toggle');
             edit(type, id);
         });
 
@@ -202,6 +197,16 @@ var dashboard = (function ($, undefined) {
         if(typeof(cb_submit) == 'function') cb_submit();
     };
 
+    var hideModal = function() {
+        $('#genericModal').modal('hide');
+        utility.reset_dynamic_button('#control-cancel');
+        utility.reset_dynamic_button('#control-save');
+        $('.modal-footer').html('');
+        $('.modal-title').html('');
+        $('.modal-header').html('');
+    };
+
+
     var actionGet = function(self, type, id) {
         action = $(self).data('action');
         $.ajax({
@@ -210,15 +215,14 @@ var dashboard = (function ($, undefined) {
             dataType: 'json'
         })
         .done(function (resp) {
-            //$('#genericModal').modal('toggle');
             switch(resp.action) {
                 case 'show':  showModalForm(type, null, resp,
-                    function() {},
+                    function() {hideModal();},
                     function() {}
                 ); break;
                 case 'create':
                     showModalForm(type, null, resp,
-                        function() {},
+                        function() {hideModal();},
                         function() {actionPost(action, type, id);}
                     );
                     break;
@@ -241,7 +245,7 @@ var dashboard = (function ($, undefined) {
         $('.modal-body form').on('submit', function (e) {
 
             e.preventDefault();
-            var data = $('form').serializeArray(); // convert form to array
+            var data = $('form').serializeArray();
                     data.push({
                         name: "_token",
                         value: $("meta[name='csrf-token']").attr("content")
@@ -255,7 +259,7 @@ var dashboard = (function ($, undefined) {
                 dataType: 'json'
             })
             .done(function (resp) {
-                $('#genericModal').modal('hide'); //'toggle
+                hideModal();
                 utility.show_message(resp, function () {
                     list(type);
                 });
@@ -270,7 +274,7 @@ var dashboard = (function ($, undefined) {
     var actionPatch = function(action, type, id) {
         $('.modal-body form').on('submit', function (e) {
             e.preventDefault();
-            var data = $('form').serializeArray(); // convert form to array
+            var data = $('form').serializeArray();
             data.push({
                 name: "_token",
                 value: $("meta[name='csrf-token']").attr("content")
@@ -283,7 +287,6 @@ var dashboard = (function ($, undefined) {
                 dataType: 'json'
             })
             .done(function (resp) {
-                //$('#genericModal').modal('toggle');
                 switch(resp.action) {
                     case 'show':  show(type, id); break;
                     case 'create':
@@ -294,8 +297,8 @@ var dashboard = (function ($, undefined) {
                         break;
                     case 'edit':  edit(type, id); break;
                     default: utility.show_message(resp, function () {
+                        hideModal();
                         list(type);
-                        $('#genericModal').modal('hide');
                     }); break;
                 }
 
@@ -327,7 +330,7 @@ var dashboard = (function ($, undefined) {
         $('.modal-body form').on('submit', function (e) {
             e.preventDefault();
             if (true) {
-                var data = $(this).serializeArray(); // convert form to array
+                var data = $(this).serializeArray();
                 data.push({
                     name: "_token",
                     value: $("meta[name='csrf-token']").attr("content")
@@ -341,11 +344,11 @@ var dashboard = (function ($, undefined) {
                     })
                     .done(function (resp) {
                         utility.show_message(resp, function () {
+                            hideModal();
                             list(type);
                             if(type == 'category') {
                                 list('entry');
                             }
-                            $('#genericModal').modal('hide'); //'toggle'
                         });
                     })
                     .fail(function (message) {
@@ -360,7 +363,7 @@ var dashboard = (function ($, undefined) {
         var data = [{
             name: "_token",
             value: $("meta[name='csrf-token']").attr("content")
-        }]; // convert form to array
+        }];
 
         if (confirm()) $.ajax({
             type: "patch",
@@ -383,7 +386,7 @@ var dashboard = (function ($, undefined) {
         var data = [{
             name: "_token",
             value: $("meta[name='csrf-token']").attr("content")
-        }]; // convert form to array
+        }];
 
         if (confirm()) $.ajax({
             type: "DELETE",
@@ -393,8 +396,9 @@ var dashboard = (function ($, undefined) {
         })
         .done(function (resp) {
             utility.show_message(resp, function () {
+                hideModal();
                 list(type);
-                $('#genericModal').modal('hide'); //'toggle'
+                $('#genericModal').modal('hide');
             });
         })
         .fail(function (message) {

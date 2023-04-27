@@ -29,16 +29,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     })->name('dashboard');
     Route::namespace('App\Http\Controllers')->group(function () {
 
-        // Cart Routes
-        Route::prefix('cart')->group(function () {
-
-            Route::post('subscribe','SubscriptionController@subscribe');
-            Route::get('checkout', 'SubscriptionController@checkout');
-            Route::post('register', 'SubscriptionController@register');
-            Route::post('payment', 'SubscriptionController@payment');
-            Route::get('table', 'SubscriptionController@carttable');
-            Route::get('', 'SubscriptionController@showcart');
-        });
+        Route::post('/subscription/new','SubscriptionController@subscribe');
+        Route::post('/subscription/payment', 'SubscriptionController@payment');
+        Route::post('/subscription/cancel', 'SubscriptionController@cancel');
 
 
 

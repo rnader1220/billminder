@@ -45,25 +45,28 @@
                 </div>
                 <div class='row'>
                     <div class='col-lg-8 col-12'>
-                        <div class="container-fluid mb-2" id='entry-div' style='display:hidden'></div>
+                        <div class="container-fluid mb-2" id='entry-div' style='display:none'></div>
                     </div>
 
                     <div class='col-lg-4 col-12'>
                         <div class='container-fluid mb-2'><div class='row'>
                             <div class="col-10 offset-md-2 col-md-6"><div class='btn-app-primary clickable' onclick="dashboard.listaccount();" data-open='false'><span class='display-title'><i id='account-icon' class='fa-regular fa-chevrons-right'></i> Accounts</span></div></div>
                             <div class="col-2"><div class='btn-app-primary centered clickable' onclick="dashboard.add('account');"><i class='fa-regular fa-plus-large'></i></div></div>
-                            <div class="container-fluid mb-2" id='account-div' style='display:hidden'></div>
+                            <div class="container-fluid mb-2" id='account-div' style='display:none'></div>
                         </div></div>
 
                         <div class='container-fluid mb-2'><div class='row'>
                             <div class="col-10 offset-md-2 col-md-6"><div class='btn-app-primary clickable' onclick="dashboard.listcategory();" data-open='false'><span class='display-title'><i id='category-icon' class='fa-regular fa-chevrons-right'></i> Categories</span></div></div>
                             <div class="col-2"><div class='btn-app-primary centered clickable' onclick="dashboard.add('category');"><i class='fa-regular fa-plus-large'></i></div></div>
-                            <div class="container-fluid mb-2" id='category-div' style='display:hidden'></div>
+                            <div class="container-fluid mb-2" id='category-div' style='display:none'></div>
                         </div></div>
 
+                        <div class='container-fluid mb-2 subscribe-div'  style='display:none'><div class='row'>
+                            <div class="col-12 offset-md-2 col-md-8"><div class='btn-app-primary centered' onclick="subscription.showOffer();"><span class='subscribe-button'><i class='fa-regular fa-face-smiling-hands'></i> Subscribe</span></div></div>
+                        </div></div>
 
-                        <div class='container-fluid mb-2 subscribe-div'><div class='row'>
-                            <div class="col-12 offset-md-2 col-md-8"><div class='btn-app-primary clickable' onclick="dashboard.subscribe();"><span class='subscribe-button'><i class='fa-regular fa-face-smiling-hands'></i> Subscribe ($30.00 per year)</span></div></div>
+                        <div class='container-fluid mb-2 reports-div'  style='display:none'><div class='row'>
+                            <div class="col-12 offset-md-2 col-md-8"><div class='btn-app-primary centered' onclick="reports.show_menu();"><span class='reports-button'><i class='fa-regular fa-download'></i> Reports</span></div></div>
                         </div></div>
 
                     </div>

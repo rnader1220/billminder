@@ -47,7 +47,7 @@ class Entry extends BaseModel
         $result = Entry::select('entries.id', 'entries.next_due_date', 'entries.amount', 'entries.name',
             DB::raw('categories.label as category'),
             DB::raw(
-                "case when income = 1 then 'income' when next_due_date < NOW() then 'late' " .
+                "case when income = 1 then 'income' when next_due_date < CURDATE() then 'late' " .
                 "when next_due_date < (select min(next_due_date) from entries where user_id = 2 and income=1 and deleted_at is null) then 'due' " .
                 "else 'expense' end as status"
             )

@@ -1,5 +1,6 @@
 var dashboard = (function ($, undefined) {
 
+    var help_text = '';
 
     var initialize = function() {
         subscriber();
@@ -61,6 +62,10 @@ var dashboard = (function ($, undefined) {
             dataType: 'json'
         })
         .done(function(response) {
+            if(typeof(response.help_text) == 'string') {
+                help_text = response.help_text;
+            }
+
             if(typeof(response.subscribed_at) != 'string') {
                 $('.subscribe-div').show();
             }
@@ -194,6 +199,9 @@ var dashboard = (function ($, undefined) {
             destroy(type, id);
         });
 
+        utility.set_dynamic_button('#control-help', helpShow);
+
+
         if(typeof(cb_submit) == 'function') cb_submit();
     };
 
@@ -205,6 +213,8 @@ var dashboard = (function ($, undefined) {
         $('.modal-title').html('');
         $('.modal-header').html('');
     };
+
+
 
 
     var actionGet = function(self, type, id) {
@@ -406,11 +416,39 @@ var dashboard = (function ($, undefined) {
         });
     };
 
+
+    var helpDashboard = function() {
+
+        $('.modal-header').html('<h5 class="modal-title">Help</h5>');
+        // just the close button
+        $('.modal-header').append(modal_form.js_panel_control([{
+            'title': 'Close', 'class': 'btn-secondary', 'id':  'control-cancel', 'icon': 'far fa-undo-alt'
+        }]));
+        utility.set_dynamic_button('#control-cancel', hideModal);
+        $('.modal-body').html(help_text);
+        $('.modal-footer').hide();
+        if(!$('#myModal').is(':visible')) {
+            $('#genericModal').modal('show');
+
+        }
+      };
+
+    var helpShow = function() {
+        $('#help-text').slideDown(300);
+        utility.set_dynamic_button('#control-help', helpHide);
+    };
+
+    var helpHide = function() {
+        $('#help-text').slideUp(300);
+        utility.set_dynamic_button('#control-help', helpShow);
+    };
+
     return {
         initialize: initialize,
         listentry: listentry,
         listaccount: listaccount,
         listcategory: listcategory,
+        helpDashboard: helpDashboard,
         add: add,
         edit: edit,
         show: show,
@@ -566,191 +604,21 @@ var subscription = (function ($, undefined) {
         "</div>" +
         "</div>" +
         "</form>";
-
-
     return {
         showOffer: showOffer,
     };
 })(jQuery);
 
-
-/*
-from granitesme cart.js:
-
-
-    var subscribe = function(id) {
-        $.ajax({
-            type: 'POST',
-            url: '/cart/subscribe',
-            data: {
-                "_token": $("meta[name='csrf-token']").attr("content"),
-                "package_id": id,
-            },
-            cache: false,
-        })
-        .done(show_cart)
-        .fail(function(message) {
-            common.ajax_fail(message);
-        });
-    };
-
-    var show_cart = function() {
-        options = [];
-        $('#genericModal').modal(options);
-        $('#genericModal #modal-close').on('click', function() {
-            $('#genericModal').modal('hide');
-            $('#genericModal').modal('dispose');
-        });
-
-        $.ajax({
-            type: 'get',
-            url: '/cart',
-            cache: false,
-            dataType: 'html',
-        })
-        .done(function(html) {
-            $('.modal-body').html(html);
-            $('.modal-title').html(cart_header);
-            $('.modal-footer').html(cart_footer);
-
-            $('#btn-checkout').off('click').on('click', checkout);
-        })
-        .fail(function(message) {
-            common.ajax_fail(message);
-        });
-    };
-
-    var checkout = function() {
-        $.ajax({
-            type: 'get',
-            url: '/cart/checkout',
-            cache: false,
-        })
-        .done(function(html) {
-            $('.modal-body').html(html);
-            $('.modal-title').html(register_header);
-            $('.modal-footer').html(register_footer);
-            $('#btn-register').off('click').on('click', register);
-        })
-        .fail(function(message) {
-            common.ajax_fail(message);
-        });
-    };
-
-    var register = function() {
-        var data = $('#register-form').serializeArray(); // convert form to array
-        data.push({
-            name: "_token",
-            value: $("meta[name='csrf-token']").attr("content")
-        });
-
-        $.ajax({
-            url: "/cart/register",
-            cache: false,
-            data: data,
-            method: 'POST',
-            dataType: 'html',
-        })
-        .done(function(html) {
-            $('.modal-body').html(html);
-            $('.modal-title').html(payment_header);
-            $('.modal-footer').html(payment_footer);
-            $('#btn-payment').off('click').on('click', payment);
-        })
-        .fail(function(message) {
-            common.ajax_fail(message);
-        });
-    };
-
-    var payment = function() {
-        var data = $('#payment-form').serializeArray(); // convert form to array
-        data.push({
-            name: "_token",
-            value: $("meta[name='csrf-token']").attr("content")
-        });
-
-        $.ajax({
-            url: "/cart/payment",
-            cache: false,
-            data: data,
-            method: 'POST',
-            dataType: 'html',
-        })
-        .done(function(html) {
-            $('.modal-body').html(html);
-            $('.modal-title').html(complete_header);
-            $('.modal-footer').html(complete_footer);
-            $('#btn-complete').off('click').on('click', function() {
-                document.location = '/login';
-            });
-        })
-        .fail(function(message) {
-            utility.ajax_fail(message);
-        });
-    };
-
-    var cart_header = "<span style='font-weight: 700; color: gray'>"+
-    "&nbsp;&nbsp;&nbsp;&nbsp;<span style='color:#002244'>1: Subscription</span>&nbsp;&nbsp;&nbsp;&nbsp;|" +
-    "&nbsp;&nbsp;&nbsp;&nbsp;2: Register&nbsp;&nbsp;&nbsp;&nbsp;|" +
-    "&nbsp;&nbsp;&nbsp;&nbsp;3: Payment&nbsp;&nbsp;&nbsp;&nbsp;|" +
-    "&nbsp;&nbsp;&nbsp;&nbsp;4: Complete&nbsp;&nbsp;&nbsp;&nbsp;</span>" ;
-
-    var cart_footer = "<div class='container'><div class='row'><div class='offset-lg-10 col-lg-2'>" +
-    "<button id='btn-checkout' type='button' class='btn btn-primary w-100'>Lets Get Started!</button>" +
-    "</div></div></div>";
-
-    var register_header = "<span style='font-weight: 700; color: gray'>"+
-    "&nbsp;&nbsp;&nbsp;&nbsp;1: Subscription&nbsp;&nbsp;&nbsp;&nbsp;|" +
-    "&nbsp;&nbsp;&nbsp;&nbsp;<span style='color: #002244'>2: Register</span>&nbsp;&nbsp;&nbsp;&nbsp;|" +
-    "&nbsp;&nbsp;&nbsp;&nbsp;3: Payment&nbsp;&nbsp;&nbsp;&nbsp;|" +
-    "&nbsp;&nbsp;&nbsp;&nbsp;4: Complete&nbsp;&nbsp;&nbsp;&nbsp;</span>";
-
-    var register_footer = "<div class='container'><div class='row'><div class='offset-lg-10 col-lg-2'>" +
-    "<button id='btn-register' type='button' class='btn btn-primary w-100'>Sign Me Up!</button>" +
-    "</div></div></div>";
-
-    var payment_header = "<span style='font-weight: 700; color: gray'>"+
-    "&nbsp;&nbsp;&nbsp;&nbsp;1: Subscription&nbsp;&nbsp;&nbsp;&nbsp;|" +
-    "&nbsp;&nbsp;&nbsp;&nbsp;2: Register&nbsp;&nbsp;&nbsp;&nbsp;|" +
-    "&nbsp;&nbsp;&nbsp;&nbsp;<span style='color: #002244'>3: Payment</span>&nbsp;&nbsp;&nbsp;&nbsp;|" +
-    "&nbsp;&nbsp;&nbsp;&nbsp;4: Complete&nbsp;&nbsp;&nbsp;&nbsp;</span>";
-
-    var payment_footer = "<div class='container'><div class='row'><div class='offset-lg-10 col-lg-2'>" +
-    "<button id='btn-payment' type='button' class='btn btn-primary w-100'>Take My Money!</button>" +
-    "</div></div></div>";
-
-    var complete_header = "<span style='font-weight: 700; color: gray'>"+
-    "&nbsp;&nbsp;&nbsp;&nbsp;1: Subscription&nbsp;&nbsp;&nbsp;&nbsp;|" +
-    "&nbsp;&nbsp;&nbsp;&nbsp;2: Register&nbsp;&nbsp;&nbsp;&nbsp;|" +
-    "&nbsp;&nbsp;&nbsp;&nbsp;3: Payment&nbsp;&nbsp;&nbsp;&nbsp;|" +
-    "&nbsp;&nbsp;&nbsp;&nbsp;<span style='color: #002244'>4: Complete</span>&nbsp;&nbsp;&nbsp;&nbsp;</span>";
-
-    var complete_footer = "<div class='container'><div class='row'><div class='offset-lg-10 col-lg-2'>" +
-    "<button id='btn-complete' type='button' class='btn btn-primary w-100'>Go To Login!!</button>" +
-    "</div></div></div>";
-
-*/
-
-/*
-
-
-*/
-
-
-/*
-<p>Success!!</p>
-*/
-
 var reports = (function ($, undefined) {
 
-    var show_menu = function() {
-        alert('show_menu');
+    var show = function() {
+        alert('show reports');
 
     };
 
 
     return {
-        show_menu: show_menu,
+        show: show,
     };
 })(jQuery);
 
@@ -1568,6 +1436,10 @@ var modal_form = (function ($, undefined) {
 
         spacer: function (attr) {
             return "<div class='" + attr.grid_class + "'>&nbsp;</div>";
+        },
+
+        static_hidden: function (attr) {
+            return "<div id='" + attr.datapoint + "' class='" + attr.grid_class + "' style='display:none'><p>" + attr.text + "</p></div>";
         },
 
         static_text: function (attr) {

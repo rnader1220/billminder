@@ -78,7 +78,7 @@ class Entry extends BaseModel
     }
 
     public function localGetForm($mode) {
-        $this->label = ($this->income?'Income':'Expense');
+        $this->formLabel = ($this->income?'Income':'Expense');
         if($this->income) {
             $this->form[0][13]['parameters']['label'] = $this->form[0][13]['parameters']['label_income'];
             $this->form[0][14]['parameters']['label'] = $this->form[0][14]['parameters']['label_income'];
@@ -304,6 +304,15 @@ class Entry extends BaseModel
                     'datapoint' => 'party_id',
                     'grid_class' => 'col-sm-6 col-md-4 col-lg-3',
                     'list' => [],
+                ]
+            ],
+            [
+                'type' => 'static_hidden',
+                'parameters' =>
+                [
+                    'datapoint' => "help-text",
+                    'grid_class' => 'col-md-12',
+                    'text' => ''
                 ]
             ],
         ],

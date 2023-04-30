@@ -32,9 +32,12 @@ class Category extends BaseModel
     public function getList(string $q = '') {
         $result = Category::where('user_id', Auth::user()->id)
         ->whereNull('deleted_at')
-        ->orderBy('label')
         ->get()
         ->toArray();
+
+        // because they are encrypted!
+        // arrayWalk sort array by label alpha
+
         return $result;
     }
 
@@ -42,9 +45,12 @@ class Category extends BaseModel
         $result = Category::select('label', DB::raw('id as value'))
             ->where('user_id', Auth::user()->id)
             ->whereNull('deleted_at')
-            ->orderBy('label')
             ->get()
             ->toArray();
+
+        // because they are encrypted!
+        // arrayWalk sort array by label alpha
+
         return $result;
     }
 
@@ -67,7 +73,16 @@ class Category extends BaseModel
                     'datapoint' => 'description',
                     'grid_class' => 'col-md-12'
                 ]
-            ]
+            ],
+            [
+                'type' => 'static_hidden',
+                'parameters' =>
+                [
+                    'datapoint' => "help-text",
+                    'grid_class' => 'col-md-12',
+                    'text' => ''
+                ]
+            ],
         ],
     ];
 

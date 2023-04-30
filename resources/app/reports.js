@@ -1,12 +1,12 @@
 var reports = (function ($, undefined) {
 
-    var show_menu = function() {
-        alert('show_menu');
+    var show = function() {
+        alert('show reports');
 
     };
 
 
     return {
-        show_menu: show_menu,
+        show: show,
     };
 })(jQuery);

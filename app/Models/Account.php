@@ -22,9 +22,12 @@ class Account extends BaseModel
     public static function getList(string $q = '') {
         $result = Account::where('user_id', Auth::user()->id)
         ->whereNull('deleted_at')
-        ->orderBy('name')
         ->get()
         ->toArray();
+
+                // because they are encrypted!
+        // arrayWalk sort array by name alpha
+
         foreach($result as $index => $row) {
             $result[$index]['label'] = $row['name'];
         }
@@ -35,9 +38,11 @@ class Account extends BaseModel
         $result = Account::select('website', 'name', 'id as value', 'website')
             ->where('user_id', Auth::user()->id)
             ->whereNull('deleted_at')
-            ->orderBy('name')
             ->get()
             ->toArray();
+
+        // because they are encrypted!
+        // arrayWalk sort array by name alpha
 
         foreach($result as $index => $row) {
             $result[$index]['label'] = $row['name'];
@@ -161,6 +166,15 @@ class Account extends BaseModel
                     'label' => "Website Password",
                     'datapoint' => 'password',
                     'grid_class' => 'col-md-6'
+                ]
+            ],
+            [
+                'type' => 'static_hidden',
+                'parameters' =>
+                [
+                    'datapoint' => "help-text",
+                    'grid_class' => 'col-md-12',
+                    'text' => ''
                 ]
             ],
         ],

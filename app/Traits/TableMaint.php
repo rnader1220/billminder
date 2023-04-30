@@ -9,13 +9,21 @@ trait TableMaint
 
     protected function getLabel(): string
     {
-        if(isset($this->label)) {
-            return $this->label;
+        if(isset($this->formLabel)) {
+            return $this->formLabel;
         }
         return substr(get_class($this), strrpos(get_class($this), '\\')+1);
 
     }
 
+    protected function getHelpText(): string
+    {
+        if(isset($this->helpText)) {
+            return view('help.' . $this->helpText)->render();
+        }
+        return view('help.'. strtolower($this->getLabel()))->render();
+
+    }
 
     public function getForm($mode) {
         $view = [
@@ -85,12 +93,14 @@ trait TableMaint
                 ['title' => 'Delete This %name%', 'class' => 'btn-danger', 'id' => 'control-delete', 'icon' =>'far fa-trash'],
             ],
             'foot' => [
+                ['title' => 'Help', 'class' => 'btn-secondary', 'id' => 'control-help', 'icon' =>'far fa-person-drowning'],
                 ['title' => 'Close', 'class' => 'btn-secondary', 'id' => 'control-cancel', 'icon' =>'far fa-undo-alt'],
             ]
         ],
         'edit' => [
             'head' => [],
             'foot' => [
+                ['title' => 'Help', 'class' => 'btn-secondary', 'id' => 'control-help', 'icon' =>'far fa-person-drowning'],
                 ['title' => 'Save %name% Changes', 'class' => 'btn-success', 'id' => 'control-save', 'icon' =>'far fa-save'],
                 ['title' => 'Cancel Edit %name%', 'class' => 'btn-secondary', 'id' => 'control-cancel', 'icon' =>'far fa-undo-alt'],
             ]
@@ -98,6 +108,7 @@ trait TableMaint
         'create' => [
             'head' => [],
             'foot' => [
+                ['title' => 'Help', 'class' => 'btn-secondary', 'id' => 'control-help', 'icon' =>'far fa-person-drowning'],
                 ['title' => 'Save New %name%', 'class' => 'btn-success', 'id' => 'control-save', 'icon' =>'far fa-save'],
                 ['title' => 'Cancel New %name%', 'class' => 'btn-secondary', 'id' => 'control-cancel', 'icon' =>'far fa-undo-alt'],
             ]
@@ -178,7 +189,11 @@ trait TableMaint
                         $form[$rowIndex][$elementIndex]['parameters']['value'] =
                             $this->$datapoint;
                     }
+                } else if($datapoint == 'help-text') {
+                    $form[$rowIndex][$elementIndex]['parameters']['text'] = $this->getHelpText();
+                    // do nothing
                 }
+
             }
         }
         return $form;

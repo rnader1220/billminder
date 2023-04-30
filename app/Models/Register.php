@@ -166,6 +166,16 @@ class Register extends BaseModel
                     'list' => [],
                 ]
             ],
+            [
+                'type' => 'static_hidden',
+                'parameters' =>
+                [
+                    'datapoint' => "help-text",
+                    'grid_class' => 'col-md-12',
+                    'text' => ''
+                ]
+            ],
+
         ],
     ];
 

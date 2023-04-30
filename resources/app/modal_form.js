@@ -298,6 +298,10 @@ var modal_form = (function ($, undefined) {
             return "<div class='" + attr.grid_class + "'>&nbsp;</div>";
         },
 
+        static_hidden: function (attr) {
+            return "<div id='" + attr.datapoint + "' class='" + attr.grid_class + "' style='display:none'><p>" + attr.text + "</p></div>";
+        },
+
         static_text: function (attr) {
             return "<div class='" + attr.grid_class + "'><p>" + attr.text + "</p></div>";
         },

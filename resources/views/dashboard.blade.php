@@ -66,9 +66,12 @@
                         </div></div>
 
                         <div class='container-fluid mb-2 reports-div'  style='display:none'><div class='row'>
-                            <div class="col-12 offset-md-2 col-md-8"><div class='btn-app-primary centered' onclick="reports.show_menu();"><span class='reports-button'><i class='fa-regular fa-download'></i> Reports</span></div></div>
+                            <div class="col-12 offset-md-2 col-md-8"><div class='btn-app-primary centered' onclick="reports.show();"><span class='reports-button'><i class='fa-regular fa-download'></i> Reports</span></div></div>
                         </div></div>
 
+                        <div class='container-fluid mb-2 help-div'><div class='row'>
+                            <div class="col-12 offset-md-2 col-md-8"><div class='btn-app-primary centered' onclick="help.show();"><span class='help-button'><i class='fa-regular fa-person-drowning'></i> Help</span></div></div>
+                        </div></div>
                     </div>
                 </div>
             </div>

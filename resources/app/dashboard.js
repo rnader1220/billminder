@@ -1,5 +1,6 @@
 var dashboard = (function ($, undefined) {
 
+    var help_text = '';
 
     var initialize = function() {
         subscriber();
@@ -61,6 +62,10 @@ var dashboard = (function ($, undefined) {
             dataType: 'json'
         })
         .done(function(response) {
+            if(typeof(response.help_text) == 'string') {
+                help_text = response.help_text;
+            }
+
             if(typeof(response.subscribed_at) != 'string') {
                 $('.subscribe-div').show();
             }
@@ -194,6 +199,9 @@ var dashboard = (function ($, undefined) {
             destroy(type, id);
         });
 
+        utility.set_dynamic_button('#control-help', helpShow);
+
+
         if(typeof(cb_submit) == 'function') cb_submit();
     };
 
@@ -205,6 +213,8 @@ var dashboard = (function ($, undefined) {
         $('.modal-title').html('');
         $('.modal-header').html('');
     };
+
+
 
 
     var actionGet = function(self, type, id) {
@@ -406,11 +416,39 @@ var dashboard = (function ($, undefined) {
         });
     };
 
+
+    var helpDashboard = function() {
+
+        $('.modal-header').html('<h5 class="modal-title">Help</h5>');
+        // just the close button
+        $('.modal-header').append(modal_form.js_panel_control([{
+            'title': 'Close', 'class': 'btn-secondary', 'id':  'control-cancel', 'icon': 'far fa-undo-alt'
+        }]));
+        utility.set_dynamic_button('#control-cancel', hideModal);
+        $('.modal-body').html(help_text);
+        $('.modal-footer').hide();
+        if(!$('#myModal').is(':visible')) {
+            $('#genericModal').modal('show');
+
+        }
+      };
+
+    var helpShow = function() {
+        $('#help-text').slideDown(300);
+        utility.set_dynamic_button('#control-help', helpHide);
+    };
+
+    var helpHide = function() {
+        $('#help-text').slideUp(300);
+        utility.set_dynamic_button('#control-help', helpShow);
+    };
+
     return {
         initialize: initialize,
         listentry: listentry,
         listaccount: listaccount,
         listcategory: listcategory,
+        helpDashboard: helpDashboard,
         add: add,
         edit: edit,
         show: show,

@@ -12,6 +12,8 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\TableMaint;
 use Laravel\Cashier\Billable;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AdminNotice;
 
 class User extends Authenticatable
 {
@@ -98,4 +100,48 @@ class User extends Authenticatable
 
         ],
     ];
+
+
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function($model){
+            // ... code here
+        });
+
+        self::created(function($model){
+            $details = [
+                'title' => 'BillMinder New User',
+                'body' => "A new user({$model->id}) has been created:\n{$model->name}\n{$model->email}"
+            ];
+            Mail::to('billminder@dyn-it.com')->send(new AdminNotice($details));
+        });
+
+        self::updating(function($model){
+            // ... code here
+        });
+
+        self::updated(function($model){
+            $details = [
+                'title' => 'BillMinder Updated User',
+                'body' => "A user({$model->id}) has been updated:\n{$model->name}\n{$model->email}"
+            ];
+            Mail::to('billminder@dyn-it.com')->send(new AdminNotice($details));
+        });
+
+        self::deleting(function($model){
+            // ... code here
+        });
+
+        self::deleted(function($model){
+            $details = [
+                'title' => 'BillMinder Deleted User',
+                'body' => "A user({$model->id}) has been deleted:\n{$model->name}\n{$model->email}"
+            ];
+            Mail::to('billminder@dyn-it.com')->send(new AdminNotice($details));
+        });
+    }
+
 }

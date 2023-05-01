@@ -44,7 +44,7 @@ class Entry extends BaseModel
     ];
 
     public static function getList(string $q = '') {
-        $result = Entry::select('entries.id', 'entries.next_due_date', 'entries.amount', 'entries.name',
+        $result = Entry::select('entries.id', 'entries.next_due_date', 'entries.estimated_date', 'entries.amount','entries.estimated_amount', 'entries.name',
             DB::raw('categories.label as category'),
             DB::raw(
                 "case when income = 1 then 'income' when next_due_date < CURDATE() then 'late' " .
@@ -69,16 +69,17 @@ class Entry extends BaseModel
         return $result;
     }
 
-    public function __construct() {
-        parent::__construct();
-        $this->form[0][12]['parameters']['list'] = Category::getSelectList();
-        $this->form[0][13]['parameters']['list'] = Account::getSelectList();
-        $this->form[0][14]['parameters']['list'] = Account::getSelectList();
-
-    }
-
     public function localGetForm($mode) {
         $this->formLabel = ($this->income?'Income':'Expense');
+
+        $this->form[0][12]['parameters']['list'] = Category::getSelectList();
+        $this->form[0][13]['parameters']['list'] = Account::getSelectList(['account' => 1]);
+        if($this->income) {
+            $this->form[0][14]['parameters']['list'] = Account::getSelectList(['payor' => 1]);
+        } else {
+            $this->form[0][14]['parameters']['list'] = Account::getSelectList(['payee' => 1]);
+        }
+
         if($this->income) {
             $this->form[0][13]['parameters']['label'] = $this->form[0][13]['parameters']['label_income'];
             $this->form[0][14]['parameters']['label'] = $this->form[0][14]['parameters']['label_income'];
@@ -125,8 +126,6 @@ class Entry extends BaseModel
         }
 
         return $this->responseMessage('Cycled', $success, $detail, $this->id);
-
-
     }
 
     protected function customUpdate(array &$data)
@@ -138,6 +137,39 @@ class Entry extends BaseModel
         if(is_bool($data['income'])) {
             $data['income'] = ($data['income']?1:0);
         }
+        if(is_null($data['amount'])) {
+            $data['amount'] = 0;
+        }
+
+        if($data['category_id'] == '_new') {
+            $new_category = Category::create(['user_id' => Auth::user()->id, 'label' => $data['new_category_id']]);
+            $data['category_id'] = $new_category->id;
+        }
+
+        if($data['category_id'] == '_new') {
+            $new_category = Category::create(['user_id' => Auth::user()->id, 'label' => $data['new_category_id']]);
+            $data['category_id'] = $new_category->id;
+        }
+
+        if($data['account_id'] == '_new') {
+            $new_account = Account::create(['user_id' => Auth::user()->id, 'label' => $data['new_category_id'],
+                'account' => 1,
+                'payee' => 0,
+                'payor' => 0,
+            ]);
+            $data['account_id'] = $new_account->id;
+        }
+
+        if($data['party_id'] == '_new') {
+            $new_account = Account::create(['user_id' => Auth::user()->id, 'label' => $data['new_party_id'],
+                'account' => 0,
+                'payee' => $data['income'],
+                'payor' => ($data['income']==1?0:1),
+            ]);
+            $data['party_id'] = $new_account->id;
+        }
+
+
     }
 
     protected $actions = [
@@ -166,7 +198,7 @@ class Entry extends BaseModel
                 'parameters' =>
                 [
                     'label' => "Name",
-                    'title' => "This field is what will display on the list. This is the only required field! (Encrypted)",
+                    'title' => "This field is what will display on the list. (Required) (Encrypted)",
                     'datapoint' => 'name',
                     'grid_class' => 'col-sm-12 col-md-8 col-lg-6'
                 ]
@@ -291,6 +323,7 @@ class Entry extends BaseModel
                     'datapoint' => 'category_id',
                     'allow_null' => true,
                     'grid_class' => 'col-sm-6 col-md-4 col-lg-3',
+                    'allow_new' => true,
                     'list' => [],
                 ]
             ],
@@ -303,6 +336,7 @@ class Entry extends BaseModel
                     'title' => "This can point to your internal account (bank, etc).  If set, and the account has a link, it will appear here.  See the Accounts tab for more details.",
                     'allow_null' => true,
                     'datapoint' => 'account_id',
+                    'allow_new' => true,
                     'grid_class' => 'col-sm-6 col-md-4 col-lg-3',
                     'list' => [],
                 ]
@@ -312,10 +346,11 @@ class Entry extends BaseModel
                 'parameters' =>
                 [
                     'label' => "Pay To",
-                    'label_income' => "Pay From",
-                    'title' => "This can point to your external account (cc company, employer, etc).  If set, and the account has a link, it will appear here.  See the Accounts tab for more details.",
+                    'label_income' => "Collect From",
+                    'title' => "This can point to an external account (cc company, employer, etc).  If set, and the account has a link, it will appear here.  See the Accounts tab for more details.",
                     'allow_null' => true,
                     'datapoint' => 'party_id',
+                    'allow_new' => true,
                     'grid_class' => 'col-sm-6 col-md-4 col-lg-3',
                     'list' => [],
                 ]

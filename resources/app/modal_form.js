@@ -247,6 +247,9 @@ var modal_form = (function ($, undefined) {
             }
 
             htmlString += "<select data-live-search='true' class='form-control selectpicker'  id='sel_" + attr.datapoint + "' ";
+            if(attr.hasOwnProperty('allow_new')) {
+                htmlString += " onChange = 'modal_form.check_new(\"" + attr.datapoint + " \");' ";
+            }
 
             if (attr.hasOwnProperty('multiple') && attr.multiple == true) {
                 htmlString += "  name='" + attr.datapoint + "[]' multiple='multiple' ";
@@ -265,13 +268,7 @@ var modal_form = (function ($, undefined) {
                 if (!attr.hasOwnProperty('value') || attr.value == '-99') {
                     htmlString += "selected ";
                 }
-                htmlString += "value = '-99'>";
-                if (attr.hasOwnProperty('placeholder') ) {
-                    htmlString += "- " + attr.placeholder + " -";
-                } else {
-                    htmlString += "- not selected -";
-                }
-                htmlString += "</option>\n";
+                htmlString += "value = '-99'>- not selected -</option>\n";
             }
 
             attr.list.forEach(function (element) {
@@ -284,8 +281,16 @@ var modal_form = (function ($, undefined) {
                 htmlString += element.label;
                 htmlString += "</option>\n";
             });
+            if(attr.hasOwnProperty('allow_new')) {
+                htmlString += "<option value = '_new'>New "+ attr.label + "</option>\n";
+            }
 
             htmlString += "</select>";
+
+            if(attr.hasOwnProperty('allow_new')) {
+                htmlString += "<input class='form-control' type='text' style='display:none' " +
+                "id='new_" + attr.datapoint + "' name='new_" + attr.datapoint + "' >";
+            }
 
             attr.list.forEach(function (element) {
                 if (attr.hasOwnProperty('value') && attr.value == element.value) {
@@ -474,6 +479,14 @@ var modal_form = (function ($, undefined) {
         return htmlString;
     };
 
+    var check_new = function(datapoint) {
+        if($('#sel_'+datapoint).val() == '_new') {
+            $('#new_'+datapoint).show();
+        } else {
+            $('#new_'+datapoint).hide();
+        }
+    };
+
     return {
         js_form_element: form_element,
         js_panel_control: panel_control,
@@ -482,5 +495,6 @@ var modal_form = (function ($, undefined) {
         js_button_action: button_action,
         js_table_build: table_build,
         js_form_build: form_build,
+        check_new: check_new,
     };
 })(jQuery);

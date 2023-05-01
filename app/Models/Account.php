@@ -40,9 +40,10 @@ class Account extends BaseModel
         return $resultc;
     }
 
-    public static function getSelectList(string $q = '') {
+    public static function getSelectList(array $filter) {
         $result = Account::select('website', 'name', 'id as value', 'website')
             ->where('user_id', Auth::user()->id)
+            ->where($filter)
             ->whereNull('deleted_at')
             ->get()
             ->toArray();
@@ -60,6 +61,15 @@ class Account extends BaseModel
         return $resultc;
     }
 
+
+    protected function customUpdate(array &$data)
+    {
+        $data['account'] = (isset($data['account'])?1:0);
+        $data['payor'] = (isset($data['payor'])?1:0);
+        $data['payee'] = (isset($data['payee'])?1:0);
+    }
+
+
     protected $fillable = [
         'name',
         'balance',
@@ -67,6 +77,9 @@ class Account extends BaseModel
         'description',
         'account_number',
         'routing_number',
+        'account',
+        'payor',
+        'payee',
         'website',
         'username',
         'password',
@@ -114,7 +127,7 @@ class Account extends BaseModel
                     'datapoint' => 'balance',
                     'numeric' => true,
 
-                    'grid_class' => 'col-lg-4'
+                    'grid_class' => 'col-lg-3'
                 ],
             ],
             [
@@ -126,6 +139,40 @@ class Account extends BaseModel
                     'datapoint' => 'bank_account',
                     'grid_class' => 'col-lg-3'
                 ],
+            ],
+
+
+            [
+                'type' => 'input_checkbox',
+                'parameters' =>
+                [
+                    'label' => "Is To/From Account",
+                    'title' => "Click this for your bank account, credit card, etc; where you send from or recieve to.",
+                    'datapoint' => 'account',
+                    'grid_class' => 'col-md-4'
+                ]
+            ],
+
+            [
+                'type' => 'input_checkbox',
+                'parameters' =>
+                [
+                    'label' => "Is Pay To",
+                    'title' => "Click this if this is someone you pay.",
+                    'datapoint' => 'payee',
+                    'grid_class' => 'col-md-4'
+                ]
+            ],
+
+            [
+                'type' => 'input_checkbox',
+                'parameters' =>
+                [
+                    'label' => "Is Collect From",
+                    'title' => "Click this if this account is someone who pays you",
+                    'datapoint' => 'payor',
+                    'grid_class' => 'col-md-4'
+                ]
             ],
             [
                 'type' => 'textarea',

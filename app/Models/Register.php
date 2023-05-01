@@ -50,13 +50,11 @@ class Register extends BaseModel
         return $result;
     }
 
-    public function __construct() {
-        parent::__construct();
-        $this->form[0][6]['parameters']['list'] = Category::getSelectList();
-        $this->form[0][7]['parameters']['list'] = Account::getSelectList();
-        $this->form[0][8]['parameters']['list'] = Account::getSelectList();
 
-    }
+
+
+
+
 
     public function getCycle() {
         $entry = Entry::find($this->entry_id)->toArray();
@@ -68,6 +66,16 @@ class Register extends BaseModel
             $this->form[0][7]['parameters']['label'] = $this->form[0][7]['parameters']['label_income'];
             $this->form[0][8]['parameters']['label'] = $this->form[0][8]['parameters']['label_income'];
         }
+
+        $this->form[0][6]['parameters']['list'] = Category::getSelectList();
+        $this->form[0][7]['parameters']['list'] = Account::getSelectList(['account' => 1]);
+        if($this->income) {
+            $this->form[0][8]['parameters']['list'] = Account::getSelectList(['payor' => 1]);
+        } else {
+            $this->form[0][8]['parameters']['list'] = Account::getSelectList(['payee' => 1]);
+        }
+
+
         $form = $this->getForm('create');
         $form['action'] = 'create';
         return $form;

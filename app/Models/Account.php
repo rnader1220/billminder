@@ -21,12 +21,12 @@ class Account extends BaseModel
     use EncryptedAttribute;
 
     public static function getList(string $q = '') {
+        $resultc = [];
         $result = Account::where('user_id', Auth::user()->id)
         ->whereNull('deleted_at')
         ->get()
         ->toArray();
 
-        $resultc = [];
         foreach($result as $index => $row) {
             $result[$index]['label'] = $row['name'];
         }
@@ -41,6 +41,7 @@ class Account extends BaseModel
     }
 
     public static function getSelectList(array $filter) {
+        $resultc = [];
         $result = Account::select('website', 'name', 'id as value', 'website')
             ->where('user_id', Auth::user()->id)
             ->where($filter)

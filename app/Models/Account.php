@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use ESolution\DBEncryption\Encrypter;
+use Illuminate\Support\Collection;
 use App\Traits\TableMaint;
 
 
@@ -25,13 +26,18 @@ class Account extends BaseModel
         ->get()
         ->toArray();
 
-                // because they are encrypted!
-        // arrayWalk sort array by name alpha
-
+        $resultc = [];
         foreach($result as $index => $row) {
             $result[$index]['label'] = $row['name'];
         }
-        return $result;
+
+        $resulta = collect($result);
+        $resultb = $resulta->sortBy('label');
+
+        foreach($resultb as $index => $row) {
+            $resultc[] = $row;
+        }
+        return $resultc;
     }
 
     public static function getSelectList(string $q = '') {
@@ -41,13 +47,17 @@ class Account extends BaseModel
             ->get()
             ->toArray();
 
-        // because they are encrypted!
-        // arrayWalk sort array by name alpha
-
         foreach($result as $index => $row) {
             $result[$index]['label'] = $row['name'];
         }
-        return $result;
+
+        $resulta = collect($result);
+        $resultb = $resulta->sortBy('label');
+
+        foreach($resultb as $index => $row) {
+            $resultc[] = $row;
+        }
+        return $resultc;
     }
 
     protected $fillable = [
@@ -90,6 +100,7 @@ class Account extends BaseModel
                 'parameters' =>
                 [
                     'label' => "Account Name",
+                    'title' => "This field is what will display on the list. This is the only required field! (Encrypted)",
                     'datapoint' => 'name',
                     'grid_class' => 'col-md-6'
                 ]
@@ -99,6 +110,7 @@ class Account extends BaseModel
                 'parameters' =>
                 [
                     'label' => "Current Balance",
+                    'title' => "For informational purposes only:  Use to keep track of your balance.",
                     'datapoint' => 'balance',
                     'numeric' => true,
 
@@ -110,6 +122,7 @@ class Account extends BaseModel
                 'parameters' =>
                 [
                     'label' => "Is Bank Account?",
+                    'title' => "Is this a bank account?",
                     'datapoint' => 'bank_account',
                     'grid_class' => 'col-lg-3'
                 ],
@@ -119,6 +132,7 @@ class Account extends BaseModel
                 'parameters' =>
                 [
                     'label' => "Description",
+                    'title' => "Write whatever you like here: description, notes, and so forth, for this account. (Encrypted)",
                     'datapoint' => 'description',
                     'grid_class' => 'col-md-12'
                 ]
@@ -128,6 +142,7 @@ class Account extends BaseModel
                 'parameters' =>
                 [
                     'label' => "Account Number",
+                    'title' => "The number the bank, credit card, etc, used to identify this account. (Encrypted)",
                     'datapoint' => 'account_number',
                     'grid_class' => 'col-md-6'
                 ]
@@ -137,6 +152,7 @@ class Account extends BaseModel
                 'parameters' =>
                 [
                     'label' => "Routing Number",
+                    'title' => "The number that identifies the bank: found on a check. (Encrypted)",
                     'datapoint' => 'routing_number',
                     'grid_class' => 'col-md-6'
                 ]
@@ -146,6 +162,7 @@ class Account extends BaseModel
                 'parameters' =>
                 [
                     'label' => "Website URL",
+                    'title' => "the website for this account, where you can log in to pay, check balances, etc.  A link will appear on the Expense dialog when this is populated. (Encrypted)",
                     'datapoint' => 'website',
                     'grid_class' => 'col-md-12'
                 ]
@@ -155,6 +172,7 @@ class Account extends BaseModel
                 'parameters' =>
                 [
                     'label' => "Website User",
+                    'title' => "This is here for informational purposes, and are safely encrypted. (Encrypted)",
                     'datapoint' => 'username',
                     'grid_class' => 'col-md-6'
                 ]
@@ -164,6 +182,7 @@ class Account extends BaseModel
                 'parameters' =>
                 [
                     'label' => "Website Password",
+                    'title' => "This is here for informational purposes, and are safely encrypted. (Encrypted)",
                     'datapoint' => 'password',
                     'grid_class' => 'col-md-6'
                 ]

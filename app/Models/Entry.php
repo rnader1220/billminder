@@ -151,14 +151,13 @@ class Entry extends BaseModel
         ],
     ];
 
-
     protected $form = [
         [
             [
                 'type' => 'input_hidden',
                 'parameters' =>
                 [
-                    'label' => "Income?",
+                    'label' => "income",
                     'datapoint' => 'income',
                 ],
             ],
@@ -167,6 +166,7 @@ class Entry extends BaseModel
                 'parameters' =>
                 [
                     'label' => "Name",
+                    'title' => "This field is what will display on the list. This is the only required field! (Encrypted)",
                     'datapoint' => 'name',
                     'grid_class' => 'col-sm-12 col-md-8 col-lg-6'
                 ]
@@ -176,6 +176,8 @@ class Entry extends BaseModel
                 'parameters' =>
                 [
                     'label' => "Current Amount",
+                    'title' => "How much is the bill, currently?",
+                    'title_income' => "How much is this income, currently?",
                     'datapoint' => 'amount',
                     'grid_class' => 'col-sm-6 col-md-4 col-lg-3'
                 ],
@@ -185,6 +187,7 @@ class Entry extends BaseModel
                 'parameters' =>
                 [
                     'label' => "Estimated Amt?",
+                    'title' => "Is the current amount an estimate, or is it confirmed?",
                     'datapoint' => 'estimated_amount',
                     'grid_class' => 'col-sm-6 col-md-4 col-lg-3'
                 ],
@@ -194,6 +197,7 @@ class Entry extends BaseModel
                 'parameters' =>
                 [
                     'label' => "AutoPay",
+                    'title' => "Does this happen automatically?",
                     'datapoint' => 'autopay',
                     'grid_class' => 'col-sm-6 col-md-4 col-lg-3'
                 ]
@@ -203,6 +207,7 @@ class Entry extends BaseModel
                 'parameters' =>
                 [
                     'label' => "Frequency",
+                    'title' => "What is the billing cycle for this (monthly, annual, etc)?",
                     'datapoint' => 'cycle',
                     'grid_class' => 'col-sm-6 col-md-4 col-lg-3',
                     'allow_null' => true,
@@ -221,6 +226,7 @@ class Entry extends BaseModel
                 'parameters' =>
                 [
                     'label' => "Next Due Date",
+                    'title' => "When is this due, currently?",
                     'datapoint' => 'next_due_date',
                     'grid_class' => 'col-md-6 col-md-6 col-lg-3'
                 ],
@@ -230,6 +236,7 @@ class Entry extends BaseModel
                 'parameters' =>
                 [
                     'label' => "Estimated Date?",
+                    'title' => " Is the date an estimate, or is it confirmed?",
                     'datapoint' => 'estimated_date',
                     'grid_class' => 'col-sm-6 col-md-6 col-lg-3'
                 ],
@@ -239,6 +246,7 @@ class Entry extends BaseModel
                 'parameters' =>
                 [
                     'label' => "Fixed Amount?",
+                    'title' => "Is this a fixed amount? Cycling will not reset the estimate flag.",
                     'datapoint' => 'fixed',
                     'grid_class' => 'col-sm-6 col-md-4 col-lg-3'
                 ],
@@ -249,6 +257,7 @@ class Entry extends BaseModel
                 'parameters' =>
                 [
                     'label' => "Payments Left",
+                    'title' => "Does this have a fixed number of payments?  If set, this value will go down on cycling.",
                     'datapoint' => 'payments_remaining',
                     'grid_class' => 'col-sm-6 col-md-4 col-lg-3'
                 ],
@@ -258,6 +267,7 @@ class Entry extends BaseModel
                 'parameters' =>
                 [
                     'label' => "Balance Left",
+                    'title' => "For informational purposes only:  Use to keep track of your balance.",
                     'datapoint' => 'balance_remaining',
                     'grid_class' => 'col-sm-6 col-md-4 col-lg-3'
                 ],
@@ -267,6 +277,7 @@ class Entry extends BaseModel
                 'parameters' =>
                 [
                     'label' => "Description",
+                    'title' => "Write whatever you like here: description, notes, and so forth, for this. (Encrypted)",
                     'datapoint' => 'description',
                     'grid_class' => 'col-12'
                 ]
@@ -276,6 +287,7 @@ class Entry extends BaseModel
                 'parameters' =>
                 [
                     'label' => "Category",
+                    'title' => "This field is what will display on the list. Select from your category list, to organize your bills and income for reporting purposes.  See the Categories tab for more details.",
                     'datapoint' => 'category_id',
                     'allow_null' => true,
                     'grid_class' => 'col-sm-6 col-md-4 col-lg-3',
@@ -288,6 +300,7 @@ class Entry extends BaseModel
                 [
                     'label' => "From Account",
                     'label_income' => "To Account",
+                    'title' => "This can point to your internal account (bank, etc).  If set, and the account has a link, it will appear here.  See the Accounts tab for more details.",
                     'allow_null' => true,
                     'datapoint' => 'account_id',
                     'grid_class' => 'col-sm-6 col-md-4 col-lg-3',
@@ -300,6 +313,7 @@ class Entry extends BaseModel
                 [
                     'label' => "Pay To",
                     'label_income' => "Pay From",
+                    'title' => "This can point to your external account (cc company, employer, etc).  If set, and the account has a link, it will appear here.  See the Accounts tab for more details.",
                     'allow_null' => true,
                     'datapoint' => 'party_id',
                     'grid_class' => 'col-sm-6 col-md-4 col-lg-3',

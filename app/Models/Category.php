@@ -35,10 +35,13 @@ class Category extends BaseModel
         ->get()
         ->toArray();
 
-        // because they are encrypted!
-        // arrayWalk sort array by label alpha
+        $resulta = collect($result);
+        $resultb = $resulta->sortBy('label');
 
-        return $result;
+        foreach($resultb as $index => $row) {
+            $resultc[] = $row;
+        }
+        return $resultc;
     }
 
     public static function getSelectList(string $q = '') {
@@ -48,10 +51,13 @@ class Category extends BaseModel
             ->get()
             ->toArray();
 
-        // because they are encrypted!
-        // arrayWalk sort array by label alpha
+            $resulta = collect($result);
+            $resultb = $resulta->sortBy('label');
 
-        return $result;
+            foreach($resultb as $index => $row) {
+                $resultc[] = $row;
+            }
+            return $resultc;
     }
 
     protected $form = [
@@ -61,6 +67,7 @@ class Category extends BaseModel
                 'parameters' =>
                 [
                     'label' => "Category Label",
+                    'title' => "This field is what will display on the list. This is the only required field! (Encrypted)",
                     'datapoint' => 'label',
                     'grid_class' => 'col-md-9'
                 ]
@@ -70,6 +77,7 @@ class Category extends BaseModel
                 'parameters' =>
                 [
                     'label' => "Description",
+                    'title' => "Write whatever you like here: description, notes, and so forth, for this account. (Encrypted)",
                     'datapoint' => 'description',
                     'grid_class' => 'col-md-12'
                 ]

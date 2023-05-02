@@ -154,7 +154,7 @@ var utility = (function ($, undefined) {
             document.location = "/login";
         } else {
             show_fail_message(
-                "<div class='alert alert-danger message-element' style='text-align:center; width:100%'>" +
+                "<div class='alert alert-danger message-element w-100 text-center'>" +
                     "<strong>Something Went Wrong!</strong><br>The requested action failed." +
                     "<br>Contact technical support.<br>" +
                     "<button class='button-error alert-danger'><span class='far fa-times'></span> Click to Close</button>" +

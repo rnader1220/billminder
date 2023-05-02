@@ -3,26 +3,28 @@ var library = (function ($, undefined) {
     var drawEntry = function(el) {
         html = "<div class='row'><div class='col-12 mb-2'><div class='app-draw-row entry-"+ el.status+"' onclick=\"dashboard.show('entry', "+el.id+");\">";
         html += "<div class='row'>";
-        html += "<div class='col-2 col-md-1' style='text-align:left'>" + entryIcon(el.status) + "</div>";
-        html += "<div class='col-4 col-md-2' style='text-align:right'>";
-        html += (el.estimated_date == 1?"<i class='fa fa-regular fa-circle-question' title='Estimated'></i>&nbsp;":"");
-        html += (typeof(el.next_due_date) == 'string'?dateFormat(el.next_due_date):"<i class='fa fa-regular fa-circle-exclamation' title='Date Not Set'></i>");
+        html += "<div class='col-2 col-md-1 text-start'>" + entryIcon(el.status);
+        html += (el.autopay == 1?"<i class='fa fa-solid fa-robot' title='Autopay'></i>":"");
         html += "</div>";
-        html += "<div class='col-6 col-md-2' style='text-align:right'>" +
-            (el.estimated_amount == 1?"<i class='fa fa-regular fa-circle-question' title='Estimated'></i>&nbsp;":"") +
-            (el.amount == '0.00'?"<i class='fa fa-regular fa-circle-exclamation' title='Amount Not Set'></i>":el.amount) + "</div>";
-        html += "<div class='col-6 col-md-4' style='text-align:left'>"+ el.name + "</div>";
-        html += "<div class='col-6 col-md-3' style='text-align:left'>"+ (typeof(el.category) != 'string'?'Unassigned':el.category) + "</div>";
+        html += "<div class='col-4 col-md-2 text-end'>";
+        html += (el.estimated_date == 1?"<i class='fa fa-solid fa-circle-question' title='Estimated'></i>&nbsp;":"");
+        html += (typeof(el.next_due_date) == 'string'?dateFormat(el.next_due_date):"<i class='fa fa-solid fa-circle-exclamation' title='Date Not Set'></i>");
+        html += "</div>";
+        html += "<div class='col-6 col-md-2 text-end'>" +
+            (el.estimated_amount == 1?"<i class='fa fa-solid fa-circle-question' title='Estimated'></i>&nbsp;":"") +
+            (el.amount == '0.00'?"<i class='fa fa-solid fa-circle-exclamation' title='Amount Not Set'></i>":el.amount) + "</div>";
+        html += "<div class='col-12 col-md-4 text-start'>"+ el.name + "</div>";
+        html += "<div class='d-none d-md-inline col-md-3 text-start'>"+ (typeof(el.category) != 'string'?'Unassigned':el.category) + "</div>";
         html += '</div></div></div>';
         return html;
     };
 
     var entryIcon = function(status) {
         switch (status) {
-            case 'income': return '<i class="fa-solid fa-money-bill-wave fa-fw"></i>';
-            case 'late': return '<i class="fa-solid fa-triangle-exclamation fa-fw"></i>';
-            case 'due': return '<i class="fa-solid fa-alarm-clock fa-fw"></i>';
-            case 'expense': return '<i class="fa-solid fa-file-invoice-dollar fa-fw"></i>';
+            case 'income': return '<i class="fa-solid fa-badge-dollar fa-fw" title="Income"></i>';
+            case 'late': return '<i class="fa-solid fa-triangle-exclamation fa-fw" title="Late"></i>';
+            case 'due': return '<i class="fa-solid fa-alarm-clock fa-fw" title="Due"></i>';
+            case 'expense': return '<i class="fa-solid fa-file-invoice-dollar fa-fw" title="Expense"></i>';
         }
     };
 

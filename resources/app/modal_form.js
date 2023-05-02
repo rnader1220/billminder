@@ -86,12 +86,12 @@ var modal_form = (function ($, undefined) {
 
 
             if (attr.hasOwnProperty('vertical')) {
-                htmlString += "<div class='btn-group-vertical btn-group-toggle' ";
+                htmlString += "<div class='btn-group-vertical btn-group-toggle w-100 text-center' ";
             } else {
-                htmlString += "<div class='btn-group-toggle' ";
+                htmlString += "<div class='btn-group-toggle w-100 text-center' ";
 
             }
-            htmlString += "style='width:100%; text-align:center' data-toggle='buttons'>";
+            htmlString += " data-toggle='buttons'>";
 
             attr.list.forEach(function (element) {
                 htmlString += "<label class='btn btn-radio' for='" + attr.datapoint + "-" + element.value + "' >" +
@@ -121,8 +121,15 @@ var modal_form = (function ($, undefined) {
                 htmlString += "<label for='" + attr.datapoint + "' class='control-label'>" + attr.label + "</label>";
             }
 
-            htmlString += "<div class='input-group'><input class='form-control' type='text' " +
+            htmlString += "<div class='input-group'><input type='text' " +
                 "id='" + attr.datapoint + "' name='" + attr.datapoint + "' ";
+
+            if (attr.hasOwnProperty('numeric')) {
+                htmlString += " class='form-control text-end' ";
+            } else {
+                htmlString += " class='form-control' ";
+            }
+
 
             if (attr.hasOwnProperty('placeholder')) {
                 htmlString += " placeholder='" + attr.placeholder + "'";
@@ -137,9 +144,6 @@ var modal_form = (function ($, undefined) {
                 htmlString += " value='" + attr.value + "' ";
             }
 
-            if (attr.hasOwnProperty('numeric')) {
-                htmlString += " style='text-align:right' ";
-            }
 
             htmlString += " ></div></div></div>";
             return htmlString;
@@ -161,21 +165,24 @@ var modal_form = (function ($, undefined) {
             if ((attr.hasOwnProperty('disabled') && attr.disabled == true) || mode == 'show') {
                 htmlString += "<a target='_new' href='" + attr.value + "'>" + attr.value + "</a>";
             } else {
-                htmlString += "<input class='form-control' type='text' " +
+                htmlString += "<input type='text' " +
                 "id='" + attr.datapoint + "' name='" + attr.datapoint + "' ";
 
-            if (attr.hasOwnProperty('placeholder')) {
-                htmlString += " placeholder='" + attr.placeholder + "'";
-            }
+                if (attr.hasOwnProperty('placeholder')) {
+                    htmlString += " placeholder='" + attr.placeholder + "'";
+                }
 
-            if (attr.hasOwnProperty('value')) {
-                htmlString += " value='" + attr.value + "' ";
-            }
+                if (attr.hasOwnProperty('value')) {
+                    htmlString += " value='" + attr.value + "' ";
+                }
 
-            if (attr.hasOwnProperty('numeric')) {
-                htmlString += " style='text-align:right' ";
-            }
-            htmlString += " >";
+                if (attr.hasOwnProperty('numeric')) {
+                    htmlString += " class='form-control text-end'";
+                } else {
+                    htmlString += " class='form-control'";
+
+                }
+                htmlString += " >";
             }
 
 
@@ -194,7 +201,7 @@ var modal_form = (function ($, undefined) {
             if (attr.hasOwnProperty('label')) {
                 htmlString += "<label for='" + attr.datapoint + "' class='control-label'>" + attr.label + "</label>";
             }
-            htmlString += "<div class='input-group'><input class='form-control' type='password' " +
+            htmlString += "<div class='input-group'><input type='password' " +
                 "id='" + attr.datapoint + "' name='" + attr.datapoint + "' ";
             if (attr.hasOwnProperty('placeholder')) {
                 htmlString += " placeholder='" + attr.placeholder + "'";
@@ -206,31 +213,29 @@ var modal_form = (function ($, undefined) {
                 htmlString += " value='" + attr.value + "' ";
             }
             if (attr.hasOwnProperty('numeric')) {
-                htmlString += " style='text-align:right' ";
+                htmlString += " class='form-control text-end' ";
+            } else {
+                htmlString += " class='form-control' ";
             }
             htmlString += " ></div></div></div>";
             return htmlString;
         },
 
         download: function (attr) {
-            return "<div class='" + attr.grid_class + "'><a href='" + attr.value + "' target='_new' " +
-            "style='max-width: inherit; border: solid 1px silver; padding: 12px; margin-top: 20px;'> VIEW FILE</a></div>";
+            return "<div class='" + attr.grid_class + "'><a href='" + attr.value + "' target='_new' class='media'> VIEW FILE</a></div>";
         },
 
 
         image: function (attr) {
-            return "<div class='" + attr.grid_class + "'><img src='" + attr.value + "' " +
-            "style='max-width: inherit; border: solid 1px silver; padding: 12px; margin-top: 20px;' / ></div>";
+            return "<div class='" + attr.grid_class + "'><img src='" + attr.value + "' class='media' / ></div>";
         },
 
         audio: function (attr) {
-            return "<audio class='" + attr.grid_class + "' controls><source src='" + attr.value + "' " +
-            "style='max-width: inherit; border: solid 1px silver; padding: 12px; margin-top: 20px;' / ></audio>";
+            return "<audio class='" + attr.grid_class + "' controls><source src='" + attr.value + "' class='media' / ></audio>";
         },
 
         video: function (attr) {
-            return "<video class='" + attr.grid_class + "' controls><source src='" + attr.value + "' " +
-            "style='max-width: inherit; border: solid 1px silver; padding: 12px; margin-top: 20px;' / ></video>";
+            return "<video class='" + attr.grid_class + "' controls><source src='" + attr.value + "'  class='media' / ></video>";
         },
 
 
@@ -288,7 +293,7 @@ var modal_form = (function ($, undefined) {
             htmlString += "</select>";
 
             if(attr.hasOwnProperty('allow_new')) {
-                htmlString += "<input class='form-control' type='text' style='display:none' " +
+                htmlString += "<input class='form-control app-hidden' type='text' " +
                 "id='new_" + attr.datapoint + "' name='new_" + attr.datapoint + "' >";
             }
 
@@ -338,7 +343,7 @@ var modal_form = (function ($, undefined) {
         },
 
         static_hidden: function (attr) {
-            return "<div id='" + attr.datapoint + "' class='" + attr.grid_class + "' style='display:none'><p>" + attr.text + "</p></div>";
+            return "<div id='" + attr.datapoint + "' class='" + attr.grid_class + " app-hidden' ><p>" + attr.text + "</p></div>";
         },
 
         static_text: function (attr) {
@@ -350,8 +355,8 @@ var modal_form = (function ($, undefined) {
         },
 
         button_control: function (attr) {
-            htmlString = "<button title='" + attr.title + "' style='display: none' type='button' " +
-                "class='btn " + attr.class + " btn-control' id='" + attr.id + "' ";
+            htmlString = "<button title='" + attr.title + " ' type='button' " +
+                "class='btn " + attr.class + " btn-control app-hidden' id='" + attr.id + "' ";
                 if(attr.hasOwnProperty('title')) {
                     htmlString += " title='" + attr.title + "' ";
                 }
@@ -367,7 +372,7 @@ var modal_form = (function ($, undefined) {
         },
 
         button_action: function (attr) {
-            htmlString = "<button title='" + attr.title + "' style='display: none' type='button' ";
+            htmlString = "<button title='" + attr.title + "' type='button' ";
             if(attr.hasOwnProperty('title')) {
                 htmlString += " title='" + attr.title + "' ";
             }
@@ -381,7 +386,7 @@ var modal_form = (function ($, undefined) {
             if (attr.hasOwnProperty('data')) {
                 htmlString += ' ' + attr.data;
             }
-            htmlString += " class='btn " + attr.button_class + " btn-action' id='" + attr.id + "'>";
+            htmlString += " class='btn " + attr.button_class + " btn-action app-hidden' id='" + attr.id + "'>";
             if (attr.hasOwnProperty('icon')) {
                 htmlString += " <span class='" + attr.icon + "'></span>";
             }
@@ -435,7 +440,7 @@ var modal_form = (function ($, undefined) {
     var table_build = function (content) {
         /* card body -- table here */
         htmlString += "<div class='index-table col-lg-12'>";
-        htmlString += "<table id='" + content.table_name + "' class='hover display-table' style='width:100%'>";
+        htmlString += "<table id='" + content.table_name + "' class='hover display-table w-100'>";
         htmlString += "<tbody></tbody><tfoot></tfoot></table></div>";
         return htmlString;
     };

@@ -76,6 +76,7 @@ body.dashboard {
     background-color: var(--main-back-alt-color);
 
 }
+
 .card {
     box-shadow: 0 4px 8px 0 var(--shadow-color-a), 0 4px 20px 0 var(--shadow-color-b);
 
@@ -190,6 +191,12 @@ body.dashboard {
     border: solid 1px var(--shadow-color-a);
   }
 
+  .form-control .media {
+    max-width: inherit;
+    border: solid 1px silver;
+    padding: 12px;
+    margin-top: 20px;
+  }
 
 
   input:checked + .cb3slider {
@@ -490,4 +497,8 @@ body.dashboard {
 .app-draw-row.entry-expense {
     background-color: var(--draw-entry-expense);
 
+}
+
+.app-hidden {
+    display: none;
 }

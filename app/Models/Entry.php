@@ -44,7 +44,14 @@ class Entry extends BaseModel
     ];
 
     public static function getList(string $q = '') {
-        $result = Entry::select('entries.id', 'entries.next_due_date', 'entries.estimated_date', 'entries.amount','entries.estimated_amount', 'entries.name',
+        $result = Entry::select(
+            'entries.id',
+            'entries.next_due_date',
+            'entries.estimated_date',
+            'entries.amount',
+            'entries.estimated_amount',
+            'entries.name',
+            'entries.autopay',
             DB::raw('categories.label as category'),
             DB::raw(
                 "case when income = 1 then 'income' when next_due_date < CURDATE() then 'late' " .

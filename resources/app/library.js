@@ -3,10 +3,10 @@ var library = (function ($, undefined) {
     var drawEntry = function(el) {
         html = "<div class='row'><div class='col-12 mb-2'><div class='app-draw-row entry-"+ el.status+"' onclick=\"dashboard.show('entry', "+el.id+");\">";
         html += "<div class='row'>";
-        html += "<div class='col-2 col-md-1 text-start'>" + entryIcon(el.status);
+        html += "<div class='col-3 col-md-1 text-start'>" + entryIcon(el.status);
         html += (el.autopay == 1?"<i class='fa fa-solid fa-robot' title='Autopay'></i>":"");
         html += "</div>";
-        html += "<div class='col-4 col-md-2 text-end'>";
+        html += "<div class='col-3 col-md-2 text-end'>";
         html += (el.estimated_date == 1?"<i class='fa fa-solid fa-circle-question' title='Estimated'></i>&nbsp;":"");
         html += (typeof(el.next_due_date) == 'string'?dateFormat(el.next_due_date):"<i class='fa fa-solid fa-circle-exclamation' title='Date Not Set'></i>");
         html += "</div>";

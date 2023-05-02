@@ -3,18 +3,18 @@ var library = (function ($, undefined) {
     var drawEntry = function(el) {
         html = "<div class='row'><div class='col-12 mb-2'><div class='app-draw-row entry-"+ el.status+"' onclick=\"dashboard.show('entry', "+el.id+");\">";
         html += "<div class='row'>";
-        html += "<div class='col-3 col-md-1 text-start'>" + entryIcon(el.status);
+        html += "<div class='col-3 col-lg-1 text-start'>" + entryIcon(el.status);
         html += (el.autopay == 1?"<i class='fa fa-solid fa-robot' title='Autopay'></i>":"");
         html += "</div>";
-        html += "<div class='col-3 col-md-2 text-end'>";
+        html += "<div class='col-4 col-lg-2 text-end'>";
         html += (el.estimated_date == 1?"<i class='fa fa-solid fa-circle-question' title='Estimated'></i>&nbsp;":"");
         html += (typeof(el.next_due_date) == 'string'?dateFormat(el.next_due_date):"<i class='fa fa-solid fa-circle-exclamation' title='Date Not Set'></i>");
         html += "</div>";
-        html += "<div class='col-6 col-md-2 text-end'>" +
+        html += "<div class='col-5 col-lg-2 text-end'>" +
             (el.estimated_amount == 1?"<i class='fa fa-solid fa-circle-question' title='Estimated'></i>&nbsp;":"") +
             (el.amount == '0.00'?"<i class='fa fa-solid fa-circle-exclamation' title='Amount Not Set'></i>":el.amount) + "</div>";
-        html += "<div class='col-12 col-md-4 text-start'>"+ el.name + "</div>";
-        html += "<div class='d-none d-md-inline col-md-3 text-start'>"+ (typeof(el.category) != 'string'?'Unassigned':el.category) + "</div>";
+        html += "<div class='col-12 col-lg-4 text-start'>"+ el.name + "</div>";
+        html += "<div class='d-none d-lg-inline col-lg-3 text-start'>"+ (typeof(el.category) != 'string'?'Unassigned':el.category) + "</div>";
         html += '</div></div></div>';
         return html;
     };
@@ -29,7 +29,7 @@ var library = (function ($, undefined) {
     };
 
     var drawSecondary = function(type, el) {
-        html = "<div class='row'><div class='col-12 offset-md-2 col-md-8'>" +
+        html = "<div class='row'><div class='col-12 offset-lg-2 col-lg-8'>" +
         "<div class='app-draw-row category ml-2 mr-4 px-2' onclick=\"dashboard.show('"+type+"', "+el.id+");\">";
         html += el.label;
         html += '</div></div></div>';

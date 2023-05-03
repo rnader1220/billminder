@@ -30,6 +30,7 @@ class Category extends BaseModel
 
 
     public function getList(string $q = '') {
+        $resultc = [];
         $result = Category::where('user_id', Auth::user()->id)
         ->whereNull('deleted_at')
         ->get()
@@ -45,6 +46,7 @@ class Category extends BaseModel
     }
 
     public static function getSelectList(string $q = '') {
+        $resultc = [];
         $result = Category::select('label', DB::raw('id as value'))
             ->where('user_id', Auth::user()->id)
             ->whereNull('deleted_at')

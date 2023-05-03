@@ -77,6 +77,7 @@ var dashboard = (function ($, undefined) {
 
 
     var list = function(dtype) {
+
         $.ajax({
             url: '/' + dtype,
             cache: false,
@@ -87,6 +88,14 @@ var dashboard = (function ($, undefined) {
         })
         .done(function(response) {
             $('#' + dtype + '-div').html('');
+            if(dtype == 'entry') {
+                if (response.length ==0 && !$('#welcome-div').is(":visible")) {
+                    $('#welcome-div').slideDown(300);
+                }
+                if (response.length !=0 && $('#welcome-div').is(":visible")) {
+                    $('#welcome-div').slideUp(300);
+                }
+            }
             response.forEach(function (el) {
                 $('#' + dtype + '-div').append(library.drawElement(dtype, el));
             });

@@ -10,3 +10,5 @@
 <li><strong>Pay To</strong>: This can point to your external account (cc company, employer, etc).  If set, and the account has a link, it will appear here.  See the Accounts tab for more details.</li>
 </ul>
 <p>Meaningful fields are encrypted in the database for your protection.  These are indicated above.</p>
+
+@include( 'help.controls')

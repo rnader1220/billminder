@@ -89,28 +89,28 @@ trait TableMaint
     protected $controls = [
         'view' => [
             'head' => [
-                ['title' => 'Edit This %name%', 'class' => 'btn-warning', 'id' => 'control-edit', 'icon' =>'far fa-edit'],
-                ['title' => 'Delete This %name%', 'class' => 'btn-danger', 'id' => 'control-delete', 'icon' =>'far fa-trash'],
+                ['title' => 'Edit This %name%', 'class' => 'btn-warning', 'id' => 'control-edit', 'icon' =>'fa-solid fa-edit'],
+                ['title' => 'Delete This %name%', 'class' => 'btn-danger', 'id' => 'control-delete', 'icon' =>'fa-solid fa-trash'],
             ],
             'foot' => [
-                ['title' => 'Help', 'class' => 'btn-secondary', 'id' => 'control-help', 'icon' =>'far fa-person-drowning'],
-                ['title' => 'Close', 'class' => 'btn-secondary', 'id' => 'control-cancel', 'icon' =>'far fa-undo-alt'],
+                ['title' => 'Help', 'class' => 'btn-secondary', 'id' => 'control-help', 'icon' =>'fa-solid fa-person-drowning'],
+                ['title' => 'Close', 'class' => 'btn-secondary', 'id' => 'control-cancel', 'icon' =>'fa-solid fa-xmark'],
             ]
         ],
         'edit' => [
             'head' => [],
             'foot' => [
-                ['title' => 'Help', 'class' => 'btn-secondary', 'id' => 'control-help', 'icon' =>'far fa-person-drowning'],
-                ['title' => 'Save %name% Changes', 'class' => 'btn-success', 'id' => 'control-save', 'icon' =>'far fa-save'],
-                ['title' => 'Cancel Edit %name%', 'class' => 'btn-secondary', 'id' => 'control-cancel', 'icon' =>'far fa-undo-alt'],
+                ['title' => 'Help', 'class' => 'btn-secondary', 'id' => 'control-help', 'icon' =>'fa-solid fa-person-drowning'],
+                ['title' => 'Save %name% Changes', 'class' => 'btn-success', 'id' => 'control-save', 'icon' =>'fa-solid fa-floppy-disk-pen'],
+                ['title' => 'Cancel Edit %name%', 'class' => 'btn-secondary', 'id' => 'control-cancel', 'icon' =>'fa-solid fa-backward'],
             ]
         ],
         'create' => [
             'head' => [],
             'foot' => [
-                ['title' => 'Help', 'class' => 'btn-secondary', 'id' => 'control-help', 'icon' =>'far fa-person-drowning'],
-                ['title' => 'Save New %name%', 'class' => 'btn-success', 'id' => 'control-save', 'icon' =>'far fa-save'],
-                ['title' => 'Cancel New %name%', 'class' => 'btn-secondary', 'id' => 'control-cancel', 'icon' =>'far fa-undo-alt'],
+                ['title' => 'Help', 'class' => 'btn-secondary', 'id' => 'control-help', 'icon' =>'fa-solid fa-person-drowning'],
+                ['title' => 'Save New %name%', 'class' => 'btn-success', 'id' => 'control-save', 'icon' =>'fa-solid fa-floppy-disk-pen'],
+                ['title' => 'Cancel New %name%', 'class' => 'btn-secondary', 'id' => 'control-cancel', 'icon' =>'fa-solid fa-xmark'],
             ]
         ]
     ];

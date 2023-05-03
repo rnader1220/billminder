@@ -96,8 +96,16 @@ class User extends Authenticatable
                     'grid_class' => 'col-md-12'
                 ]
 
+            ],
+            [
+                'type' => 'help_text',
+                'parameters' =>
+                [
+                    'datapoint' => "help-text",
+                    'grid_class' => 'col-md-12',
+                    'text' => ''
+                ]
             ]
-
         ],
     ];
 

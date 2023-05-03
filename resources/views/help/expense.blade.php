@@ -1,4 +1,7 @@
-<p>Describe Concept and Display Screen</p>
+<p>Expenses are your main bills.
+    Enter in all the expenses you want to track, and when they need to be addressed.
+    Categorize them for reporting purposes, and link them to accounts for convenient access to them.</p>
+
 <p>Meaningful fields are encrypted in the database for your protection.  These are indicated above.</p>
 
 <h5>Special Controls</h5>

@@ -431,9 +431,12 @@ var dashboard = (function ($, undefined) {
         $('.modal-header').html('<h5 class="modal-title">Help</h5>');
         // just the close button
         $('.modal-header').append(modal_form.js_panel_control([{
-            'title': 'Close', 'class': 'btn-secondary', 'id':  'control-cancel', 'icon': 'far fa-undo-alt'
+            'title': 'Close', 'class': 'btn-secondary', 'id':  'control-close', 'icon': 'far fa-xmark'
         }]));
-        utility.set_dynamic_button('#control-cancel', hideModal);
+        utility.set_dynamic_button('#control-close', function() {
+            hideModal();
+            $('.modal-footer').show();
+        });
         $('.modal-body').html(help_text);
         $('.modal-footer').hide();
         if(!$('#myModal').is(':visible')) {
@@ -443,12 +446,12 @@ var dashboard = (function ($, undefined) {
       };
 
     var helpShow = function() {
-        $('#help-text').slideDown(300);
+        $('.help-text').slideDown(300);
         utility.set_dynamic_button('#control-help', helpHide);
     };
 
     var helpHide = function() {
-        $('#help-text').slideUp(300);
+        $('.help-text').slideUp(300);
         utility.set_dynamic_button('#control-help', helpShow);
     };
 

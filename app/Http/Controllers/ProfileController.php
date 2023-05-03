@@ -37,9 +37,10 @@ class ProfileController extends Controller
 
     public function subscriber()
     {
-        $record = User::find(Auth::user()->id);
+        $response = User::find(Auth::user()->id) ->toArray();
+        $response['help_text'] = view('help.dashboard')->render();
 
-        return ($record->toArray());
+        return ($response);
     }
 
 

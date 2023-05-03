@@ -378,6 +378,7 @@ body.dashboard {
     min-height:40px;
 }
 
+.form-group .help-text,
 .ui-trans-wrapper .display-name,
 .ui-display-wrapper .display-name {
     color:var(--main-text-color-desc);

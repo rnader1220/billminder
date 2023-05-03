@@ -73,7 +73,7 @@
                         </div></div>
 
                         <div class='container-fluid mb-2 help-div'><div class='row'>
-                            <div class="col-12 offset-xl-2 col-xl-8"><div class='btn-app-primary centered' onclick="help.show();"><i class='fa-regular fa-person-drowning'></i>&nbsp;&nbsp;Help</div></div>
+                            <div class="col-12 offset-xl-2 col-xl-8"><div class='btn-app-primary centered' onclick="dashboard.helpDashboard();"><i class='fa-regular fa-person-drowning'></i>&nbsp;&nbsp;Help</div></div>
                         </div></div>
                     </div>
                 </div>

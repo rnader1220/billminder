@@ -109,7 +109,8 @@ class Register extends BaseModel
                 [
                     'label' => "Name",
                     'datapoint' => 'name',
-                    'grid_class' => 'col-sm-12 col-md-8 col-lg-6'
+                    'grid_class' => 'col-sm-12 col-md-8 col-lg-6',
+                    'title' => 'This field is what will display on the list. (Required) (Encrypted)',
                 ]
             ],
             [
@@ -118,7 +119,8 @@ class Register extends BaseModel
                 [
                     'label' => "Paid Amount",
                     'datapoint' => 'amount',
-                    'grid_class' => 'col-sm-6 col-md-4 col-lg-3'
+                    'grid_class' => 'col-sm-6 col-md-4 col-lg-3',
+                    'title' => 'How much is this, this time?',
                 ],
             ],
             [
@@ -127,7 +129,8 @@ class Register extends BaseModel
                 [
                     'label' => "Paid Date",
                     'datapoint' => 'paid_date',
-                    'grid_class' => 'col-md-6 col-md-6 col-lg-3'
+                    'grid_class' => 'col-md-6 col-md-6 col-lg-3',
+                    'title' => 'When did this happen, this time?',
                 ],
             ],
             [
@@ -136,7 +139,9 @@ class Register extends BaseModel
                 [
                     'label' => "Description",
                     'datapoint' => 'description',
-                    'grid_class' => 'col-12'
+                    'grid_class' => 'col-12',
+                    'title' => 'Write whatever you like here: description, notes, and so forth, for this transaction. (Encrypted)',
+
                 ]
             ],
             [
@@ -148,6 +153,7 @@ class Register extends BaseModel
                     'allow_null' => true,
                     'grid_class' => 'col-sm-6 col-md-4 col-lg-3',
                     'list' => [],
+                    'title' => "This field is what will display on the list. Select from your category list, to organize your bills and income for reporting purposes.  See the Categories tab for more details.",
                 ]
             ],
             [
@@ -160,6 +166,8 @@ class Register extends BaseModel
                     'datapoint' => 'account_id',
                     'grid_class' => 'col-sm-6 col-md-4 col-lg-3',
                     'list' => [],
+                    'title' => "This can point to your internal account (bank, etc).  If set, and the account has a link, it will appear here.  See the Accounts tab for more details.",
+
                 ]
             ],
             [
@@ -167,15 +175,17 @@ class Register extends BaseModel
                 'parameters' =>
                 [
                     'label' => "Pay To",
-                    'label_income' => "Pay From",
+                    'label_income' => "Collect From",
                     'allow_null' => true,
                     'datapoint' => 'party_id',
                     'grid_class' => 'col-sm-6 col-md-4 col-lg-3',
                     'list' => [],
+                    'title' => "This can point to an external account (cc company, employer, etc).  If set, and the account has a link, it will appear here.  See the Accounts tab for more details.",
+
                 ]
             ],
             [
-                'type' => 'static_hidden',
+                'type' => 'help_text',
                 'parameters' =>
                 [
                     'datapoint' => "help-text",

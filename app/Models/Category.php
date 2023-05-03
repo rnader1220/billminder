@@ -85,7 +85,7 @@ class Category extends BaseModel
                 ]
             ],
             [
-                'type' => 'static_hidden',
+                'type' => 'help_text',
                 'parameters' =>
                 [
                     'datapoint' => "help-text",

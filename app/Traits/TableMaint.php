@@ -16,12 +16,12 @@ trait TableMaint
 
     }
 
-    protected function getHelpText(): string
+    protected function getHelpText($mode): string
     {
         if(isset($this->helpText)) {
-            return view('help.' . $this->helpText)->render();
+            return view('help.' . $this->helpText, ['mode' => $mode])->render();
         }
-        return view('help.'. strtolower($this->getLabel()))->render();
+        return view('help.'. strtolower($this->getLabel()), ['mode' => $mode])->render();
 
     }
 
@@ -31,7 +31,7 @@ trait TableMaint
             'title' => $this->dialogTitle($mode, $this->getLabel()),
             'mode' => $mode,
             'form_div_class' => "col-md-12",
-            'form' => $this->hydrateForm()
+            'form' => $this->hydrateForm($mode)
         ];
         if($mode == 'show') {
             $view['actions'] = $this->getActions();
@@ -168,7 +168,7 @@ trait TableMaint
     }
 
 
-    public function hydrateForm(?string $formname = null): array
+    public function hydrateForm($mode, ?string $formname = null): array
     {
         // use defined default form is not passed in.
         if (is_null($formname)) {
@@ -190,7 +190,7 @@ trait TableMaint
                             $this->$datapoint;
                     }
                 } else if($datapoint == 'help-text') {
-                    $form[$rowIndex][$elementIndex]['parameters']['text'] = $this->getHelpText();
+                    $form[$rowIndex][$elementIndex]['parameters']['text'] = $this->getHelpText($mode);
                     // do nothing
                 }
 

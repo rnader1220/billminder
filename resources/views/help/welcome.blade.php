@@ -1,7 +1,7 @@
 <section>
     <h4>Welcome!</h4>
     <p>Billminder is a simple little web application, here to help you find some peace about a
-        daily life issue that hounds everyone: expense management.
+        daily life issue that hounds everyone: balancing your budget.
         Visualizing your bill schedule, combined with your income, allows you, at a glance,
         to understand your expenses and confidently manage them.
         Peace of mind comes quickly when you can see where everything is in relation to

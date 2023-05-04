@@ -119,15 +119,15 @@ var subscription = (function ($, undefined) {
         "<div class='row'>" +
         "<div class='col-12 col-lg-6 offset-lg-3'>" +
         "<label>Name on Card *</label>" +
-        "<input class='form-control' name='cardname' placeholder='Name on Card' value='My Name' required>" +
+        "<input class='form-control' name='cardname' placeholder='Name on Card' required>" +
         "</div>" +
         "<div class='col-12 col-lg-6 offset-lg-3'>" +
         "<label>Card Number*</label>" +
-        "<input class='form-control' name='cardnum' placeholder='Card Number' value='4242424242424242' required>" +
+        "<input class='form-control' name='cardnum' placeholder='Card Number' required>" +
         "</div>" +
         "<div class='col-lg-2 offset-lg-3 col-sm-12'>" +
         "<label>Month*</label>" +
-        "<select class='form-control' name='exp_month' placeholder='MM' required>" +
+        "<select class='form-control' name='exp_month' required>" +
         "<option value = '01'>01-January</option><option value = '02'>02-February</option>" +
         "<option value = '03'>03-March</option><option value = '04'>04-April</option>" +
         "<option value = '05'>05-May</option><option value = '06'>06-June</option>" +
@@ -138,11 +138,11 @@ var subscription = (function ($, undefined) {
         "</div>" +
         "<div class='col-lg-2 col-sm-12'>" +
         "<label>Year*</label>" +
-        "<input class='form-control' name='exp_year' placeholder='YYYY' value='2024' required>" +
+        "<input class='form-control' name='exp_year' placeholder='YYYY' required>" +
         "</div>" +
         "<div class='col-lg-2 col-sm-12'>" +
         "<label>Security Code*</label>" +
-        "<input class='form-control' name='cvc' placeholder='***' required value='123'>" +
+        "<input class='form-control' name='cvc' placeholder='***' required >" +
         "</div>" +
         "</div>" +
         "</form>";

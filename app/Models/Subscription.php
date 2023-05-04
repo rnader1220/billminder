@@ -35,7 +35,7 @@ class Subscription extends Model
         $user = User::find(Auth::user()->id);
         $stripeUser = $user->createOrGetStripeCustomer();
 
-        //try {
+        try {
             $paymethod = $this->PayMethod($stripeUser, $request->post());
             $subscription = $this->GetSubscription($stripeUser);
             if(count($subscription['items']) > 0) {
@@ -45,17 +45,26 @@ class Subscription extends Model
             if($success) {
                 $user->subscribed_at = Carbon::now();
                 $user->save();
+                $entry = new Entry();
+                $entry->name = 'Billminder Subscription';
+                $entry->amount = 30;
+                $entry->frequency = -5;
+                $entry->income = 0;
+                $entry->autopay = 1;
+                $entry->save();
+
+                // create new expense record
+
             } else {
-                // need to capture and show transaction failure reason.
                 $success = false;
                 $detail = 'Transaction Failed Reason:  ' . $subscriptionObj;
             }
 
-/*         } catch(\Exception $e) {
+         } catch(\Exception $e) {
             $success = false;
             $detail =  $e->getMessage();
         }
- */
+
         return self::responseMessage('Subscription', $success, $detail);
     }
 
@@ -114,8 +123,6 @@ class Subscription extends Model
 
     private function PayMethod(object $stripeUser, array $payData) : string
     {
-        //$apiKey = getenv('STRIPE_SECRET');
-
         $paymentMethod = \Stripe\PaymentMethod::create([
             'type' => 'card',
             'card' => [

@@ -11,7 +11,7 @@ var subscription = (function ($, undefined) {
                 'label': 'Subscribe Now',
                 'title': 'Subscribe Now',
                 'button_class': 'btn-success m-1',
-                'icon': 'fas fa-two-thumbs',
+                'icon': 'fas fa-piggy-bank fa-shake',
                 'id': 'utility-advance',
                 'action': 'collect_payment',
             }
@@ -32,7 +32,7 @@ var subscription = (function ($, undefined) {
                 'label': 'Start My Subscription',
                 'title': 'Start My Subscription',
                 'button_class': 'btn-primary m-1',
-                'icon': 'fas fa-credit-card',
+                'icon': 'fas fa-credit-card fa-flip',
                 'id': 'utility-advance',
                 'action': 'post_payment',
             }
@@ -77,7 +77,7 @@ var subscription = (function ($, undefined) {
                 'label': 'Thank You',
                 'title': 'Thank You',
                 'button_class': 'btn-primary m-1',
-                'icon': 'fas fa-hearts-face',
+                'icon': 'fas fa-hearts-face fa-bounce',
                 'id': 'utility-advance',
                 'action': 'reload-page',
             }

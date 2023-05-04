@@ -171,7 +171,9 @@ var modal_form = (function ($, undefined) {
 
             htmlString += "<div class='input-group'>";
             if ((attr.hasOwnProperty('disabled') && attr.disabled == true) || mode == 'show') {
-                htmlString += "<a target='_new' href='" + attr.value + "'>" + attr.value + "</a>";
+                if(typeof(attr.value) == 'string') {
+                    htmlString += "<a target='_new' href='" + attr.value + "'>" + attr.value + "</a>";
+                }
             } else {
                 htmlString += "<input type='text' " +
                 "id='" + attr.datapoint + "' name='" + attr.datapoint + "' ";
@@ -183,13 +185,8 @@ var modal_form = (function ($, undefined) {
                 if (attr.hasOwnProperty('value')) {
                     htmlString += " value='" + attr.value + "' ";
                 }
+                htmlString += " class='form-control'";
 
-                if (attr.hasOwnProperty('numeric')) {
-                    htmlString += " class='form-control text-end'";
-                } else {
-                    htmlString += " class='form-control'";
-
-                }
                 htmlString += " >";
             }
             htmlString += " ></div>";
@@ -309,7 +306,7 @@ var modal_form = (function ($, undefined) {
 
             attr.list.forEach(function (element) {
                 if (attr.hasOwnProperty('value') && attr.value == element.value) {
-                    if(element.hasOwnProperty('website') && element.website != '') {
+                    if(element.hasOwnProperty('website') && element.website != '' && typeof(element.website) == 'string') {
                         htmlString += "<a target='_new' href='"+element.website+"'>"+element.label+"</a>";
                     }
                 }

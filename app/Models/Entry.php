@@ -149,34 +149,34 @@ class Entry extends BaseModel
         }
 
         if($data['category_id'] == '_new') {
-            $new_category = Category::create(['user_id' => Auth::user()->id, 'label' => $data['new_category_id']]);
-            $data['category_id'] = $new_category->id;
-        }
-
-        if($data['category_id'] == '_new') {
-            $new_category = Category::create(['user_id' => Auth::user()->id, 'label' => $data['new_category_id']]);
+            $new_category = new Category();
+            $new_category->label = $data['new_category_id'];
+            $new_category->save();
             $data['category_id'] = $new_category->id;
         }
 
         if($data['account_id'] == '_new') {
-            $new_account = Account::create(['user_id' => Auth::user()->id, 'label' => $data['new_category_id'],
-                'account' => 1,
-                'payee' => 0,
-                'payor' => 0,
-            ]);
+            $new_account = new Account();
+            $new_account->name = $data['new_account_id'];
+            $new_account->account = 1;
+            $new_account->payee = 0;
+            $new_account->payor = 0;
+            $new_account->save();
             $data['account_id'] = $new_account->id;
         }
 
         if($data['party_id'] == '_new') {
-            $new_account = Account::create(['user_id' => Auth::user()->id, 'label' => $data['new_party_id'],
-                'account' => 0,
-                'payee' => $data['income'],
-                'payor' => ($data['income']==1?0:1),
-            ]);
-            $data['party_id'] = $new_account->id;
+            $new_party = new Account();
+            $new_party->name = $data['new_party_id'];
+            $new_party->account = 0;
+            $new_party->payee = ($data['income']==1?0:1);
+            $new_party->payor = ($data['income']==1?1:0);
+            $new_party->save();
+
+            $data['party_id'] = $new_party->id;
         }
 
-
+        return true;
     }
 
     protected $actions = [

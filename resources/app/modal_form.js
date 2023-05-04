@@ -33,7 +33,9 @@ var modal_form = (function ($, undefined) {
                 htmlString += " checked ";
             }
             htmlString += "><span class='cb3slider' for='is_" + attr.datapoint + "'></span></label>";
-            htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
+            if(attr.hasOwnProperty('title')) {
+                htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
+            }
             htmlString += "</div>";
             htmlString += "</div>";
             return htmlString;
@@ -62,7 +64,9 @@ var modal_form = (function ($, undefined) {
                 htmlString += " value='" + attr.value + "' ";
             }
             htmlString += " ></div>";
-            htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
+            if(attr.hasOwnProperty('title')) {
+                htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
+            }
             htmlString += "</div></div>";
             return htmlString;
         },
@@ -111,7 +115,9 @@ var modal_form = (function ($, undefined) {
                     element.label + "</label>";
             });
             htmlString += " ></div>";
-            htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
+            if(attr.hasOwnProperty('title')) {
+                htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
+            }
             htmlString += "</div></div>";
             return htmlString;
         },
@@ -152,7 +158,9 @@ var modal_form = (function ($, undefined) {
 
 
             htmlString += " ></div>";
-            htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
+            if(attr.hasOwnProperty('title')) {
+                htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
+            }
             htmlString += "</div></div>";
             return htmlString;
         },
@@ -190,7 +198,9 @@ var modal_form = (function ($, undefined) {
                 htmlString += " >";
             }
             htmlString += " ></div>";
-            htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
+            if(attr.hasOwnProperty('title')) {
+                htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
+            }
             htmlString += "</div></div>";
             return htmlString;
         },
@@ -223,7 +233,9 @@ var modal_form = (function ($, undefined) {
                 htmlString += " class='form-control' ";
             }
             htmlString += " ></div>";
-            htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
+            if(attr.hasOwnProperty('title')) {
+                htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
+            }
             htmlString += "</div></div>";
             return htmlString;
         },
@@ -311,7 +323,9 @@ var modal_form = (function ($, undefined) {
                     }
                 }
             });
-            htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
+            if(attr.hasOwnProperty('title')) {
+                htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
+            }
             htmlString += "</div></div>";
 
 
@@ -344,7 +358,9 @@ var modal_form = (function ($, undefined) {
                 htmlString += attr.value;
             }
             htmlString += "</textarea>";
-            htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
+            if(attr.hasOwnProperty('title')) {
+                htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
+            }
             htmlString += "</div></div>";
             return htmlString;
         },

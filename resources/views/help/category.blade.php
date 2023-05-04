@@ -1,3 +1,5 @@
+<h5>Categories</h5>
+
 <p>
     Categories are assigned to expenses and income.
     Use categories to sift out the types of bills and income you have.

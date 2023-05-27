@@ -68,6 +68,11 @@ var dashboard = (function ($, undefined) {
 
             if(typeof(response.subscribed_at) != 'string') {
                 $('.subscribe-div').show();
+            } else {
+
+                $('.reports-div').show();
+                $('.hours-div').show();
+                $('.miles-div').show();
             }
         })
         .fail(function(message) {

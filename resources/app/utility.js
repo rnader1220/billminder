@@ -1,32 +1,18 @@
 var utility = (function ($, undefined) {
     var initialize = function () {
-        //var dark_toggle = $("#cb-dark-theme");
-
         var prefersDarkScheme = window.matchMedia(
             "(prefers-color-scheme: dark)"
         );
         if (prefersDarkScheme.matches) {
             $("body").addClass("dark-theme");
-            //$(dark_toggle).prop('checked', true);
         } else {
             $("body").removeClass("dark-theme");
-            //$(dark_toggle).prop('checked', false);
         }
 
         var currentTheme = localStorage.getItem("theme");
         if (currentTheme == "dark") {
             $("body").addClass("dark-theme");
-            //$(dark_toggle).prop('checked', true);
         }
-
-        /* $(dark_toggle).on("change", function () {
-            $("body").toggleClass("dark-theme");
-            var theme = "light";
-            if ($("body").containsClass("dark-theme")) {
-                theme = "dark";
-            }
-            localStorage.setItem("theme", theme);
-        }); */
     };
 
 
@@ -129,7 +115,6 @@ var utility = (function ($, undefined) {
 
         $(".page-wrapper").removeClass("toggled");
         $(".overlay").removeClass("active");
-        feature_chatrooms.set_config({ current_chatroom_id: null });
     };
 
     var show_dash = function () {
@@ -137,7 +122,6 @@ var utility = (function ($, undefined) {
         setTimeout(function () {
             $("#dashboard").slideDown(300);
         }, 300);
-        feature_chatrooms.set_config({ current_chatroom_id: null });
     };
 
     var set_dynamic_button = function (btn_name, callback) {
@@ -185,7 +169,6 @@ var utility = (function ($, undefined) {
         profile_public.set_config({ subscriber_id: subscriber_id });
         profile_public.load();
 
-        //alert('subscriber '+ subscriber_id + ' profile modal popup here');
     };
 
     return {

@@ -15,6 +15,7 @@ class CreateMilesTable extends Migration
     {
         Schema::create('miles', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('user_id');
             $table->datetime('beg_time');
             $table->decimal('beg_odometer');
             $table->datetime('end_time')->nullable();
@@ -25,6 +26,7 @@ class CreateMilesTable extends Migration
             $table->boolean('reportable')->default(false);
             $table->decimal('distance')->nullable();
             $table->bigInteger('category_id')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

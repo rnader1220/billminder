@@ -21,6 +21,10 @@ class Mile extends BaseModel
     use SoftDeletes;
     use EncryptedAttribute;
 
+
+    protected $helpText = 'mile';
+    protected $formLabel = 'Travel Tracker';
+
     protected $encryptable = [
         'name',
         'description',
@@ -38,10 +42,38 @@ class Mile extends BaseModel
         'category_id',
     ];
 
+    public static function getList(string $q = '') {
+        $result = Mile::select(
+            'miles.id',
+            'miles.beg_time',
+            'miles.distance',
+            'miles.name',
+            DB::raw('categories.label as category'),
+        )
+        ->leftjoin('categories', function($join) {
+            $join->on('categories.id', '=', 'miles.category_id')
+            ->whereNull('categories.deleted_at');
+        })
+        ->where('miles.user_id', Auth::user()->id)
+        ->orderBy('miles.beg_time', 'desc')
+        ->whereNull('miles.deleted_at')
+        ->get()
+        ->toArray();
+
+        foreach($result as $index => $row) {
+            $result[$index]['category'] = Encrypter::decrypt($row['category']);
+        }
+        return $result;
+    }
+
     public function localGetForm($mode) {
         $this->form[0][9]['parameters']['list'] = Category::getSelectList();
         return $this->getForm($mode);
     }
+
+    /*
+    on update, recalculate duration
+    */
 
     protected $form = [
         [

@@ -20,6 +20,10 @@ class Hour extends BaseModel
     use SoftDeletes;
     use EncryptedAttribute;
 
+    protected $formLabel = 'Time Tracker';
+
+    protected $helpText = 'hour';
+
     protected $encryptable = [
         'name',
         'description',
@@ -35,35 +39,26 @@ class Hour extends BaseModel
     ];
 
     public static function getList(string $q = '') {
-        $result = Entry::select(
-            'entries.id',
-            'entries.next_due_date',
-            'entries.estimated_date',
-            'entries.amount',
-            'entries.estimated_amount',
-            'entries.name',
-            'entries.autopay',
+        $result = Hour::select(
+            'hours.id',
+            'hours.beg_time',
+            'hours.duration',
+            'hours.name',
             DB::raw('categories.label as category'),
-            DB::raw(
-                "case when income = 1 then 'income' when next_due_date < CURDATE() then 'late' " .
-                "when next_due_date < (select min(next_due_date) from entries where user_id = 2 and income=1 and deleted_at is null) then 'due' " .
-                "else 'expense' end as status"
-            )
         )
         ->leftjoin('categories', function($join) {
-            $join->on('categories.id', '=', 'entries.category_id')
+            $join->on('categories.id', '=', 'hours.category_id')
             ->whereNull('categories.deleted_at');
         })
-        ->where('entries.user_id', Auth::user()->id)
-        ->orderBy('entries.next_due_date')
-        ->whereNull('entries.deleted_at')
+        ->where('hours.user_id', Auth::user()->id)
+        ->orderBy('hours.beg_time', 'desc')
+        ->whereNull('hours.deleted_at')
         ->get()
         ->toArray();
 
         foreach($result as $index => $row) {
             $result[$index]['category'] = Encrypter::decrypt($row['category']);
         }
-
         return $result;
     }
 
@@ -71,6 +66,10 @@ class Hour extends BaseModel
         $this->form[0][5]['parameters']['list'] = Category::getSelectList();
         return $this->getForm($mode);
     }
+
+    /*
+    on update, recalculate distance
+    */
 
     protected $form = [
         [

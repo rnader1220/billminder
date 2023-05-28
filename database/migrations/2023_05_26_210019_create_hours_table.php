@@ -15,6 +15,7 @@ class CreateHoursTable extends Migration
     {
         Schema::create('hours', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('user_id');
             $table->datetime('beg_time');
             $table->datetime('end_time')->nullable();
             $table->string('name')->nullable();
@@ -22,6 +23,7 @@ class CreateHoursTable extends Migration
             $table->boolean('billable')->default(false);
             $table->bigInteger('duration')->nullable();
             $table->bigInteger('category_id')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

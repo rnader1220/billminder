@@ -33,17 +33,21 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::post('/subscription/payment', 'SubscriptionController@payment');
         Route::post('/subscription/cancel', 'SubscriptionController@cancel');
 
+        Route::get('/profile/subscriber', 'ProfileController@subscriber');
+        Route::get('/profile/list', 'ProfileController@index');
 
-
+        Route::any('/miles/{entry}/action', 'MilesController@action');
+        Route::any('/hours/{entry}/action', 'HoursController@action');
         Route::any('/entry/{entry}/action', 'EntryController@action');
+
+        Route::get('/miles/list', 'MilesController@index');
+        Route::get('/hours/list', 'HoursController@index');
         Route::get('/entry/list', 'EntryController@index');
         Route::get('/account/list', 'AccountController@index');
         Route::get('/category/list', 'CategoryController@index');
 
-        Route::get('/profile/subscriber', 'ProfileController@subscriber');
-        Route::get('/profile/list', 'ProfileController@index');
-
-
+        Route::resource('/miles', 'MilesController');
+        Route::resource('/hours', 'HoursController');
         Route::resource('/entry', 'EntryController');
         Route::resource('/account', 'AccountController');
         Route::resource('/category', 'CategoryController');

@@ -1,6 +1,12 @@
 var dashboard = (function ($, undefined) {
 
     var help_text = '';
+    var accordion_divs = [
+        '#account-div',
+        '#category-div',
+        '#miles-div',
+        '#hours-div'
+    ];
 
     var initialize = function() {
         subscriber();
@@ -8,52 +14,32 @@ var dashboard = (function ($, undefined) {
     };
 
     var listentry = function() {
-
-        if($('#account-div').data('open') == true) {
-            $('#account-div').slideUp(300, function() {
-                $('#account-div').html('');
-                $('#account-div').data('open', false);
-            });
-        }
-
-        if($('#category-div').data('open') == true) {
-            $('#category-div').slideUp(300, function() {
-                $('#category-div').html('');
-                $('#category-div').data('open', false);
-            });
-        }
-        list('entry');
+        hide_others();
+        fetchdata('entry');
     };
 
-    var listaccount = function() {
-        if($('#account-div').data('open') == true) {
-            $('#account-div').slideUp(300, function() {
-                $('#account-div').html('').data('open', false);
+    var list = function(name) {
+        var auxdiv = '#'+name+'-div';
+        if($(auxdiv).data('open') == true) {
+            $(auxdiv).slideUp(300, function() {
+                $(auxdiv).html('').data('open', false);
             });
         } else {
-            if($('#category-div').data('open') == true) {
-                $('#category-div').slideUp(300, function() {
-                    $('#category-div').html('').data('open', false);
-                });
-            }
-            list('account');
+            hide_others();
+            fetchdata(name);
         }
-    };
 
-    var listcategory = function() {
-        if($('#category-div').data('open') == true) {
-            $('#category-div').slideUp(300, function() {
-                $('#category-div').html('').data('open', false);
-            });
-        } else {
-            if($('#account-div').data('open') == true) {
-                $('#account-div').slideUp(300, function() {
-                    $('#account-div').html('').data('open', false);
+    }
+
+    var hide_others = function() {
+        accordion_divs.forEach(function(element){
+            if($(element).data('open') == true) {
+                $(element).slideUp(300, function() {
+                    $(element).html('').data('open', false);
                 });
             }
-            list('category');
-        }
-    };
+        });
+    }
 
     var subscriber = function() {
         $.ajax({
@@ -69,7 +55,6 @@ var dashboard = (function ($, undefined) {
             if(typeof(response.subscribed_at) != 'string') {
                 $('.subscribe-div').show();
             } else {
-
                 $('.reports-div').show();
                 $('.hours-div').show();
                 $('.miles-div').show();
@@ -81,7 +66,7 @@ var dashboard = (function ($, undefined) {
     };
 
 
-    var list = function(dtype) {
+    var fetchdata = function(dtype) {
 
         $.ajax({
             url: '/' + dtype,
@@ -152,7 +137,7 @@ var dashboard = (function ($, undefined) {
                     .done(function (resp) {
                         utility.show_message(resp, function () {
                             hideModal();
-                            list(type);
+                            fetchdata(type);
                         });
                     })
                     .fail(function (message) {
@@ -255,7 +240,7 @@ var dashboard = (function ($, undefined) {
                     function() {actionPatch(action, type, id);}
                 ); break;
                 default: utility.show_message(resp, function () {
-                    list(type);
+                    fetchdata(type);
                 }); break;
             }
 
@@ -285,7 +270,7 @@ var dashboard = (function ($, undefined) {
             .done(function (resp) {
                 hideModal();
                 utility.show_message(resp, function () {
-                    list(type);
+                    fetchdata(type);
                 });
 
             })
@@ -322,7 +307,7 @@ var dashboard = (function ($, undefined) {
                     case 'edit':  edit(type, id); break;
                     default: utility.show_message(resp, function () {
                         hideModal();
-                        list(type);
+                        fetchdata(type);
                     }); break;
                 }
 
@@ -369,9 +354,9 @@ var dashboard = (function ($, undefined) {
                     .done(function (resp) {
                         utility.show_message(resp, function () {
                             hideModal();
-                            list(type);
+                            fetchdata(type);
                             if(type == 'category') {
-                                list('entry');
+                                fetchdata('entry');
                             }
                         });
                     })
@@ -397,7 +382,7 @@ var dashboard = (function ($, undefined) {
         })
         .done(function (resp) {
             utility.show_message(resp, function () {
-                list(type);
+                fetchdata(type);
             });
         })
         .fail(function (message) {
@@ -421,7 +406,7 @@ var dashboard = (function ($, undefined) {
         .done(function (resp) {
             utility.show_message(resp, function () {
                 hideModal();
-                list(type);
+                fetchdata(type);
                 $('#genericModal').modal('hide');
             });
         })
@@ -463,8 +448,7 @@ var dashboard = (function ($, undefined) {
     return {
         initialize: initialize,
         listentry: listentry,
-        listaccount: listaccount,
-        listcategory: listcategory,
+        list: list,
         helpDashboard: helpDashboard,
         add: add,
         edit: edit,

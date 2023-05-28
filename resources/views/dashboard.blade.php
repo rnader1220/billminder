@@ -54,7 +54,7 @@
                     <div class='col-lg-4 col-12'>
                         <div class='container-fluid mb-2'><div class='row'>
                             <div class="col-12 offset-xl-2 col-xl-8"><div class='btn-group w-100'>
-                                    <div class='btn-app-primary centered clickable' style='width:80%; padding-right:0; margin-right:0' onclick="dashboard.listaccount();" data-open='false'><i class='fa-regular fa-building-columns'></i>&nbsp;&nbsp;Accounts</div>
+                                    <div class='btn-app-primary centered clickable' style='width:80%; padding-right:0; margin-right:0' onclick="dashboard.list('account');" data-open='false'><i class='fa-regular fa-building-columns'></i>&nbsp;&nbsp;Accounts</div>
                                     <div class='btn-app-primary centered clickable' style='width:20%; padding-left:0; margin-left:0'  onclick="dashboard.add('account');"><i class='fa-regular fa-plus-large'></i></div>
                                 </div>
                             </div>
@@ -63,7 +63,7 @@
 
                         <div class='container-fluid mb-2'><div class='row'>
                             <div class="col-12 offset-xl-2 col-xl-8"><div class='btn-group w-100'>
-                                <div class='btn-app-primary centered clickable' style='width:80%; padding-right:0; margin-right:0'  onclick="dashboard.listcategory();" data-open='false'><i class='fa-regular fa-objects-column'></i>&nbsp;&nbsp;Categories</div>
+                                <div class='btn-app-primary centered clickable' style='width:80%; padding-right:0; margin-right:0'  onclick="dashboard.list('category');" data-open='false'><i class='fa-regular fa-objects-column'></i>&nbsp;&nbsp;Categories</div>
                                 <div class='btn-app-primary centered clickable' style='width:20%; padding-left:0; margin-left:0' onclick="dashboard.add('category');"><i class='fa-regular fa-plus-large'></i></div>
                             </div></div>
                             <div class="container-fluid mb-2 app-hidden" id='category-div'></div>
@@ -75,16 +75,16 @@
 
                         <div class='container-fluid mb-2 hours-div app-hidden' ><div class='row'>
                             <div class="col-12 offset-xl-2 col-xl-8"><div class='btn-group w-100'>
-                                <div class='btn-app-primary centered clickable' style='width:80%; padding-right:0; margin-right:0'  onclick="hours.show();" data-open='false'><i class='fa-regular fa-business-time'></i>&nbsp;&nbsp;Time</div>
-                                <div class='btn-app-primary centered clickable' style='width:20%; padding-left:0; margin-left:0' onclick="hours.add();"><i class='fa-regular fa-plus-large'></i></div>
+                                <div class='btn-app-primary centered clickable' style='width:80%; padding-right:0; margin-right:0'  onclick="dashboard.list('hours');" data-open='false'><i class='fa-regular fa-business-time'></i>&nbsp;&nbsp;Time</div>
+                                <div class='btn-app-primary centered clickable' style='width:20%; padding-left:0; margin-left:0' onclick="dashboard.add('hours');"><i class='fa-regular fa-plus-large'></i></div>
                             </div></div>
                             <div class="container-fluid mb-2 app-hidden" id='hours-div'></div>
                         </div></div>
 
                         <div class='container-fluid mb-2 miles-div app-hidden' ><div class='row'>
                             <div class="col-12 offset-xl-2 col-xl-8"><div class='btn-group w-100'>
-                                <div class='btn-app-primary centered clickable' style='width:80%; padding-right:0; margin-right:0'  onclick="miles.show();" data-open='false'><i class='fa-regular fa-car-building'></i>&nbsp;&nbsp;Travel</div>
-                                <div class='btn-app-primary centered clickable' style='width:20%; padding-left:0; margin-left:0' onclick="miles.add();"><i class='fa-regular fa-plus-large'></i></div>
+                                <div class='btn-app-primary centered clickable' style='width:80%; padding-right:0; margin-right:0'  onclick="dashboard.list('miles');" data-open='false'><i class='fa-regular fa-car-building'></i>&nbsp;&nbsp;Travel</div>
+                                <div class='btn-app-primary centered clickable' style='width:20%; padding-left:0; margin-left:0' onclick="dashboard.add('miles');"><i class='fa-regular fa-plus-large'></i></div>
                             </div></div>
                             <div class="container-fluid mb-2 app-hidden" id='miles-div'></div>
                         </div></div>

@@ -1,7 +1,7 @@
-var miles = (function ($, undefined) {
+var entries = (function ($, undefined) {
 
     var show = function() {
-        alert('show miles');
+        alert('show entries');
 
     };
 

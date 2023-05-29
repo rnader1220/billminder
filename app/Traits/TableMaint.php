@@ -185,6 +185,10 @@ trait TableMaint
                         $form[$rowIndex][$elementIndex]['parameters']['value'] =
                             Carbon::parse($this->$datapoint)->format('Y-m-d');
 
+                    } else if($element['type'] == 'input_time') {
+                        $form[$rowIndex][$elementIndex]['parameters']['value'] =
+                            Carbon::parse($this->$datapoint)->format('H:i');
+
                     } else {
                         $form[$rowIndex][$elementIndex]['parameters']['value'] =
                             $this->$datapoint;

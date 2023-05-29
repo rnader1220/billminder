@@ -115,7 +115,6 @@ var utility = (function ($, undefined) {
 
         $(".page-wrapper").removeClass("toggled");
         $(".overlay").removeClass("active");
-        feature_chatrooms.set_config({ current_chatroom_id: null });
     };
 
     var show_dash = function () {
@@ -123,7 +122,6 @@ var utility = (function ($, undefined) {
         setTimeout(function () {
             $("#dashboard").slideDown(300);
         }, 300);
-        feature_chatrooms.set_config({ current_chatroom_id: null });
     };
 
     var set_dynamic_button = function (btn_name, callback) {
@@ -171,7 +169,6 @@ var utility = (function ($, undefined) {
         profile_public.set_config({ subscriber_id: subscriber_id });
         profile_public.load();
 
-        //alert('subscriber '+ subscriber_id + ' profile modal popup here');
     };
 
     return {

@@ -35,6 +35,5 @@ mix.scripts([
 
 mix.styles([
     'resources/bootstrap/bootstrap.min.css',
-    'resources/fontawesome/all.min.css',
     'resources/jquery/jquery-ui.css',
 ], 'public/css/resources.css').version();

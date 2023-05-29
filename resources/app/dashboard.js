@@ -1,59 +1,53 @@
 var dashboard = (function ($, undefined) {
 
     var help_text = '';
+    var accordion_divs = [
+        '#account-div',
+        '#category-div',
+    ];
+    var auxiliary_divs = [
+        '#miles-div',
+        '#hours-div',
+
+    ]
 
     var initialize = function() {
         subscriber();
-        listentry();
+        fetchdata('entry');
     };
 
-    var listentry = function() {
-
-        if($('#account-div').data('open') == true) {
-            $('#account-div').slideUp(300, function() {
-                $('#account-div').html('');
-                $('#account-div').data('open', false);
+    var list = function(name) {
+        var auxdiv = '#'+name+'-div';
+        if($(auxdiv).data('open') == true) {
+            $(auxdiv).slideUp(300, function() {
+                $(auxdiv).html('').data('open', false);
             });
-        }
-
-        if($('#category-div').data('open') == true) {
-            $('#category-div').slideUp(300, function() {
-                $('#category-div').html('');
-                $('#category-div').data('open', false);
-            });
-        }
-        list('entry');
-    };
-
-    var listaccount = function() {
-        if($('#account-div').data('open') == true) {
-            $('#account-div').slideUp(300, function() {
-                $('#account-div').html('').data('open', false);
-            });
+            if(name == 'miles' || name == 'hours') {
+                $('#entry-div').slideDown(300);
+                $('#entry-controls').slideDown(300);
+            }
         } else {
-            if($('#category-div').data('open') == true) {
-                $('#category-div').slideUp(300, function() {
-                    $('#category-div').html('').data('open', false);
+            hide_others(accordion_divs);
+            if(name == 'miles' || name == 'hours') {
+                hide_others(auxiliary_divs);
+                $('#entry-div').slideUp(300);
+                $('#entry-controls').slideUp(300);
+            }
+            fetchdata(name);
+        }
+
+    }
+
+    var hide_others = function(list) {
+        list.forEach(function(element){
+            if($(element).data('open') == true) {
+                $(element).slideUp(300, function() {
+                    $(element).html('').data('open', false);
                 });
             }
-            list('account');
-        }
-    };
+        });
+    }
 
-    var listcategory = function() {
-        if($('#category-div').data('open') == true) {
-            $('#category-div').slideUp(300, function() {
-                $('#category-div').html('').data('open', false);
-            });
-        } else {
-            if($('#account-div').data('open') == true) {
-                $('#account-div').slideUp(300, function() {
-                    $('#account-div').html('').data('open', false);
-                });
-            }
-            list('category');
-        }
-    };
 
     var subscriber = function() {
         $.ajax({
@@ -68,6 +62,10 @@ var dashboard = (function ($, undefined) {
 
             if(typeof(response.subscribed_at) != 'string') {
                 $('.subscribe-div').show();
+            } else {
+                $('.reports-div').show();
+                $('.hours-div').show();
+                $('.miles-div').show();
             }
         })
         .fail(function(message) {
@@ -76,7 +74,7 @@ var dashboard = (function ($, undefined) {
     };
 
 
-    var list = function(dtype) {
+    var fetchdata = function(dtype) {
 
         $.ajax({
             url: '/' + dtype,
@@ -99,6 +97,14 @@ var dashboard = (function ($, undefined) {
             response.forEach(function (el) {
                 $('#' + dtype + '-div').append(library.drawElement(dtype, el));
             });
+            if(dtype == 'miles') {
+                $('#miles-div').prepend('<h4>Travel</h4>');
+                $('#miles-div').append('<h4>Pagination</h4>');
+            }
+            if(dtype == 'hours') {
+                $('#hours-div').prepend('<h4>Time</h4>');
+                $('#hours-div').append('<h4>Pagination</h4>');
+            }
             $('#' + dtype + '-div').data('open', true);
             $('#' + dtype + '-div').slideDown(300);
         })
@@ -117,6 +123,22 @@ var dashboard = (function ($, undefined) {
             dataType: 'json'
         })
         .done(function (resp) {
+            if(type == 'miles' || type == 'hours') {
+                console.log(typeof(resp));
+                console.log(typeof(resp.form));
+                console.log(typeof(resp.form[0][0].parameters));
+                console.log(typeof(resp.form[0][0]['parameters']));
+                var n = new Date();
+                resp.form[0][0]['parameters']['value']= n.getFullYear() + '-' +
+                    String(n.getMonth()+1).padStart(2, '0') + '-' +
+                    String(n.getDate()).padStart(2, '0');  //date
+                resp.form[0][1]['parameters']['value']= n.toLocaleString("en-US", {
+                    'hour12': false,
+                    'hour':'2-digit',
+                    'minute':'2-digit',
+                    });  //time
+            }
+
             showModalForm(type, null, resp,
                 function() {hideModal();},
                 function() {store(type);}
@@ -147,7 +169,7 @@ var dashboard = (function ($, undefined) {
                     .done(function (resp) {
                         utility.show_message(resp, function () {
                             hideModal();
-                            list(type);
+                            fetchdata(type);
                         });
                     })
                     .fail(function (message) {
@@ -250,7 +272,7 @@ var dashboard = (function ($, undefined) {
                     function() {actionPatch(action, type, id);}
                 ); break;
                 default: utility.show_message(resp, function () {
-                    list(type);
+                    fetchdata(type);
                 }); break;
             }
 
@@ -280,7 +302,7 @@ var dashboard = (function ($, undefined) {
             .done(function (resp) {
                 hideModal();
                 utility.show_message(resp, function () {
-                    list(type);
+                    fetchdata(type);
                 });
 
             })
@@ -317,7 +339,7 @@ var dashboard = (function ($, undefined) {
                     case 'edit':  edit(type, id); break;
                     default: utility.show_message(resp, function () {
                         hideModal();
-                        list(type);
+                        fetchdata(type);
                     }); break;
                 }
 
@@ -364,9 +386,9 @@ var dashboard = (function ($, undefined) {
                     .done(function (resp) {
                         utility.show_message(resp, function () {
                             hideModal();
-                            list(type);
+                            fetchdata(type);
                             if(type == 'category') {
-                                list('entry');
+                                fetchdata('entry');
                             }
                         });
                     })
@@ -392,7 +414,7 @@ var dashboard = (function ($, undefined) {
         })
         .done(function (resp) {
             utility.show_message(resp, function () {
-                list(type);
+                fetchdata(type);
             });
         })
         .fail(function (message) {
@@ -416,7 +438,7 @@ var dashboard = (function ($, undefined) {
         .done(function (resp) {
             utility.show_message(resp, function () {
                 hideModal();
-                list(type);
+                fetchdata(type);
                 $('#genericModal').modal('hide');
             });
         })
@@ -457,9 +479,7 @@ var dashboard = (function ($, undefined) {
 
     return {
         initialize: initialize,
-        listentry: listentry,
-        listaccount: listaccount,
-        listcategory: listcategory,
+        list: list,
         helpDashboard: helpDashboard,
         add: add,
         edit: edit,

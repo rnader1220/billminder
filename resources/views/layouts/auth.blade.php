@@ -35,6 +35,16 @@
     </div>
 </body>
 <script>
-    utility.initialize();
+    var prefersDarkScheme = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+    );
+    if (prefersDarkScheme.matches) {
+        document.body.classList.add("dark-theme");
+    } else {
+        document.body.classList.remove("dark-theme");
+    }
 </script>
+<script type="text/javascript" src="{{ mix('/js/resources.js') }}"></script>
+<script type="text/javascript" src="{{ mix('/js/billminder.js') }}"></script>
+
 </html>

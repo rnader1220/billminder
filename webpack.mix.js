@@ -15,8 +15,6 @@ mix.scripts([
     'resources/app/dashboard.js',
     'resources/app/subscription.js',
     'resources/app/reports.js',
-    'resources/app/hours.js',
-    'resources/app/miles.js',
     'resources/app/utility.js',
     'resources/app/library.js',
     'resources/app/modal_form.js',

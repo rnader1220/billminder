@@ -16,7 +16,7 @@ class MilesController extends Controller
     public function create()
     {
         $record = new Mile();
-        return $record->getForm('create');
+        return $record->localGetForm('create');
     }
 
     public function store(Request $request)
@@ -29,13 +29,13 @@ class MilesController extends Controller
     public function show($id)
     {
         $record = Mile::find($id);
-        return $record->getForm('show');
+        return $record->localGetForm('show');
     }
 
     public function edit($id)
     {
         $record = Mile::find($id);
-        return $record->getForm('edit');
+        return $record->localGetForm('edit');
     }
 
     public function update(Request $request, $id)

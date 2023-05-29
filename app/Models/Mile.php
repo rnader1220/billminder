@@ -33,19 +33,20 @@ class Mile extends BaseModel
     protected $fillable = [
         'name',
         'description',
-        'beg_time',
-        'end_time',
+        'travel_date',
+        'travel_time',
         'beg_odometer',
         'end_odometer',
         'billable',
-        'recordable',
+        'reportable',
+        'distance',
         'category_id',
     ];
 
     public static function getList(string $q = '') {
         $result = Mile::select(
             'miles.id',
-            'miles.beg_time',
+            'miles.travel_time',
             'miles.distance',
             'miles.name',
             DB::raw('categories.label as category'),
@@ -55,20 +56,43 @@ class Mile extends BaseModel
             ->whereNull('categories.deleted_at');
         })
         ->where('miles.user_id', Auth::user()->id)
-        ->orderBy('miles.beg_time', 'desc')
+        ->orderBy('miles.travel_time', 'desc')
         ->whereNull('miles.deleted_at')
         ->get()
         ->toArray();
 
         foreach($result as $index => $row) {
             $result[$index]['category'] = Encrypter::decrypt($row['category']);
+            $result[$index]['label'] = Carbon::createFromDate($row['travel_time'])->format('M d, h:i A') . ':  ' . $row['name'];
         }
         return $result;
     }
 
     public function localGetForm($mode) {
-        $this->form[0][9]['parameters']['list'] = Category::getSelectList();
+        $this->form[0][8]['parameters']['list'] = Category::getSelectList();
         return $this->getForm($mode);
+    }
+
+    protected function customUpdate(array &$data)
+    {
+        $data['billable'] = (isset($data['billable'])?1:0);
+        $data['reportable'] = (isset($data['reportable'])?1:0);
+
+        $data['travel_time'] = $data['travel_date'] . ':' . $data['travel_time'];
+
+        if(isset($data['end_odometer'])) {
+            $data['distance'] = $data['end_odometer'] - $data['beg_odometer'];
+        } else {
+            $data['distance'] = null;
+        }
+
+        if($data['category_id'] == '_new') {
+            $new_category = new Category();
+            $new_category->label = $data['new_category_id'];
+            $new_category->save();
+            $data['category_id'] = $new_category->id;
+        }
+        return true;
     }
 
     /*
@@ -79,25 +103,38 @@ class Mile extends BaseModel
         [
 
             [
+                'type' => 'input_date',
+                'parameters' =>
+                [
+                    'label' => "Travel Date",
+                    'title' => "When Did this Trip Begin?",
+                    'datapoint' => 'travel_date',
+                    'grid_class' => 'col-md-6 col-md-6 col-lg-3'
+                ],
+            ],
+
+            [
+                'type' => 'input_time',
+                'parameters' =>
+                [
+                    'label' => "Travel Time",
+                    'title' => "When Did this Trip Begin?",
+                    'datapoint' => 'travel_time',
+                    'grid_class' => 'col-md-6 col-md-6 col-lg-3'
+                ],
+            ],
+            [
                 'type' => 'input_text',
                 'parameters' =>
                 [
                     'label' => "Beginning Odometer",
                     'title' => "Odometer reading at beginning of trip",
                     'datapoint' => 'beg_odometer',
+                    'numeric' => true,
                     'grid_class' => 'col-sm-6 col-md-4 col-lg-3'
                 ],
             ],
-            [
-                'type' => 'input_date',
-                'parameters' =>
-                [
-                    'label' => "Trip Started",
-                    'title' => "When Did this Trip Begin?",
-                    'datapoint' => 'beg_time',
-                    'grid_class' => 'col-md-6 col-md-6 col-lg-3'
-                ],
-            ],
+
             [
                 'type' => 'input_text',
                 'parameters' =>
@@ -105,17 +142,8 @@ class Mile extends BaseModel
                     'label' => "Ending Odometer",
                     'title' => "Odometer reading at completion of trip",
                     'datapoint' => 'end_odometer',
+                    'numeric' => true,
                     'grid_class' => 'col-sm-6 col-md-4 col-lg-3'
-                ],
-            ],
-            [
-                'type' => 'input_date',
-                'parameters' =>
-                [
-                    'label' => "Trip Ended",
-                    'title' => "When Did this Trip End?",
-                    'datapoint' => 'end_time',
-                    'grid_class' => 'col-md-6 col-md-6 col-lg-3'
                 ],
             ],
             [

@@ -32,8 +32,10 @@ class Hour extends BaseModel
     protected $fillable = [
         'name',
         'description',
+        'act_date',
         'beg_time',
         'end_time',
+        'duration',
         'billable',
         'category_id',
     ];
@@ -58,13 +60,38 @@ class Hour extends BaseModel
 
         foreach($result as $index => $row) {
             $result[$index]['category'] = Encrypter::decrypt($row['category']);
+            $result[$index]['label'] = Carbon::createFromDate($row['beg_time'])->format('M d, h:i A') . ':  ' . $row['name'];
         }
         return $result;
     }
 
     public function localGetForm($mode) {
-        $this->form[0][5]['parameters']['list'] = Category::getSelectList();
+        $this->form[0][6]['parameters']['list'] = Category::getSelectList();
         return $this->getForm($mode);
+    }
+
+    protected function customUpdate(array &$data)
+    {
+        $data['billable'] = (isset($data['billable'])?1:0);
+
+        $data['beg_time'] = $data['act_date'] . ' ' . $data['beg_time'];
+
+        if(isset($data['end_time'])) {
+            $data['end_time'] = $data['act_date'] . ' ' . $data['end_time'];
+            $beg_dt = Carbon::createFromDate($data['beg_time']);
+            $end_dt = Carbon::createFromDate($data['end_time']);
+            $data['duration'] = $beg_dt->diffInMinutes($end_dt);
+        } else {
+            $data['duration'] = null;
+        }
+
+        if($data['category_id'] == '_new') {
+            $new_category = new Category();
+            $new_category->label = $data['new_category_id'];
+            $new_category->save();
+            $data['category_id'] = $new_category->id;
+        }
+        return true;
     }
 
     /*
@@ -77,17 +104,27 @@ class Hour extends BaseModel
                 'type' => 'input_date',
                 'parameters' =>
                 [
-                    'label' => "DateTime Started",
+                    'label' => "Activity Date",
+                    'title' => "When did this activity begin?",
+                    'datapoint' => 'act_date',
+                    'grid_class' => 'col-md-6 col-md-6 col-lg-3'
+                ],
+            ],
+            [
+                'type' => 'input_time',
+                'parameters' =>
+                [
+                    'label' => "Start Time",
                     'title' => "When did this activity begin?",
                     'datapoint' => 'beg_time',
                     'grid_class' => 'col-md-6 col-md-6 col-lg-3'
                 ],
             ],
             [
-                'type' => 'input_date',
+                'type' => 'input_time',
                 'parameters' =>
                 [
-                    'label' => "Trip Ended",
+                    'label' => "End Time",
                     'title' => "When did this activity end?",
                     'datapoint' => 'end_time',
                     'grid_class' => 'col-md-6 col-md-6 col-lg-3'

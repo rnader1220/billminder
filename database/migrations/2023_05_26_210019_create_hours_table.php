@@ -16,6 +16,7 @@ class CreateHoursTable extends Migration
         Schema::create('hours', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id');
+            $table->datetime('act_date');
             $table->datetime('beg_time');
             $table->datetime('end_time')->nullable();
             $table->string('name')->nullable();

@@ -623,32 +623,6 @@ var reports = (function ($, undefined) {
     };
 })(jQuery);
 
-var hours = (function ($, undefined) {
-
-    var show = function() {
-        alert('show hours');
-
-    };
-
-
-    return {
-        show: show,
-    };
-})(jQuery);
-
-var miles = (function ($, undefined) {
-
-    var show = function() {
-        alert('show miles');
-
-    };
-
-
-    return {
-        show: show,
-    };
-})(jQuery);
-
 var utility = (function ($, undefined) {
     var initialize = function () {
         var prefersDarkScheme = window.matchMedia(
@@ -1210,6 +1184,38 @@ var modal_form = (function ($, undefined) {
             htmlString += "</div></div>";
             return htmlString;
         },
+
+
+        input_time: function (attr) {
+            htmlString = "<div class='" + attr.grid_class + "'  id='" + attr.datapoint + "_div'";
+            if(attr.hasOwnProperty('title')) {
+                htmlString += " title='" + attr.title + "' ";
+            }
+            htmlString += ">" +
+                "<div class='form-group'>";
+            if (attr.hasOwnProperty('label')) {
+                htmlString += "<label for='" + attr.datapoint + "' class='control-label'>" + attr.label + "</label>";
+            }
+            htmlString += "<div class='input-group'><input class='form-control' type='time' " +
+                "id='" + attr.datapoint + "' name='" + attr.datapoint + "' ";
+            if (attr.hasOwnProperty('placeholder')) {
+                htmlString += " placeholder='" + attr.placeholder + "'";
+            }
+            if ((attr.hasOwnProperty('disabled') && attr.disabled == true) || mode == 'show') {
+                htmlString += " disabled='disabled' ";
+            }
+
+            if (attr.hasOwnProperty('value')) {
+                htmlString += " value='" + attr.value + "' ";
+            }
+            htmlString += " ></div>";
+            if(attr.hasOwnProperty('title')) {
+                htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
+            }
+            htmlString += "</div></div>";
+            return htmlString;
+        },
+
 
         input_hidden: function (attr) {
             htmlString = "<input type='hidden' " +

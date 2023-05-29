@@ -91,7 +91,7 @@ class Entry extends BaseModel
             $this->form[0][13]['parameters']['label'] = $this->form[0][13]['parameters']['label_income'];
             $this->form[0][14]['parameters']['label'] = $this->form[0][14]['parameters']['label_income'];
         }
-        return$this->getForm($mode);
+        return $this->getForm($mode);
     }
 
     public function postCycle() {
@@ -218,6 +218,7 @@ class Entry extends BaseModel
                     'title' => "How much is the bill, currently?",
                     'title_income' => "How much is this income, currently?",
                     'datapoint' => 'amount',
+                    'numeric' => true,
                     'grid_class' => 'col-sm-6 col-md-4 col-lg-3'
                 ],
             ],
@@ -298,6 +299,7 @@ class Entry extends BaseModel
                     'label' => "Payments Left",
                     'title' => "Does this have a fixed number of payments?  If set, this value will go down on cycling.",
                     'datapoint' => 'payments_remaining',
+                    'numeric' => true,
                     'grid_class' => 'col-sm-6 col-md-4 col-lg-3'
                 ],
             ],
@@ -308,6 +310,7 @@ class Entry extends BaseModel
                     'label' => "Balance Left",
                     'title' => "For informational purposes only:  Use to keep track of your balance.",
                     'datapoint' => 'balance_remaining',
+                    'numeric' => true,
                     'grid_class' => 'col-sm-6 col-md-4 col-lg-3'
                 ],
             ],

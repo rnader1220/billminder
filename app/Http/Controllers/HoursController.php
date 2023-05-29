@@ -18,7 +18,7 @@ class HoursController extends Controller
     public function create()
     {
         $record = new Hour();
-        return $record->getForm('create');
+        return $record->localGetForm('create');
     }
 
     public function store(Request $request)
@@ -31,13 +31,13 @@ class HoursController extends Controller
     public function show($id)
     {
         $record = Hour::find($id);
-        return $record->getForm('show');
+        return $record->localGetForm('show');
     }
 
     public function edit($id)
     {
         $record = Hour::find($id);
-        return $record->getForm('edit');
+        return $record->localGetForm('edit');
     }
 
     public function update(Request $request, $id)

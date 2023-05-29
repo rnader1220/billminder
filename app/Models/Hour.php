@@ -44,8 +44,14 @@ class Hour extends BaseModel
         $result = Hour::select(
             'hours.id',
             'hours.beg_time',
+            'hours.end_time',
             'hours.duration',
             'hours.name',
+            DB::raw(
+                "case when duration = null then 'open' " .
+                "else 'closed' end as status"
+            ),
+
             DB::raw('categories.label as category'),
         )
         ->leftjoin('categories', function($join) {
@@ -60,14 +66,28 @@ class Hour extends BaseModel
 
         foreach($result as $index => $row) {
             $result[$index]['category'] = Encrypter::decrypt($row['category']);
-            $result[$index]['label'] = Carbon::createFromDate($row['beg_time'])->format('M d, h:i A') . ':  ' . $row['name'];
+
+            $result[$index]['activity_date'] = Carbon::createFromDate($row['beg_time'])->format('M d');
+            $result[$index]['beg_value'] = Carbon::createFromDate($row['beg_time'])->format('h:i A');
+            $result[$index]['interval'] = $row['duration'] . ' min';
         }
         return $result;
     }
 
     public function localGetForm($mode) {
         $this->form[0][6]['parameters']['list'] = Category::getSelectList();
+
+        if(is_null($this->act_date)) {
+            $this->act_date = Carbon::now();
+        }
+        if(is_null($this->beg_time)) {
+            $this->beg_time = Carbon::now();
+        }
+
         return $this->getForm($mode);
+
+
+
     }
 
     protected function customUpdate(array &$data)

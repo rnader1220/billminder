@@ -47,8 +47,13 @@ class Mile extends BaseModel
         $result = Mile::select(
             'miles.id',
             'miles.travel_time',
+            'miles.beg_odometer',
             'miles.distance',
             'miles.name',
+            DB::raw(
+                "case when distance = null then 'open' " .
+                "else 'closed' end as status"
+            ),
             DB::raw('categories.label as category'),
         )
         ->leftjoin('categories', function($join) {
@@ -63,13 +68,31 @@ class Mile extends BaseModel
 
         foreach($result as $index => $row) {
             $result[$index]['category'] = Encrypter::decrypt($row['category']);
-            $result[$index]['label'] = Carbon::createFromDate($row['travel_time'])->format('M d, h:i A') . ':  ' . $row['name'];
+            $result[$index]['beg_value'] = number_format($row['beg_odometer'], 2);
+            $result[$index]['activity_date'] = Carbon::createFromDate($row['travel_time'])->format('M D Y');
+            $result[$index]['interval'] = $row['distance'] . ' miles';
         }
         return $result;
     }
 
     public function localGetForm($mode) {
         $this->form[0][8]['parameters']['list'] = Category::getSelectList();
+
+        if(is_null($this->beg_odometer)) {
+            $this->beg_odometer =
+            Mile::where('miles.user_id', Auth::user()->id)
+            ->whereNull('miles.deleted_at')
+            ->orderBy('miles.travel_time', 'desc')
+            ->value('end_odometer');
+        }
+
+        if(is_null($this->travel_date)) {
+            $this->travel_date = Carbon::now();
+        }
+        if(is_null($this->travel_time)) {
+            $this->travel_time = Carbon::now();
+        }
+
         return $this->getForm($mode);
     }
 

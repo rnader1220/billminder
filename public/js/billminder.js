@@ -4,17 +4,15 @@ var dashboard = (function ($, undefined) {
     var accordion_divs = [
         '#account-div',
         '#category-div',
-        '#miles-div',
-        '#hours-div'
     ];
+    var auxiliary_divs = [
+        '#miles-div',
+        '#hours-div',
+
+    ]
 
     var initialize = function() {
         subscriber();
-        listentry();
-    };
-
-    var listentry = function() {
-        hide_others();
         fetchdata('entry');
     };
 
@@ -24,15 +22,24 @@ var dashboard = (function ($, undefined) {
             $(auxdiv).slideUp(300, function() {
                 $(auxdiv).html('').data('open', false);
             });
+            if(name == 'miles' || name == 'hours') {
+                $('#entry-div').slideDown(300);
+                $('#entry-controls').slideDown(300);
+            }
         } else {
-            hide_others();
+            hide_others(accordion_divs);
+            if(name == 'miles' || name == 'hours') {
+                hide_others(auxiliary_divs);
+                $('#entry-div').slideUp(300);
+                $('#entry-controls').slideUp(300);
+            }
             fetchdata(name);
         }
 
     }
 
-    var hide_others = function() {
-        accordion_divs.forEach(function(element){
+    var hide_others = function(list) {
+        list.forEach(function(element){
             if($(element).data('open') == true) {
                 $(element).slideUp(300, function() {
                     $(element).html('').data('open', false);
@@ -40,6 +47,7 @@ var dashboard = (function ($, undefined) {
             }
         });
     }
+
 
     var subscriber = function() {
         $.ajax({
@@ -89,6 +97,14 @@ var dashboard = (function ($, undefined) {
             response.forEach(function (el) {
                 $('#' + dtype + '-div').append(library.drawElement(dtype, el));
             });
+            if(dtype == 'miles') {
+                $('#miles-div').prepend('<h4>Travel</h4>');
+                $('#miles-div').append('<h4>Pagination</h4>');
+            }
+            if(dtype == 'hours') {
+                $('#hours-div').prepend('<h4>Time</h4>');
+                $('#hours-div').append('<h4>Pagination</h4>');
+            }
             $('#' + dtype + '-div').data('open', true);
             $('#' + dtype + '-div').slideDown(300);
         })
@@ -107,6 +123,22 @@ var dashboard = (function ($, undefined) {
             dataType: 'json'
         })
         .done(function (resp) {
+            if(type == 'miles' || type == 'hours') {
+                console.log(typeof(resp));
+                console.log(typeof(resp.form));
+                console.log(typeof(resp.form[0][0].parameters));
+                console.log(typeof(resp.form[0][0]['parameters']));
+                var n = new Date();
+                resp.form[0][0]['parameters']['value']= n.getFullYear() + '-' +
+                    String(n.getMonth()+1).padStart(2, '0') + '-' +
+                    String(n.getDate()).padStart(2, '0');  //date
+                resp.form[0][1]['parameters']['value']= n.toLocaleString("en-US", {
+                    'hour12': false,
+                    'hour':'2-digit',
+                    'minute':'2-digit',
+                    });  //time
+            }
+
             showModalForm(type, null, resp,
                 function() {hideModal();},
                 function() {store(type);}
@@ -447,7 +479,6 @@ var dashboard = (function ($, undefined) {
 
     return {
         initialize: initialize,
-        listentry: listentry,
         list: list,
         helpDashboard: helpDashboard,
         add: add,
@@ -1072,6 +1103,8 @@ var library = (function ($, undefined) {
             case 'late': return '<i class="fa-solid fa-triangle-exclamation fa-fw" title="Late"></i>';
             case 'due': return '<i class="fa-solid fa-alarm-clock fa-fw" title="Due"></i>';
             case 'expense': return '<i class="fa-solid fa-file-invoice-dollar fa-fw" title="Expense"></i>';
+            case 'open': return '<i class="fa-solid fa-door-open fa-fw" title="Open"></i>';
+            case 'closed': return '<i class="fa-solid fa-thumbs-up fa-fw" title="Closed"></i>';
         }
     };
 
@@ -1080,6 +1113,20 @@ var library = (function ($, undefined) {
         "<div class='app-draw-row category ml-2 mr-4 px-2' onclick=\"dashboard.show('"+type+"', "+el.id+");\">";
         html += el.label;
         html += '</div></div></div>';
+        return html;
+    };
+
+    var drawAuxiliary = function(type, el) {
+
+        html = "<div class='row'><div class='col-12 mb-2'><div class='app-draw-row category' onclick=\"dashboard.show('"+type+"', "+el.id+");\">";
+        html += "<div class='row'>";
+        html += "<div class='col-5 col-lg-2 text-end'>" + el.activity_date + "</div>";
+        html += "<div class='col-5 col-lg-2 text-end'>" + el.beg_value + "</div>";
+        html += "<div class='col-5 col-lg-2 text-end'>" +
+            (typeof(el.interval) == 'string'?el.interval:"<i class='fa fa-solid fa-folder-open' title='End Value Not Set Not Set'></i>Open Record") + "</div>";
+        html += "<div class='col-12 col-lg-3 text-start'>"+ el.name + "</div>";
+        html += "<div class='d-none d-lg-inline col-lg-3 text-start'>"+ (typeof(el.category) != 'string'?'Unassigned':el.category) + "</div>";
+        html += '</div>' + '</div></div>';
         return html;
     };
 
@@ -1104,6 +1151,9 @@ var library = (function ($, undefined) {
         switch(type) {
             case('entry'):
                 return drawEntry(el);
+            case('hours'):
+            case('miles'):
+                return drawAuxiliary(type, el);
             default:
                 return drawSecondary(type, el);
         }

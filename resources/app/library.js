@@ -25,6 +25,8 @@ var library = (function ($, undefined) {
             case 'late': return '<i class="fa-solid fa-triangle-exclamation fa-fw" title="Late"></i>';
             case 'due': return '<i class="fa-solid fa-alarm-clock fa-fw" title="Due"></i>';
             case 'expense': return '<i class="fa-solid fa-file-invoice-dollar fa-fw" title="Expense"></i>';
+            case 'open': return '<i class="fa-solid fa-door-open fa-fw" title="Open"></i>';
+            case 'closed': return '<i class="fa-solid fa-thumbs-up fa-fw" title="Closed"></i>';
         }
     };
 
@@ -33,6 +35,20 @@ var library = (function ($, undefined) {
         "<div class='app-draw-row category ml-2 mr-4 px-2' onclick=\"dashboard.show('"+type+"', "+el.id+");\">";
         html += el.label;
         html += '</div></div></div>';
+        return html;
+    };
+
+    var drawAuxiliary = function(type, el) {
+
+        html = "<div class='row'><div class='col-12 mb-2'><div class='app-draw-row category' onclick=\"dashboard.show('"+type+"', "+el.id+");\">";
+        html += "<div class='row'>";
+        html += "<div class='col-5 col-lg-2 text-end'>" + el.activity_date + "</div>";
+        html += "<div class='col-5 col-lg-2 text-end'>" + el.beg_value + "</div>";
+        html += "<div class='col-5 col-lg-2 text-end'>" +
+            (typeof(el.interval) == 'string'?el.interval:"<i class='fa fa-solid fa-folder-open' title='End Value Not Set Not Set'></i>Open Record") + "</div>";
+        html += "<div class='col-12 col-lg-3 text-start'>"+ el.name + "</div>";
+        html += "<div class='d-none d-lg-inline col-lg-3 text-start'>"+ (typeof(el.category) != 'string'?'Unassigned':el.category) + "</div>";
+        html += '</div>' + '</div></div>';
         return html;
     };
 
@@ -57,6 +73,9 @@ var library = (function ($, undefined) {
         switch(type) {
             case('entry'):
                 return drawEntry(el);
+            case('hours'):
+            case('miles'):
+                return drawAuxiliary(type, el);
             default:
                 return drawSecondary(type, el);
         }

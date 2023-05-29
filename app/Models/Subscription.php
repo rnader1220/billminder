@@ -9,6 +9,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Traits\TableMaint;
 use Laravel\Cashier\Billable;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AdminNotice;
 
 class Subscription extends Model
 {
@@ -176,6 +178,45 @@ class Subscription extends Model
 
         return true;
 
+    }
+
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function($model){
+            // ... code here
+        });
+
+        self::created(function($model){
+
+            $details = [
+                'title' => 'BillMinder New Subscription',
+                'body' => "A user ({Auth::user()->id}) has subscribed:\n{Auth::user()->name}\n{Auth::user()->email}"
+            ];
+            Mail::to('billminder@dyn-it.com')->send(new AdminNotice($details));
+        });
+
+        self::updating(function($model){
+            // ... code here
+        });
+
+        self::updated(function($model){
+            // ... code here
+        });
+
+        self::deleting(function($model){
+            // ... code here
+        });
+
+        self::deleted(function($model){
+            $details = [
+                'title' => 'BillMinder Cancelled Subscription',
+                'body' => "A user ({Auth::user()->id}) has cancelled subscription:\n{Auth::user()->name}\n{Auth::user()->email}"
+            ];
+            Mail::to('billminder@dyn-it.com')->send(new AdminNotice($details));
+        });
     }
 
 }

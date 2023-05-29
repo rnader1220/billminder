@@ -11,15 +11,13 @@ body {
     --main-back-alt-color: #ddddff;
     --main-text-color-desc: grey;
     --main-border-color: silver;
-    --main-back-color-deac:  silver;
+    --main-back-color-deac: silver;
     --draw-entry-income: #90ff90;
     --draw-entry-expense: #BCD4E6;
     --draw-entry-late: #FF7F50;
     --draw-entry-due: #fdefb2;
     --draw-account: #c0c0c0;
     --draw-category: #c0c0c0;
-
-
     --shadow-color-a: rgba(199, 199, 199, 0.5);
     --shadow-color-b: rgba(231, 231, 231, 0.5);
 }
@@ -32,29 +30,25 @@ body.dark-theme {
     --main-back-color: #202020;
     --main-back-alt-color: #303030;
     --main-text-color-desc: silver;
-    --main-back-color-deac:  #404040;
+    --main-back-color-deac: #404040;
     --main-border-color: gray;
-
     --draw-entry-income: #004000;
     --draw-entry-expense: #4C516D;
     --draw-entry-late: #C6011F;
     --draw-entry-due: #978942;
     --draw-account: #303030;
     --draw-category: #303030;
-
-
     --shadow-color-a: rgba(8, 8, 8, 0.5);
     --shadow-color-b: rgba(12, 12, 12, 0.5);
-    }
+}
 
 body.dashboard {
-    background-color:var(--body-back-color);
-    color:var(--body-text-color);
-
+    background-color: var(--body-back-color);
+    color: var(--body-text-color);
 }
-.page-content {
-    margin-top:20px;
 
+.page-content {
+    margin-top: 20px;
 }
 
 /* card, modal */
@@ -65,14 +59,14 @@ body.dashboard {
     box-shadow: 0 4px 8px 0 var(--shadow-color-a), 0 4px 20px 0 var(--shadow-color-b);
 }
 
-.accordion * ,
+.accordion *,
 .card * {
     color: inherit;
     background-color: inherit;
 }
 
 .accordion-button:not(.collapsed) {
-    color:var(--main-highlight-color);
+    color: var(--main-highlight-color);
     background-color: var(--main-back-alt-color);
 
 }
@@ -81,6 +75,7 @@ body.dashboard {
     box-shadow: 0 4px 8px 0 var(--shadow-color-a), 0 4px 20px 0 var(--shadow-color-b);
 
 }
+
 .modal {
     color: inherit
 }
@@ -88,20 +83,20 @@ body.dashboard {
 
 .modal-header,
 .modal-footer {
-    height:72px;
-    max-height:72px;
+    height: 72px;
+    max-height: 72px;
 }
 
 .modal-title,
 .card-title {
-    color:var(--main-text-color);
-    background-color:transparent;
-    float:left;
-    margin-right:32px
+    color: var(--main-text-color);
+    background-color: transparent;
+    float: left;
+    margin-right: 32px
 }
 
 .card-control-panel {
-    float:right;
+    float: right;
 }
 
 .col-form-label,
@@ -114,7 +109,7 @@ body.dashboard {
 .card-borderless,
 .card-borderless .card-header,
 .card-borderless .card-body,
-.card-borderless .card-footer  {
+.card-borderless .card-footer {
     border: 0;
     background-color: transparent;
     box-shadow: none;
@@ -125,7 +120,7 @@ body.dashboard {
 .content {
     color: var(--body-text-color);
     background-color: var(--body-back-color);
-    padding-bottom:30px;
+    padding-bottom: 30px;
 }
 
 
@@ -136,17 +131,17 @@ body.dashboard {
     display: inline-block;
     width: 60px;
     height: 24px;
-  }
+}
 
-  /* Hide default HTML checkbox */
-  .cb3switch input {
+/* Hide default HTML checkbox */
+.cb3switch input {
     opacity: 0;
     width: 0;
     height: 0;
-  }
+}
 
-  /* The slider */
-  .cb3slider {
+/* The slider */
+.cb3slider {
     position: absolute;
     cursor: pointer;
     top: 0;
@@ -154,13 +149,13 @@ body.dashboard {
     right: 0;
     bottom: 0;
     color: var(--body-text-color);
-    background-color:var(--body-back-color);
+    background-color: var(--body-back-color);
     -webkit-transition: .4s;
     transition: .4s;
     border-radius: 24px;
-  }
+}
 
-  .cb3slider:before {
+.cb3slider:before {
     position: absolute;
     content: "";
     height: 16px;
@@ -172,55 +167,57 @@ body.dashboard {
     -webkit-transition: .4s;
     transition: .4s;
     border-radius: 50%;
-  }
+}
 
-  .form-control {
+.form-control {
     color: var(--main-text-color);
     background-color: var(--main-back-color);
     border: solid 1px var(--shadow-color-b);
-  }
-  .form-control:disabled {
-    background-color: transparent;
-    color:  var(--main-text-color);
-    border: solid 1px var(--shadow-color-b);
-  }
+}
 
-  .form-control:focus {
+.form-control:disabled {
+    background-color: transparent;
+    color: var(--main-text-color);
+    border: solid 1px var(--shadow-color-b);
+}
+
+.form-control:focus {
     color: var(--main-text-color);
     background-color: var(--main-back-alt-color);
     border: solid 1px var(--shadow-color-a);
-  }
+}
 
-  .form-control .media {
+.form-control .media {
     max-width: inherit;
     border: solid 1px silver;
     padding: 12px;
     margin-top: 20px;
-  }
+}
 
 
-  input:checked + .cb3slider {
+input:checked+.cb3slider {
     background-color: #2196F3;
-  }
+}
 
-  input:focus + .cb3slider {
+input:focus+.cb3slider {
     box-shadow: 0 0 1px #2196F3;
-  }
+}
 
-  input:checked + .cb3slider:before {
+input:checked+.cb3slider:before {
     -webkit-transform: translateX(36px);
     -ms-transform: translateX(36px);
     transform: translateX(36px);
-  }
- /* /Slider Checkbox */
+}
+
+/* /Slider Checkbox */
 
 /* Message Containers */
 .message-container {
-    position:absolute;
-    top:32px;
-    left:0;
-    width:100%;
-    z-index:10000;
+    position: absolute;
+    top: 32px;
+    left: 0;
+    width: 100%;
+    z-index: 10000;
 }
 
 .message-popup {
@@ -241,6 +238,7 @@ body.dashboard {
     font-size: 1.6em;
     font-weight: 620;
 }
+
 /* ------------------------- */
 
 /*  ui wrappers */
@@ -252,8 +250,8 @@ body.dashboard {
 
 .ui-trans-wrapper .toolbar,
 .ui-display-wrapper .toolbar {
-    float:right;
-    margin-left:6px
+    float: right;
+    margin-left: 6px
 }
 
 .ui-form-wrapper,
@@ -263,28 +261,26 @@ body.dashboard {
     border: 0;
     border-radius: 6px 6px 6px 6px;
     margin-bottom: 12px;
-    padding:6px;
+    padding: 6px;
     box-shadow: 0 4px 8px 0 var(--shadow-color-a), 0 4px 20px 0 var(--shadow-color-b);
 }
 
-.ui-trans-wrapper
-{
+.ui-trans-wrapper {
     background: inherit;
     color: inherit;
     border: 0;
     border-radius: 6px 6px 6px 6px;
     margin-bottom: 12px;
-    padding:6px;
+    padding: 6px;
 }
 
-.ui-display-block
-{
-    margin-top:68px;
+.ui-display-block {
+    margin-top: 68px;
 }
 
 .ui-trans-wrapper .display-item,
 .ui-display-wrapper .display-item {
-    padding-top:6px;
+    padding-top: 6px;
 }
 
 
@@ -312,31 +308,31 @@ body.dashboard {
 
 .ui-trans-wrapper .display-icon,
 .ui-display-wrapper .display-icon {
-    width:40px;
-    height:40px;
+    width: 40px;
+    height: 40px;
     margin-top: 6px;
     margin-right: 12px;
-    float:left;
+    float: left;
 }
 
 .ui-trans-wrapper .icon,
 .ui-display-wrapper .icon {
-    float:left;
-    height:48px;
-    width:48px;
-    text-align:center;
-    vertical-align:middle;
-    margin-right:6px
+    float: left;
+    height: 48px;
+    width: 48px;
+    text-align: center;
+    vertical-align: middle;
+    margin-right: 6px
 }
 
 .ui-trans-wrapper .right-icon,
 .ui-display-wrapper .right-icon {
-    float:right;
+    float: right;
 }
 
 .ui-trans-wrapper .display-toolbar,
 .ui-display-wrapper .display-toolbar {
-    float:right;
+    float: right;
     margin-right: 6px;
 }
 
@@ -347,8 +343,8 @@ body.dashboard {
 
 .ui-trans-wrapper .display-large-toolbar,
 .ui-display-wrapper .display-large-toolbar {
-    font-size:1.25em;
-    float:right;
+    font-size: 1.25em;
+    float: right;
     margin-right: 6px;
 }
 
@@ -361,9 +357,9 @@ body.dashboard {
 .ui-display-wrapper .display-avatar img {
     margin-top: 6px;
     margin-right: 6px;
-    max-width:36px;
-    max-height:36px;
-    float:left;
+    max-width: 36px;
+    max-height: 36px;
+    float: left;
 }
 
 .ui-trans-wrapper .display-member,
@@ -375,14 +371,14 @@ body.dashboard {
 .ui-trans-wrapper .display-text,
 .ui-display-wrapper .display-text {
     font-size: 0.95em;
-    min-height:40px;
+    min-height: 40px;
 }
 
 .form-group .help-text,
 .ui-trans-wrapper .display-name,
 .ui-display-wrapper .display-name {
-    color:var(--main-text-color-desc);
-    font-weight:700;
+    color: var(--main-text-color-desc);
+    font-weight: 700;
     font-size: 0.80em;
 }
 
@@ -393,8 +389,8 @@ body.dashboard {
 
 .ui-trans-wrapper .display-content,
 .ui-display-wrapper .display-content {
-    height:240px;
-    width:100%;
+    height: 240px;
+    width: 100%;
     font-size: 0.95em;
     background: var(--main-back-color);
     color: var(--main-text-color);
@@ -458,30 +454,31 @@ body.dashboard {
 .link-app-primary:active,
 .link-app-primary:hover,
 .link-app-primary:focus {
-    color:var(--main-highlight-color)
-
+    color: var(--main-highlight-color)
 }
 
 .centered {
-    text-align:center;
+    text-align: center;
 }
 
 .app-draw-row {
-    width:100%;
+    width: 100%;
     color: var(--main-text-color);
     border-radius: 6px;
     border: solid 1px var(--shadow-color-b);
-    padding:4px;
-    margin-bottom:4px;
+    padding: 4px;
+    margin-bottom: 4px;
     box-shadow: 0 4px 8px 0 var(--shadow-color-a), 0 4px 20px 0 var(--shadow-color-b);
 }
 
 .app-draw-row.account {
     background-color: var(--draw-account);
 }
+
 .app-draw-row.category {
     background-color: var(--draw-category);
 }
+
 .app-draw-row.entry-late {
     font-weight: bold;
     background-color: var(--draw-entry-late);

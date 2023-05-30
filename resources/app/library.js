@@ -47,7 +47,7 @@ var library = (function ($, undefined) {
         html += "<div class='col-5 col-lg-2 text-end'>" + el.activity_date + "</div>";
         html += "<div class='col-5 col-lg-2 text-end'>" + el.beg_value + "</div>";
         html += "<div class='col-5 col-lg-2 text-end'>" +
-            (typeof(el.interval) == 'string'?el.interval:"<i class='fa fa-solid fa-folder-open' title='End Value Not Set Not Set'></i>Open Record") + "</div>";
+            (typeof(el.interval) == 'string'?el.interval:"<i class='fa fa-solid fa-folder-open' title='End Value Not Set Not Set'></i>&nbsp;&nbsp;Open Record") + "</div>";
         html += "<div class='col-12 col-lg-3 text-start'>"+ el.name + "</div>";
         html += "<div class='d-none d-lg-inline col-lg-3 text-start'>"+ (typeof(el.category) != 'string'?'Unassigned':el.category) + "</div>";
         html += '</div>' + '</div></div>';

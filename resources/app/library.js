@@ -40,7 +40,9 @@ var library = (function ($, undefined) {
 
     var drawAuxiliary = function(type, el) {
 
-        html = "<div class='row'><div class='col-12 mb-2'><div class='app-draw-row category' onclick=\"dashboard.show('"+type+"', "+el.id+");\">";
+        html = "<div class='row'><div class='col-12 mb-2'><div class='app-draw-row ";
+        html +=  (typeof(el.interval) == 'string'?'category':"open-record");
+        html += "' onclick=\"dashboard.show('"+type+"', "+el.id+");\">";
         html += "<div class='row'>";
         html += "<div class='col-5 col-lg-2 text-end'>" + el.activity_date + "</div>";
         html += "<div class='col-5 col-lg-2 text-end'>" + el.beg_value + "</div>";

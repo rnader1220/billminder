@@ -69,7 +69,7 @@ class Mile extends BaseModel
         foreach($result as $index => $row) {
             $result[$index]['category'] = Encrypter::decrypt($row['category']);
             $result[$index]['beg_value'] = number_format($row['beg_odometer'], 2);
-            $result[$index]['activity_date'] = Carbon::createFromDate($row['travel_time'])->format('M D Y');
+            $result[$index]['activity_date'] = Carbon::createFromDate($row['travel_time'])->format('M d');
             $result[$index]['interval'] = $row['distance'] . ' miles';
         }
         return $result;

@@ -69,7 +69,12 @@ class Hour extends BaseModel
 
             $result[$index]['activity_date'] = Carbon::createFromDate($row['beg_time'])->format('M d');
             $result[$index]['beg_value'] = Carbon::createFromDate($row['beg_time'])->format('h:i A');
-            $result[$index]['interval'] = $row['duration'] . ' min';
+            if(isset($row['duration'])) {
+                $result[$index]['interval'] = $row['duration'] . ' min';
+            } else {
+                $result[$index]['interval'] = $row['duration'];
+            }
+
         }
         return $result;
     }

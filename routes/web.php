@@ -46,6 +46,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('/account/list', 'AccountController@index');
         Route::get('/category/list', 'CategoryController@index');
 
+
+        Route::resource('/reports', 'ReportController');
+
         Route::resource('/miles', 'MilesController');
         Route::resource('/hours', 'HoursController');
         Route::resource('/entry', 'EntryController');

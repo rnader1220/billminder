@@ -6,6 +6,14 @@ var reports = (function ($, undefined) {
     };
 
 
+
+
+
+
+
+    var request_form = "";
+
+
     return {
         show: show,
     };

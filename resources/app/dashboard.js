@@ -124,10 +124,6 @@ var dashboard = (function ($, undefined) {
         })
         .done(function (resp) {
             if(type == 'miles' || type == 'hours') {
-                console.log(typeof(resp));
-                console.log(typeof(resp.form));
-                console.log(typeof(resp.form[0][0].parameters));
-                console.log(typeof(resp.form[0][0]['parameters']));
                 var n = new Date();
                 resp.form[0][0]['parameters']['value']= n.getFullYear() + '-' +
                     String(n.getMonth()+1).padStart(2, '0') + '-' +

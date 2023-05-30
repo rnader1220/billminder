@@ -488,6 +488,7 @@ input:checked+.cb3slider:before {
     background-color: var(--draw-entry-income);
 }
 
+.app-draw-row.open-record,
 .app-draw-row.entry-due {
     background-color: var(--draw-entry-due);
 }

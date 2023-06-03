@@ -1,84 +1,63 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
+use App\Models\Report;
+use App\Exports\Report as Export;
 
 class ReportController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return view('reportform');
-    }
+    /* scheduling reports is later.  right now, its just immedate reports. */
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+     public function index()
+     {
+         $list = Report::getList();
+         return $list;
+     }
+
+
     public function create()
     {
-        //
+        $record = new Report();
+        return $record->localGetForm('create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
-    }
+        $record = new Report();
+        $response = $record->localSaveRecord($request);
+        return $response;
+       }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+       public function generate(Request $request)
+       {
+         (new Export($request))->store('/reports/report.xlsx');
+       }
+
     public function show($id)
     {
-        //
+        $record = Report::find($id);
+        return $record->localGetForm('show');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        //
+        $record = Report::find($id);
+        return $record->localGetForm('edit');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //
+        $record = Report::find($id);
+        $response = $record->saveRecord($request);
+        return $response;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+        $record = Report::find($id);
+        $response = $record->destroyRecord();
+        return $response;
     }
+
 }

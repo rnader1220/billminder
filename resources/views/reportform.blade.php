@@ -4,34 +4,7 @@
 
 <h1>Reports</h1>
 <script>
-    var set_options = function (obj) {
 
-        switch ($(obj).data('model')) {
-            case 'Register':
-            case 'Entry':
-                $('#account-div').show();
-                break;
-            default:
-                $('#account-div').hide();
-                break;
-        }
-
-        switch ($(obj).data('filter')) {
-            case 'income=true':
-                $('#payor-div').show();
-                $('#payee-div').hide();
-                break;
-            case 'income=false':
-                $('#payor-div').hide();
-                $('#payee-div').show();
-                break;
-            default:
-                $('#payor-div').hide();
-                $('#payee-div').hide();
-                break;
-        }
-
-    };
 
 </script>
 <form>

@@ -477,6 +477,8 @@ var dashboard = (function ($, undefined) {
         initialize: initialize,
         list: list,
         helpDashboard: helpDashboard,
+        showModalForm: showModalForm,
+        hideModal: hideModal,
         add: add,
         edit: edit,
         show: show,

@@ -47,6 +47,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('/category/list', 'CategoryController@index');
 
 
+        Route::post('/reports/generate', 'ReportController@generate');
+
         Route::resource('/reports', 'ReportController');
 
         Route::resource('/miles', 'MilesController');

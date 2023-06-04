@@ -18,7 +18,7 @@ class Report implements FromQuery
     var $end_date;
     var $category_list;
 
-    public function __construct(Request $request)
+    public function __construct(Array $request)
     {
         $this->user_id = Auth::user()->id;
         $beg_date = new Carbon($request['beg_date']);

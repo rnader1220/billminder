@@ -701,6 +701,7 @@ var reports = (function ($, undefined) {
 
 
     var store = function () {
+
         $('.modal-body form').on('submit', function (e) {
             e.preventDefault();
             if (true) {
@@ -712,31 +713,21 @@ var reports = (function ($, undefined) {
 
                 if ($(this).valid()) $.ajax({
                         type: "POST",
-                        target: '#download',
-                        url: '/reports/generate',
+                        url: '/reports/immediate',
                         data: $.param(data)
                     })
 
                     .done(function (resp) {
-                        var blob = new Blob([resp], { type: "application/octetstream" });
-
-                        //Check the Browser type and download the File.
-                        var isIE = false || !!document.documentMode;
-                        if (isIE) {
-                            window.navigator.msSaveBlob(blob, fileName);
-                        } else {
-                            var url = window.URL || window.webkitURL;
-                            link = url.createObjectURL(blob);
-                            var a = $("<a />");
-                            a.attr("download", fileName);
-                            a.attr("href", link);
-                            $("body").append(a);
-                            a[0].click();
-                            $("body").remove(a);
-                        }
-
+                        url = '/reports/immediate';
+                        var ifrm = document.createElement('iframe');
+                        ifrm.id ='retriever_frame';
+                        ifrm.setAttribute('src', url);
+                        ifrm.style.width='0px';
+                        ifrm.style.height='0px';
+                        ifrm.style.border='0px';
+                        document.body.appendChild(ifrm);
                         dashboard.hideModal();
-
+                        return false;
                     })
                     .fail(function (message) {
                         utility.ajax_fail(message);

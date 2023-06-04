@@ -56,10 +56,9 @@ class Report extends BaseModel
         $action = 'Request Recieved';
 
         try {
-            //"generate report";
-            $report = new Export($request);
-            $report->download('miles.xlsx');
-            //$this->save();
+            $this->user_id = Auth::user()->id;
+            $this->parameters = json_encode($request->all());
+            $this->save();
         } catch (\Exception $e) {
             $success = false;
             $detail = $e->getMessage();
@@ -70,6 +69,11 @@ class Report extends BaseModel
 
     }
 
+
+    public function localGenerate() {
+        // immediate record by user_id
+
+    }
 
 
     protected $form = [

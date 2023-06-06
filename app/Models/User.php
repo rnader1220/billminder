@@ -132,11 +132,7 @@ class User extends Authenticatable
         });
 
         self::updated(function($model){
-            $details = [
-                'title' => 'BillMinder Updated User',
-                'body' => "A user({$model->id}) has been updated:\n{$model->name}\n{$model->email}"
-            ];
-            Mail::to('billminder@dyn-it.com')->send(new AdminNotice($details));
+            // ... code here
         });
 
         self::deleting(function($model){

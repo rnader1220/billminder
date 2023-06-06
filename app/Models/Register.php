@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Traits\TableMaint;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AdminNotice;
 
 class Register extends BaseModel
 {
@@ -35,7 +37,7 @@ class Register extends BaseModel
     ];
 
     public static function getList(string $q = '') {
-        $result = Entry::select('register.id', 'register.paid_date', 'register.amount', 'register.name',
+        $result = Register::select('register.id', 'register.paid_date', 'register.amount', 'register.name',
             DB::raw('categories.label as category'),
         )
         ->leftjoin('categories', function($join) {
@@ -51,6 +53,22 @@ class Register extends BaseModel
     }
 
 
+    public function category() {
+        return $this
+            ->belongsTo(Category::class, 'category_id');
+    }
+
+
+    public function account() {
+        return $this
+            ->belongsTo(Account::class, 'account_id');
+    }
+
+
+    public function party() {
+        return $this
+            ->belongsTo(Account::class, 'party_id');
+    }
 
 
 
@@ -197,4 +215,42 @@ class Register extends BaseModel
         ],
     ];
 
+
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function($model){
+            // ... code here
+        });
+
+        self::created(function($model){
+            $details = [
+                'title' => 'BillMinder New Register',
+                'body' => "A user({$model->user_id}) has created an register:\n{$model->id}"
+            ];
+            Mail::to('billminder@dyn-it.com')->send(new AdminNotice($details));
+        });
+
+        self::updating(function($model){
+            // ... code here
+        });
+
+        self::updated(function($model){
+            // ... code here
+        });
+
+        self::deleting(function($model){
+            // ... code here
+        });
+
+        self::deleted(function($model){
+            $details = [
+                'title' => 'BillMinder Deleted Register',
+                'body' => "A user({$model->user_id}) has deleted an register:\n{$model->id}"
+            ];
+            Mail::to('billminder@dyn-it.com')->send(new AdminNotice($details));
+        });
+    }
 }

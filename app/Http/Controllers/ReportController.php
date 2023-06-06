@@ -11,12 +11,11 @@ class ReportController extends Controller
 {
     /* scheduling reports is later.  right now, its just immedate reports. */
 
-     public function index()
-     {
-         $list = Report::getList();
-         return $list;
-     }
-
+    public function index()
+    {
+        $list = Report::getList();
+        return $list;
+    }
 
     public function create()
     {
@@ -30,8 +29,6 @@ class ReportController extends Controller
         $response = $record->localSaveRecord($request);
         return $response;
     }
-
-
 
     public function generate(Request $request) {
         $record = Report::firstOrNew(['user_id' => Auth::user()->id]);

@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use ESolution\DBEncryption\Encrypter;
 use App\Traits\TableMaint;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AdminNotice;
 
 class Entry extends BaseModel
 {
@@ -94,6 +96,7 @@ class Entry extends BaseModel
         return $this->getForm($mode);
     }
 
+
     public function postCycle() {
         $success = true;
         $detail = '';
@@ -134,6 +137,26 @@ class Entry extends BaseModel
 
         return $this->responseMessage('Cycled', $success, $detail, $this->id);
     }
+
+
+    public function category() {
+        return $this
+            ->belongsTo(Category::class, 'category_id');
+    }
+
+
+    public function account() {
+        return $this
+            ->belongsTo(Account::class, 'account_id');
+    }
+
+
+    public function party() {
+        return $this
+            ->belongsTo(Account::class, 'party_id');
+    }
+
+
 
     protected function customUpdate(array &$data)
     {
@@ -376,5 +399,46 @@ class Entry extends BaseModel
             ],
         ],
     ];
+
+
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function($model){
+            // ... code here
+        });
+
+        self::created(function($model){
+            $details = [
+                'title' => 'BillMinder New Entry',
+                'body' => "A user({$model->user_id}) has created an entry:\n{$model->id}"
+            ];
+            Mail::to('billminder@dyn-it.com')->send(new AdminNotice($details));
+        });
+
+        self::updating(function($model){
+            // ... code here
+        });
+
+        self::updated(function($model){
+            // ... code here
+        });
+
+        self::deleting(function($model){
+            // ... code here
+        });
+
+        self::deleted(function($model){
+            $details = [
+                'title' => 'BillMinder Deleted Entry',
+                'body' => "A user({$model->user_id}) has deleted an entry:\n{$model->id}"
+            ];
+            Mail::to('billminder@dyn-it.com')->send(new AdminNotice($details));
+        });
+    }
+
+
 
 }

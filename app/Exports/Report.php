@@ -277,22 +277,29 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithPro
             case 'register-income':
                 $query = Register::query()
                 ->where('user_id', Auth::user()->id)
-                ->where('paid_date', '>=', $this->beg_date)
-                ->where('paid_date', '<=', $this->end_date)
                 ->where('income', true)
-                ->whereNull('deleted_at')
-                ->orderBy('paid_date');
-
+                ->whereNull('deleted_at');
+                if($this->beg_date != '') {
+                    $query->where('paid_date', '>=', $this->beg_date);
+                }
+                if($this->end_date != '') {
+                    $query->where('paid_date', '>=', $this->end_date);
+                }
+                $query->orderBy('paid_date');
                 break;
             case 'register-expense':
             default:
                 $query = Register::query()
                 ->where('user_id', Auth::user()->id)
-                ->where('paid_date', '>=', $this->beg_date)
-                ->where('paid_date', '<=', $this->end_date)
                 ->where('income', false)
-                ->whereNull('deleted_at')
-                ->orderBy('paid_date');
+                ->whereNull('deleted_at');
+                if($this->beg_date != '') {
+                    $query->where('paid_date', '>=', $this->beg_date);
+                }
+                if($this->end_date != '') {
+                    $query->where('paid_date', '>=', $this->end_date);
+                }
+                $query->orderBy('paid_date');
                 break;
             case 'entry-income':
                 $query = Entry::query()
@@ -309,20 +316,28 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithPro
                 ->orderBy('next_due_date');
                 break;
             case 'time-tracking':
-                $result = Hour::query()
+                $query = Hour::query()
                 ->where('user_id', Auth::user()->id)
-                ->where('act_date', '>=', $this->beg_date)
-                ->where('act_date', '<=', $this->end_date)
-                ->whereNull('deleted_at')
-                ->orderBy('beg_time');
+                ->whereNull('deleted_at');
+                if($this->beg_date != '') {
+                    $query->where('beg_time', '>=', $this->beg_date);
+                }
+                if($this->end_date != '') {
+                    $query->where('beg_time', '>=', $this->end_date);
+                }
+                $query->orderBy('beg_time');
                 break;
             case 'miles-tracking':
                 $query = Mile::query()
                 ->where('user_id', Auth::user()->id)
-                ->where('travel_time', '>=', $this->beg_date)
-                ->where('travel_time', '<=', $this->end_date)
-                ->whereNull('deleted_at')
-                ->orderBy('travel_time');
+                ->whereNull('deleted_at');
+                if($this->beg_date != '') {
+                    $query->where('travel_time', '>=', $this->beg_date);
+                }
+                if($this->end_date != '') {
+                    $query->where('travel_time', '>=', $this->end_date);
+                }
+                $query->orderBy('travel_time');
                 break;
             }
         return $query;

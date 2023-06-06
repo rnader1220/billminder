@@ -18,10 +18,11 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithProperties;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithCustomStartCell, ShouldAutoSize, FromQuery
+class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithProperties, WithCustomStartCell, ShouldAutoSize, FromQuery
 {
     use Exportable;
     var $user_id;
@@ -31,9 +32,44 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithCus
     var $category_list;
 
 
+    public function properties(): array
+    {
+        $properties =[
+            'creator'        => Auth::user()->name,
+            'lastModifiedBy' => Auth::user()->name,
+            'title'          => 'Invoices Export',
+            'description'    => 'Billminder Report Export',
+            'manager'        => 'www.dyn-it.com/billminder',
+            'company'        => 'Billminder',
+        ];
+
+        switch($this->report_type) {
+            case 'register-income':
+                $properties['title'] = 'Past Income';
+                break;
+            case 'register-expense':
+            default:
+                $properties['title'] = 'Past Expenses';
+                break;
+            case 'entry-income':
+                $properties['title'] = 'Current Income';
+                break;
+            case 'entry-expense':
+                $properties['title'] = 'Current Expenses';
+                break;
+            case 'time-tracking':
+                $properties['title'] = 'Time Tracking Report';
+                break;
+            case 'miles-tracking':
+                $properties['title'] = 'Miles Tracking Report';
+                break;
+            }
+        return $properties;
+    }
+
     public function startCell(): string
     {
-        return 'B3';
+        return 'B2';
     }
 
     public function __construct(Array $request)
@@ -50,6 +86,7 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithCus
     {
         switch($this->report_type) {
             case 'register-income':
+                $title = ['Past Income'];
                 $map = [
                     'Date',
                     'Amount',
@@ -62,9 +99,10 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithCus
                 break;
             case 'register-expense':
             default:
-                $map = [
-                    'Date',
-                    'Amount',
+            $title = ['Past Expenses'];
+            $map = [
+                'Date',
+                'Amount',
                     'Name',
                     'Description',
                     'Category',
@@ -73,6 +111,7 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithCus
                 ];
                 break;
             case 'entry-income':
+                $title = ['Current Income'];
                 $map = [
                     'Date',
                     'Est. Date',
@@ -87,6 +126,7 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithCus
                 ];
                 break;
             case 'entry-expense':
+                $title = ['Current Expenses'];
                 $map = [
                     'Date',
                     'Est. Date',
@@ -100,7 +140,8 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithCus
                     'Payee',
                 ];
                 break;
-            case 'hour-none':
+            case 'time-tracking':
+                $title = ['Time Tracking Report'];
                 $map = [
                     'Date',
                     'Start',
@@ -111,7 +152,8 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithCus
                     'Category',
                 ];
                 break;
-            case 'mile-none':
+            case 'miles-tracking':
+                $title = ['Miles Tracking Report'];
                 $map = [
                     'Date',
                     'Start',
@@ -124,8 +166,7 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithCus
                 break;
             }
 
-        return $map;
-
+        return compact('title', 'map');
     }
 
 
@@ -161,7 +202,7 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithCus
                     (isset($record->party->name)? $record->party->name:'Unassigned'),
                 ];
                 break;
-            case 'hour-none':
+            case 'time-tracking':
                 $map = [
                     Date::dateTimeToExcel(new Carbon($record->act_date)),
                     $record->beg_time,
@@ -172,7 +213,7 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithCus
                     (isset($record->category->label)? $record->category->label:'Unassigned'),
                 ];
                 break;
-            case 'mile-none':
+            case 'miles-tracking':
                 $map = [
                     Date::dateTimeToExcel(new Carbon($record->travel_time)),
                     $record->beg_odometer,
@@ -209,7 +250,7 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithCus
                 ];
                 break;
 
-                case 'mile-none':
+                case 'miles-tracking':
                     $format = [
                         'B' => ' m/d/yy',
                         'C' => NumberFormat::FORMAT_DATE_TIME1, //time
@@ -218,7 +259,7 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithCus
                     ];
                     break;
 
-            case 'mile-none':
+            case 'miles-tracking':
                 $format = [
                     'B' => ' m/d/yy',
                     'C' => NumberFormat::FORMAT_NUMBER_0,
@@ -256,8 +297,6 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithCus
             case 'entry-income':
                 $query = Entry::query()
                 ->where('user_id', Auth::user()->id)
-                ->where('next_due_date', '>=', $this->beg_date)
-                ->where('next_due_date', '<=', $this->end_date)
                 ->where('income', true)
                 ->whereNull('deleted_at')
                 ->orderBy('next_due_date');
@@ -265,13 +304,11 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithCus
             case 'entry-expense':
                 $query = Entry::query()
                 ->where('user_id', Auth::user()->id)
-                ->where('next_due_date', '>=', $this->beg_date)
-                ->where('next_due_date', '<=', $this->end_date)
                 ->where('income', false)
                 ->whereNull('deleted_at')
                 ->orderBy('next_due_date');
                 break;
-            case 'hour-none':
+            case 'time-tracking':
                 $result = Hour::query()
                 ->where('user_id', Auth::user()->id)
                 ->where('act_date', '>=', $this->beg_date)
@@ -279,7 +316,7 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithCus
                 ->whereNull('deleted_at')
                 ->orderBy('beg_time');
                 break;
-            case 'mile-none':
+            case 'miles-tracking':
                 $query = Mile::query()
                 ->where('user_id', Auth::user()->id)
                 ->where('travel_time', '>=', $this->beg_date)
@@ -291,23 +328,3 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithCus
         return $query;
     }
 }
-
-/*
-->select(
-            'miles.id',
-            'miles.travel_time',
-            'miles.beg_odometer',
-            'miles.distance',
-            'miles.name',
-            DB::raw(
-                "case when distance = null then 'open' " .
-                "else 'closed' end as status"
-            ),
-            DB::raw('categories.label as category'),
-        )
-        ->leftjoin('categories', function($join) {
-            $join->on('categories.id', '=', 'miles.category_id')
-            ->whereNull('categories.deleted_at');
-        })
-
-        */

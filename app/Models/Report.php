@@ -91,8 +91,8 @@ class Report extends BaseModel
                         ['label' => 'Past Expense', 'value' => 'register-expense'],
                         ['label' => 'Current Income', 'value' => 'entry-income'],
                         ['label' => 'Current Expense', 'value' => 'entry-expense'],
-                        ['label' => 'Time Tracking', 'value' => 'hour-none'],
-                        ['label' => 'Miles Tracking', 'value' => 'mile-none'],
+                        ['label' => 'Time Tracking', 'value' => 'time-tracking'],
+                        ['label' => 'Miles Tracking', 'value' => 'miles-tracking'],
                     ],
                     'grid_class' => 'col-12'
                 ]

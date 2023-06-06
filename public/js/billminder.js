@@ -675,23 +675,39 @@ var reports = (function ($, undefined) {
     };
 
     var set_options = function (obj) {
-        $('#beg_date_div').show();
-        $('#end_date_div').show();
         $('#category_id_div').show();
         switch($(obj).attr('id')) {
             case 'type-register-income':
-            case 'type-entry-income':
+                $('#beg_date_div').show();
+                $('#end_date_div').show();
                 $('#account_id_div').show();
                 $('#payor_id_div').show();
                 $('#payee_id_div').hide();
                 break;
+            case 'type-entry-income':
+                $('#beg_date_div').hide();
+                $('#end_date_div').hide();
+                $('#account_id_div').show();
+                $('#payor_id_div').show();
+                $('#payee_id_div').hide();
+            break;
             case 'type-register-expense':
-            case 'type-entry-expense':
+                $('#beg_date_div').show();
+                $('#end_date_div').show();
                 $('#account_id_div').show();
                 $('#payor_id_div').hide();
                 $('#payee_id_div').show();
-                break;
+            break;
+            case 'type-entry-expense':
+                $('#beg_date_div').hide();
+                $('#end_date_div').hide();
+                $('#account_id_div').show();
+                $('#payor_id_div').hide();
+                $('#payee_id_div').show();
+            break;
             default:
+                $('#beg_date_div').show();
+                $('#end_date_div').show();
                 $('#account_id_div').hide();
                 $('#payee_id_div').hide();
                 $('#payor_id_div').hide();

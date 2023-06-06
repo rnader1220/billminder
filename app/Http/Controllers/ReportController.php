@@ -46,7 +46,7 @@ class ReportController extends Controller
         $size = strlen($report_xlsx);
         header("Accept-Ranges: bytes");
         header("Content-Type: application/octetstream");
-        header("Content-Disposition: attachment; filename=billminder_report.xlsx");
+        header("Content-Disposition: attachment; filename=billminder-{$report_object->report_type}.xlsx");
         header("Content-Length: {$size}");
         header("Expires: ".gmdate("D, d M Y H:i:s", mktime(date("H")+2, date("i"), date("s"), date("m"), date("d"), date("Y")))." GMT");
         header("Last-Modified: ".gmdate("D, d M Y H:i:s"). " GMT");

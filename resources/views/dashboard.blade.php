@@ -3,6 +3,7 @@
 @section('content')
 <div class="page-wrapper">
     <main class="page-content">
+        <div id="message" class="message-container"></div>
 
         <div class='container-fluid'>
             <div class='row'>
@@ -146,6 +147,9 @@
             </div>
         </div>
     </main>
+    <div id="download" class="download-container"></div>
+
+
     <div class='modal' id='genericModal' tabindex='-1'>
         <div class='container-fluid'>
             <div class='row'>

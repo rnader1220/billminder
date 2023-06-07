@@ -179,6 +179,8 @@ trait TableMaint
 
         foreach($form as $rowIndex => $row) {
             foreach($row as $elementIndex => $element) {
+                if(isset($element['parameters']['datapoint'])) {
+
                 $datapoint = $element['parameters']['datapoint'];
                 if(isset($this->$datapoint)) {
                     if($element['type'] == 'input_date') {
@@ -195,7 +197,7 @@ trait TableMaint
                     }
                 } else if($datapoint == 'help-text') {
                     $form[$rowIndex][$elementIndex]['parameters']['text'] = $this->getHelpText($mode);
-                    // do nothing
+                }
                 }
 
             }

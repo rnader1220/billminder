@@ -13,9 +13,14 @@
                 </div>
                 <div class='card-body'>
                     <p>Billminder is a handy little app developed by the nerds at Dynamic
-                        Iterations, to help manage income and expenses for home,
+                        Iterations, to help manage income and expenses for home and work,
                         and reduce stress by visually showing how things are not as bad as they
                         seem... Unless they are, which would also be good to know!</p>
+
+                    <p>Newly added features include Hours and Miles Tracking, and a handy reporting tool that
+                        produces spreadsheet downloads.
+                    </p>
+
                 </div>
                 <div class='card-footer'>
                     @auth

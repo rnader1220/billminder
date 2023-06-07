@@ -84,8 +84,20 @@ var library = (function ($, undefined) {
         return '';
     };
 
+    var pageRow = function() {
+        var htmlString = "<div class='row'>" +
+        "<div class='col-2'><div id='page_frst' class='btn btn-app-primary centered' role='button' title = 'first'><i class='fa-regular fa-person-to-door'></i></div></div>"+
+        "<div class='col-2'><div id='page_prev' class='btn btn-app-primary centered' role='button' title = 'previous'><i class='fa-regular fa-person-to-door'></i></div></div>"+
+        "<div class='col-4 centered'><span id='page_num'>1</span> of <span id='page_count'>1</span></div>"+
+        "<div class='col-2'><div id='page_next' class='btn btn-app-primary centered' role='button' title = 'next'><i class='fa-regular fa-person-to-door'></i></div></div>"+
+        "<div class='col-2'><div id='page_last' class='btn btn-app-primary centered' role='button' title = 'last'><i class='fa-regular fa-person-to-door'></i></div></div>"+
+        "</div>"
+        return htmlString;
+    };
+
     return {
         drawElement: drawElement,
         drawButton: drawButton,
+        pageRow: pageRow,
     };
 })(jQuery);

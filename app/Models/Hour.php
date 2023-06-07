@@ -95,6 +95,11 @@ class Hour extends BaseModel
 
     }
 
+    public function category() {
+        return $this
+            ->belongsTo(Category::class, 'category_id');
+    }
+
     protected function customUpdate(array &$data)
     {
         $data['billable'] = (isset($data['billable'])?1:0);

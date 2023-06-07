@@ -141,7 +141,7 @@ var modal_form = (function ($, undefined) {
                 htmlString += "name='" + attr.datapoint + "' value='" + element.value + "'> " +
                     element.label + "</label>";
             });
-            htmlString += " ></div>";
+            htmlString += "</div>";
             if(attr.hasOwnProperty('title')) {
                 htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
             }
@@ -313,7 +313,13 @@ var modal_form = (function ($, undefined) {
                 if (!attr.hasOwnProperty('value') || attr.value == '-99') {
                     htmlString += "selected ";
                 }
-                htmlString += "value = '-99'>- not selected -</option>\n";
+                if( typeof attr.allow_null == 'boolean' ) {
+                    htmlString += "value = '-99'>- not selected -</option>\n";
+                } else {
+                    htmlString += "value = '-99'>" + attr.allow_null + "</option>\n";
+
+                }
+
             }
 
             attr.list.forEach(function (element) {

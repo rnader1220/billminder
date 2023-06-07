@@ -291,7 +291,7 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithPro
                     $query->where('paid_date', '>=', $this->beg_date);
                 }
                 if($this->end_date != '') {
-                    $query->where('paid_date', '>=', $this->end_date);
+                    $query->where('paid_date', '<=', $this->end_date);
                 }
                 if($this->category_id[0] > -99) {
                     $query->whereIn('category_id', $this->category_id);
@@ -314,7 +314,7 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithPro
                     $query->where('paid_date', '>=', $this->beg_date);
                 }
                 if($this->end_date != '') {
-                    $query->where('paid_date', '>=', $this->end_date);
+                    $query->where('paid_date', '<=', $this->end_date);
                 }
                 if($this->category_id[0] > -99) {
                     $query->whereIn('category_id', $this->category_id);
@@ -367,7 +367,7 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithPro
                     $query->where('beg_time', '>=', $this->beg_date);
                 }
                 if($this->end_date != '') {
-                    $query->where('beg_time', '>=', $this->end_date);
+                    $query->where('beg_time', '<=', $this->end_date);
                 }
                 if($this->category_id[0] > -99) {
                     $query->whereIn('category_id', $this->category_id);
@@ -382,7 +382,7 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithPro
                     $query->where('travel_time', '>=', $this->beg_date);
                 }
                 if($this->end_date != '') {
-                    $query->where('travel_time', '>=', $this->end_date);
+                    $query->where('travel_time', '<=', $this->end_date);
                 }
                 if($this->category_id[0] > -99) {
                     $query->whereIn('category_id', $this->category_id);

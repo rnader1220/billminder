@@ -10,9 +10,10 @@ use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-
+use Monolog\Logger;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
@@ -79,10 +80,18 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithPro
     public function __construct(Array $request)
     {
         $this->user_id = Auth::user()->id;
-        $beg_date = new Carbon($request['beg_date']);
-        $this->beg_date = $beg_date->startOfDay();
-        $end_date = new Carbon($request['end_date']);
-        $this->end_date = $end_date->endOfDay();
+        if($request['beg_date'] == '') {
+            unset ($this->beg_date);
+        } else {
+            $beg_date = new Carbon($request['beg_date']);
+            $this->beg_date = $beg_date->startOfDay();
+        }
+        if($request['end_date'] == '') {
+            unset ($this->end_date);
+        } else {
+            $end_date = new Carbon($request['end_date']);
+            $this->end_date = $end_date->startOfDay();
+        }
         $this->report_type = $request['type'];
         $this->category_id = $request['category_id'];
         $this->account_id = $request['account_id'];
@@ -107,10 +116,10 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithPro
                 break;
             case 'register-expense':
             default:
-            $title = ['Past Expenses'];
-            $map = [
-                'Date',
-                'Amount',
+                $title = ['Past Expenses'];
+                $map = [
+                    'Date',
+                    'Amount',
                     'Name',
                     'Description',
                     'Category',
@@ -287,10 +296,10 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithPro
                 ->where('user_id', Auth::user()->id)
                 ->where('income', true)
                 ->whereNull('deleted_at');
-                if($this->beg_date != '') {
+                if(isset($this->beg_date)) {
                     $query->where('paid_date', '>=', $this->beg_date);
                 }
-                if($this->end_date != '') {
+                if(isset($this->end_date)) {
                     $query->where('paid_date', '<=', $this->end_date);
                 }
                 if($this->category_id[0] > -99) {
@@ -310,10 +319,10 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithPro
                 ->where('user_id', Auth::user()->id)
                 ->where('income', false)
                 ->whereNull('deleted_at');
-                if($this->beg_date != '') {
+                if(isset($this->beg_date)) {
                     $query->where('paid_date', '>=', $this->beg_date);
                 }
-                if($this->end_date != '') {
+                if(isset($this->end_date)) {
                     $query->where('paid_date', '<=', $this->end_date);
                 }
                 if($this->category_id[0] > -99) {
@@ -363,10 +372,10 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithPro
                 $query = Hour::query()
                 ->where('user_id', Auth::user()->id)
                 ->whereNull('deleted_at');
-                if($this->beg_date != '') {
+                if(isset($this->beg_date)) {
                     $query->where('beg_time', '>=', $this->beg_date);
                 }
-                if($this->end_date != '') {
+                if(isset($this->end_date)) {
                     $query->where('beg_time', '<=', $this->end_date);
                 }
                 if($this->category_id[0] > -99) {
@@ -378,12 +387,13 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithPro
                 $query = Mile::query()
                 ->where('user_id', Auth::user()->id)
                 ->whereNull('deleted_at');
-                if($this->beg_date != '') {
+                if(isset($this->beg_date)) {
                     $query->where('travel_time', '>=', $this->beg_date);
                 }
-                if($this->end_date != '') {
+                if(isset($this->end_date)) {
                     $query->where('travel_time', '<=', $this->end_date);
                 }
+
                 if($this->category_id[0] > -99) {
                     $query->whereIn('category_id', $this->category_id);
                 }

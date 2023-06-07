@@ -24,7 +24,6 @@ class Register extends BaseModel
         'amount',
         'income',
         'paid_date',
-        'fixed',
         'description',
         'category_id',
         'account_id',

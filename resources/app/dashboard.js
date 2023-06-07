@@ -99,11 +99,14 @@ var dashboard = (function ($, undefined) {
             });
             if(dtype == 'miles') {
                 $('#miles-div').prepend('<h4>Travel</h4>');
-                $('#miles-div').append('<h4>Pagination</h4>');
+                // $('#miles-div').append(library.pageRow); // might move up to forEach:, conditionally
+                // setPageRow();
+
             }
             if(dtype == 'hours') {
                 $('#hours-div').prepend('<h4>Time</h4>');
-                $('#hours-div').append('<h4>Pagination</h4>');
+                // $('#hours-div').append(library.pageRow); // might move up to forLoop:, conditionally
+                // setPageRow();
             }
             $('#' + dtype + '-div').data('open', true);
             $('#' + dtype + '-div').slideDown(300);
@@ -111,6 +114,11 @@ var dashboard = (function ($, undefined) {
         .fail(function(message) {
             utility.ajax_fail(message);
         });
+    };
+
+    var setPageRow = function() {
+        // enable nav buttons,
+        // set page_num and page_count
     };
 
     var add = function(type, income) {

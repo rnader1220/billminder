@@ -30,6 +30,10 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithPro
     var $beg_date;
     var $end_date;
     var $category_list;
+    var $category_id;
+    var $account_id;
+    var $payor_id;
+    var $payee_id;
 
 
     public function properties(): array
@@ -80,6 +84,10 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithPro
         $end_date = new Carbon($request['end_date']);
         $this->end_date = $end_date->endOfDay();
         $this->report_type = $request['type'];
+        $this->category_id = $request['category_id'];
+        $this->account_id = $request['account_id'];
+        $this->payor_id = $request['payor_id'];
+        $this->payee_id = $request['payee_id'];
     }
 
     public function headings(): array
@@ -190,7 +198,7 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithPro
             case 'entry-income':
             case 'entry-expense':
                 $map = [
-                    Date::dateTimeToExcel(new Carbon($record->next_due_date)),
+                    (isset($record->next_due_date)?Date::dateTimeToExcel(new Carbon($record->next_due_date)):''),
                     ($record->estimated_date==1?'[X]':''),
                     $record->amount,
                     ($record->estimated_amount==1?'[X]':''),
@@ -285,6 +293,15 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithPro
                 if($this->end_date != '') {
                     $query->where('paid_date', '>=', $this->end_date);
                 }
+                if($this->category_id[0] > -99) {
+                    $query->whereIn('category_id', $this->category_id);
+                }
+                if($this->account_id[0] > -99) {
+                    $query->whereIn('account_id', $this->account_id);
+                }
+                if($this->payor_id[0] > -99) {
+                    $query->whereIn('party_id', $this->payor_id);
+                }
                 $query->orderBy('paid_date');
                 break;
             case 'register-expense':
@@ -299,21 +316,48 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithPro
                 if($this->end_date != '') {
                     $query->where('paid_date', '>=', $this->end_date);
                 }
+                if($this->category_id[0] > -99) {
+                    $query->whereIn('category_id', $this->category_id);
+                }
+                if($this->account_id[0] > -99) {
+                    $query->whereIn('account_id', $this->account_id);
+                }
+                if($this->payee_id[0] > -99) {
+                    $query->whereIn('party_id', $this->payee_id);
+                }
                 $query->orderBy('paid_date');
                 break;
             case 'entry-income':
                 $query = Entry::query()
                 ->where('user_id', Auth::user()->id)
                 ->where('income', true)
-                ->whereNull('deleted_at')
-                ->orderBy('next_due_date');
+                ->whereNull('deleted_at');
+                if($this->category_id[0] > -99) {
+                    $query->whereIn('category_id', $this->category_id);
+                }
+                if($this->account_id[0] > -99) {
+                    $query->whereIn('account_id', $this->account_id);
+                }
+                if($this->payor_id[0] > -99) {
+                    $query->whereIn('party_id', $this->payor_id);
+                }
+                $query->orderBy('next_due_date');
                 break;
             case 'entry-expense':
                 $query = Entry::query()
                 ->where('user_id', Auth::user()->id)
                 ->where('income', false)
-                ->whereNull('deleted_at')
-                ->orderBy('next_due_date');
+                ->whereNull('deleted_at');
+                if($this->category_id[0] > -99) {
+                    $query->whereIn('category_id', $this->category_id);
+                }
+                if($this->account_id[0] > -99) {
+                    $query->whereIn('account_id', $this->account_id);
+                }
+                if($this->payee_id[0] > -99) {
+                    $query->whereIn('party_id', $this->payee_id);
+                }
+                $query->orderBy('next_due_date');
                 break;
             case 'time-tracking':
                 $query = Hour::query()
@@ -324,6 +368,9 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithPro
                 }
                 if($this->end_date != '') {
                     $query->where('beg_time', '>=', $this->end_date);
+                }
+                if($this->category_id[0] > -99) {
+                    $query->whereIn('category_id', $this->category_id);
                 }
                 $query->orderBy('beg_time');
                 break;
@@ -336,6 +383,9 @@ class Report implements WithColumnFormatting, WithMapping, WithHeadings, WithPro
                 }
                 if($this->end_date != '') {
                     $query->where('travel_time', '>=', $this->end_date);
+                }
+                if($this->category_id[0] > -99) {
+                    $query->whereIn('category_id', $this->category_id);
                 }
                 $query->orderBy('travel_time');
                 break;

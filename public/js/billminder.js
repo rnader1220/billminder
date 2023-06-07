@@ -99,11 +99,14 @@ var dashboard = (function ($, undefined) {
             });
             if(dtype == 'miles') {
                 $('#miles-div').prepend('<h4>Travel</h4>');
-                $('#miles-div').append('<h4>Pagination</h4>');
+                // $('#miles-div').append(library.pageRow); // might move up to forEach:, conditionally
+                // setPageRow();
+
             }
             if(dtype == 'hours') {
                 $('#hours-div').prepend('<h4>Time</h4>');
-                $('#hours-div').append('<h4>Pagination</h4>');
+                // $('#hours-div').append(library.pageRow); // might move up to forLoop:, conditionally
+                // setPageRow();
             }
             $('#' + dtype + '-div').data('open', true);
             $('#' + dtype + '-div').slideDown(300);
@@ -111,6 +114,11 @@ var dashboard = (function ($, undefined) {
         .fail(function(message) {
             utility.ajax_fail(message);
         });
+    };
+
+    var setPageRow = function() {
+        // enable nav buttons,
+        // set page_num and page_count
     };
 
     var add = function(type, income) {
@@ -715,7 +723,6 @@ var reports = (function ($, undefined) {
         }
     };
 
-
     var store = function () {
 
         $('.modal-body form').on('submit', function (e) {
@@ -1035,9 +1042,21 @@ var library = (function ($, undefined) {
         return '';
     };
 
+    var pageRow = function() {
+        var htmlString = "<div class='row'>" +
+        "<div class='col-2'><div id='page_frst' class='btn btn-app-primary centered' role='button' title = 'first'><i class='fa-regular fa-person-to-door'></i></div></div>"+
+        "<div class='col-2'><div id='page_prev' class='btn btn-app-primary centered' role='button' title = 'previous'><i class='fa-regular fa-person-to-door'></i></div></div>"+
+        "<div class='col-4 centered'><span id='page_num'>1</span> of <span id='page_count'>1</span></div>"+
+        "<div class='col-2'><div id='page_next' class='btn btn-app-primary centered' role='button' title = 'next'><i class='fa-regular fa-person-to-door'></i></div></div>"+
+        "<div class='col-2'><div id='page_last' class='btn btn-app-primary centered' role='button' title = 'last'><i class='fa-regular fa-person-to-door'></i></div></div>"+
+        "</div>"
+        return htmlString;
+    };
+
     return {
         drawElement: drawElement,
         drawButton: drawButton,
+        pageRow: pageRow,
     };
 })(jQuery);
 

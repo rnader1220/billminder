@@ -74,7 +74,6 @@ var reports = (function ($, undefined) {
         }
     };
 
-    miles
     var store = function () {
 
         $('.modal-body form').on('submit', function (e) {

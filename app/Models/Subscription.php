@@ -186,7 +186,9 @@ class Subscription extends Model
         parent::boot();
 
         self::creating(function($model){
-            // ... code here
+            if(!isset($this->user_id)) {
+                $this->user_id = Auth::user()->id;
+            }
         });
 
         self::created(function($model){
@@ -220,3 +222,4 @@ class Subscription extends Model
     }
 
 }
+

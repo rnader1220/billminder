@@ -80,5 +80,4 @@ class ReportController extends Controller
         $response = $record->destroyRecord();
         return $response;
     }
-
-}
+ }

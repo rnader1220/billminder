@@ -5,11 +5,6 @@ var dashboard = (function ($, undefined) {
         '#account-div',
         '#category-div',
     ];
-    var auxiliary_divs = [
-        '#miles-div',
-        '#hours-div',
-
-    ]
 
     var initialize = function() {
         subscriber();
@@ -22,17 +17,8 @@ var dashboard = (function ($, undefined) {
             $(auxdiv).slideUp(300, function() {
                 $(auxdiv).html('').data('open', false);
             });
-            if(name == 'miles' || name == 'hours') {
-                $('#entry-div').slideDown(300);
-                $('#entry-controls').slideDown(300);
-            }
         } else {
             hide_others(accordion_divs);
-            if(name == 'miles' || name == 'hours') {
-                hide_others(auxiliary_divs);
-                $('#entry-div').slideUp(300);
-                $('#entry-controls').slideUp(300);
-            }
             fetchdata(name);
         }
 
@@ -64,8 +50,6 @@ var dashboard = (function ($, undefined) {
                 $('.subscribe-div').show();
             } else {
                 $('.reports-div').show();
-                $('.hours-div').show();
-                $('.miles-div').show();
             }
         })
         .fail(function(message) {
@@ -97,17 +81,6 @@ var dashboard = (function ($, undefined) {
             response.forEach(function (el) {
                 $('#' + dtype + '-div').append(library.drawElement(dtype, el));
             });
-            if(dtype == 'miles') {
-                $('#miles-div').prepend('<h4>Travel</h4>');
-                // $('#miles-div').append(library.pageRow); // might move up to forEach:, conditionally
-                // setPageRow();
-
-            }
-            if(dtype == 'hours') {
-                $('#hours-div').prepend('<h4>Time</h4>');
-                // $('#hours-div').append(library.pageRow); // might move up to forLoop:, conditionally
-                // setPageRow();
-            }
             $('#' + dtype + '-div').data('open', true);
             $('#' + dtype + '-div').slideDown(300);
         })
@@ -131,17 +104,6 @@ var dashboard = (function ($, undefined) {
             dataType: 'json'
         })
         .done(function (resp) {
-            if(type == 'miles' || type == 'hours') {
-                var n = new Date();
-                resp.form[0][0]['parameters']['value']= n.getFullYear() + '-' +
-                    String(n.getMonth()+1).padStart(2, '0') + '-' +
-                    String(n.getDate()).padStart(2, '0');  //date
-                resp.form[0][1]['parameters']['value']= n.toLocaleString("en-US", {
-                    'hour12': false,
-                    'hour':'2-digit',
-                    'minute':'2-digit',
-                    });  //time
-            }
 
             showModalForm(type, null, resp,
                 function() {hideModal();},

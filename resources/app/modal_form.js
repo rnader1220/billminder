@@ -2,9 +2,9 @@ var modal_form = (function ($, undefined) {
     var mode = 'show';
     var library = {
         input_checkbox: function (attr) {
-            htmlString = "<div class='" + attr.grid_class + "'  id='" + attr.datapoint + "_div' ";
+            htmlString = "<div class='" + attr.grid_class + "' id='" + attr.datapoint + "_div' ";
 
-            if(attr.hasOwnProperty('title')) {
+            if (attr.hasOwnProperty('title')) {
                 htmlString += " title='" + attr.title + "' ";
             }
 
@@ -13,7 +13,7 @@ var modal_form = (function ($, undefined) {
             if (attr.hasOwnProperty('label')) {
                 htmlString += "<label for='" + attr.datapoint + "' class='control-label'>" + attr.label + "</label><br>";
             }
-            htmlString += "<label class='cb3switch' ><input type='checkbox' name='" + attr.datapoint + "' id='is_" + attr.datapoint + "' ";
+            htmlString += "<label class='cb3switch' ><input autocomplete='off' type='checkbox' name='" + attr.datapoint + "' id='is_" + attr.datapoint + "' ";
             if (attr.hasOwnProperty('cbvalue')) {
                 htmlString += " value='" + attr.cbvalue + "' ";
             } else {
@@ -29,7 +29,7 @@ var modal_form = (function ($, undefined) {
                 htmlString += " checked ";
             }
             htmlString += "><span class='cb3slider' for='is_" + attr.datapoint + "'></span></label>";
-            if(attr.hasOwnProperty('title')) {
+            if (attr.hasOwnProperty('title')) {
                 htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
             }
             htmlString += "</div>";
@@ -38,8 +38,8 @@ var modal_form = (function ($, undefined) {
         },
 
         input_date: function (attr) {
-            htmlString = "<div class='" + attr.grid_class + "'  id='" + attr.datapoint + "_div'";
-            if(attr.hasOwnProperty('title')) {
+            htmlString = "<div class='" + attr.grid_class + "' id='" + attr.datapoint + "_div'";
+            if (attr.hasOwnProperty('title')) {
                 htmlString += " title='" + attr.title + "' ";
             }
             htmlString += ">" +
@@ -47,7 +47,7 @@ var modal_form = (function ($, undefined) {
             if (attr.hasOwnProperty('label')) {
                 htmlString += "<label for='" + attr.datapoint + "' class='control-label'>" + attr.label + "</label>";
             }
-            htmlString += "<div class='input-group'><input class='form-control' type='date' " +
+            htmlString += "<div class='input-group'><input autocomplete='off' class='form-control' type='date' " +
                 "id='" + attr.datapoint + "' name='" + attr.datapoint + "' ";
             if (attr.hasOwnProperty('placeholder')) {
                 htmlString += " placeholder='" + attr.placeholder + "'";
@@ -60,7 +60,7 @@ var modal_form = (function ($, undefined) {
                 htmlString += " value='" + attr.value + "' ";
             }
             htmlString += " ></div>";
-            if(attr.hasOwnProperty('title')) {
+            if (attr.hasOwnProperty('title')) {
                 htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
             }
             htmlString += "</div></div>";
@@ -69,8 +69,8 @@ var modal_form = (function ($, undefined) {
 
 
         input_time: function (attr) {
-            htmlString = "<div class='" + attr.grid_class + "'  id='" + attr.datapoint + "_div'";
-            if(attr.hasOwnProperty('title')) {
+            htmlString = "<div class='" + attr.grid_class + "' id='" + attr.datapoint + "_div'";
+            if (attr.hasOwnProperty('title')) {
                 htmlString += " title='" + attr.title + "' ";
             }
             htmlString += ">" +
@@ -78,7 +78,7 @@ var modal_form = (function ($, undefined) {
             if (attr.hasOwnProperty('label')) {
                 htmlString += "<label for='" + attr.datapoint + "' class='control-label'>" + attr.label + "</label>";
             }
-            htmlString += "<div class='input-group'><input class='form-control' type='time' " +
+            htmlString += "<div class='input-group'><input autocomplete='off' class='form-control' type='time' " +
                 "id='" + attr.datapoint + "' name='" + attr.datapoint + "' ";
             if (attr.hasOwnProperty('placeholder')) {
                 htmlString += " placeholder='" + attr.placeholder + "'";
@@ -91,7 +91,7 @@ var modal_form = (function ($, undefined) {
                 htmlString += " value='" + attr.value + "' ";
             }
             htmlString += " ></div>";
-            if(attr.hasOwnProperty('title')) {
+            if (attr.hasOwnProperty('title')) {
                 htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
             }
             htmlString += "</div></div>";
@@ -100,7 +100,7 @@ var modal_form = (function ($, undefined) {
 
 
         input_hidden: function (attr) {
-            htmlString = "<input type='hidden' " +
+            htmlString = "<input autocomplete='off' type='hidden' " +
                 "id='" + attr.datapoint + "' name='" + attr.datapoint + "' ";
             if (attr.hasOwnProperty('value')) {
                 htmlString += " value='" + attr.value + "' ";
@@ -110,8 +110,8 @@ var modal_form = (function ($, undefined) {
         },
 
         input_radio: function (attr) {
-            htmlString = "<div class='" + attr.grid_class + "'  id='" + attr.datapoint + "_div'";
-            if(attr.hasOwnProperty('title')) {
+            htmlString = "<div class='" + attr.grid_class + "' id='" + attr.datapoint + "_div'";
+            if (attr.hasOwnProperty('title')) {
                 htmlString += " title='" + attr.title + "' ";
             }
             htmlString += ">" +
@@ -130,7 +130,7 @@ var modal_form = (function ($, undefined) {
 
             attr.list.forEach(function (element) {
                 htmlString += "<label class='btn btn-radio' for='" + attr.datapoint + "-" + element.value + "' >" +
-                    "<input type='radio' id='" + attr.datapoint + "-" + element.value + "' ";
+                    "<input autocomplete='off' type='radio' id='" + attr.datapoint + "-" + element.value + "' ";
                 if (attr.hasOwnProperty('value') && attr.value == element.value) {
                     htmlString += " checked ";
                 }
@@ -142,7 +142,7 @@ var modal_form = (function ($, undefined) {
                     element.label + "</label>";
             });
             htmlString += "</div>";
-            if(attr.hasOwnProperty('title')) {
+            if (attr.hasOwnProperty('title')) {
                 htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
             }
             htmlString += "</div></div>";
@@ -150,8 +150,8 @@ var modal_form = (function ($, undefined) {
         },
 
         input_text: function (attr) {
-            htmlString = "<div class='" + attr.grid_class + "'  id='" + attr.datapoint + "_div' ";
-            if(attr.hasOwnProperty('title')) {
+            htmlString = "<div class='" + attr.grid_class + "' id='" + attr.datapoint + "_div' ";
+            if (attr.hasOwnProperty('title')) {
                 htmlString += " title='" + attr.title + "' ";
             }
             htmlString += ">" +
@@ -160,7 +160,7 @@ var modal_form = (function ($, undefined) {
                 htmlString += "<label for='" + attr.datapoint + "' class='control-label'>" + attr.label + "</label>";
             }
 
-            htmlString += "<div class='input-group'><input type='text' " +
+            htmlString += "<div class='input-group'><input autocomplete='off' type='text' " +
                 "id='" + attr.datapoint + "' name='" + attr.datapoint + "' ";
 
             if (attr.hasOwnProperty('numeric')) {
@@ -182,7 +182,7 @@ var modal_form = (function ($, undefined) {
             }
 
             htmlString += " ></div>";
-            if(attr.hasOwnProperty('title')) {
+            if (attr.hasOwnProperty('title')) {
                 htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
             }
             htmlString += "</div></div>";
@@ -192,7 +192,7 @@ var modal_form = (function ($, undefined) {
 
         input_url: function (attr) {
             htmlString = "<div class='" + attr.grid_class + "' id='" + attr.datapoint + "_div' ";
-            if(attr.hasOwnProperty('title')) {
+            if (attr.hasOwnProperty('title')) {
                 htmlString += " title='" + attr.title + "' ";
             }
             htmlString += ">" +
@@ -203,11 +203,11 @@ var modal_form = (function ($, undefined) {
 
             htmlString += "<div class='input-group'>";
             if ((attr.hasOwnProperty('disabled') && attr.disabled == true) || mode == 'show') {
-                if(typeof(attr.value) == 'string') {
+                if (typeof (attr.value) == 'string') {
                     htmlString += "<a target='_new' href='" + attr.value + "'>" + attr.value + "</a>";
                 }
             } else {
-                htmlString += "<input type='text' id='" + attr.datapoint + "' name='" + attr.datapoint + "' ";
+                htmlString += "<input autocomplete='off' type='text' id='" + attr.datapoint + "' name='" + attr.datapoint + "' ";
 
                 if (attr.hasOwnProperty('placeholder')) {
                     htmlString += " placeholder='" + attr.placeholder + "'";
@@ -219,7 +219,7 @@ var modal_form = (function ($, undefined) {
                 htmlString += " class='form-control' >";
             }
             htmlString += "</div>";
-            if(attr.hasOwnProperty('title')) {
+            if (attr.hasOwnProperty('title')) {
                 htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
             }
             htmlString += "</div></div>";
@@ -228,8 +228,8 @@ var modal_form = (function ($, undefined) {
 
 
         input_password: function (attr) {
-            htmlString = "<div class='" + attr.grid_class + "'  id='" + attr.datapoint + "_div' ";
-            if(attr.hasOwnProperty('title')) {
+            htmlString = "<div class='" + attr.grid_class + "' id='" + attr.datapoint + "_div' ";
+            if (attr.hasOwnProperty('title')) {
                 htmlString += " title='" + attr.title + "' ";
             }
             htmlString += ">" +
@@ -237,7 +237,7 @@ var modal_form = (function ($, undefined) {
             if (attr.hasOwnProperty('label')) {
                 htmlString += "<label for='" + attr.datapoint + "' class='control-label'>" + attr.label + "</label>";
             }
-            htmlString += "<div class='input-group'><input type='password' " +
+            htmlString += "<div class='input-group'><input autocomplete='off' type='password' " +
                 "id='" + attr.datapoint + "' name='" + attr.datapoint + "' ";
             if (attr.hasOwnProperty('placeholder')) {
                 htmlString += " placeholder='" + attr.placeholder + "'";
@@ -254,7 +254,7 @@ var modal_form = (function ($, undefined) {
                 htmlString += " class='form-control' ";
             }
             htmlString += " ></div>";
-            if(attr.hasOwnProperty('title')) {
+            if (attr.hasOwnProperty('title')) {
                 htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
             }
             htmlString += "</div></div>";
@@ -275,14 +275,14 @@ var modal_form = (function ($, undefined) {
         },
 
         video: function (attr) {
-            return "<video class='" + attr.grid_class + "' controls><source src='" + attr.value + "'  class='media' / ></video>";
+            return "<video class='" + attr.grid_class + "' controls><source src='" + attr.value + "' class='media' / ></video>";
         },
 
 
         select: function (attr) {
             temp = [];
-            htmlString = "<div class='" + attr.grid_class + "'  id='" + attr.datapoint + "_div' ";
-            if(attr.hasOwnProperty('title')) {
+            htmlString = "<div class='" + attr.grid_class + "' id='" + attr.datapoint + "_div' ";
+            if (attr.hasOwnProperty('title')) {
                 htmlString += " title='" + attr.title + "' ";
             }
             htmlString += ">" +
@@ -291,15 +291,15 @@ var modal_form = (function ($, undefined) {
                 htmlString += "<label for='" + attr.datapoint + "' class='control-label'>" + attr.label + "</label>";
             }
 
-            htmlString += "<select data-live-search='true' class='form-control selectpicker'  id='sel_" + attr.datapoint + "' ";
-            if(attr.hasOwnProperty('allow_new')) {
+            htmlString += "<select data-live-search='true' class='form-control selectpicker' id='sel_" + attr.datapoint + "' ";
+            if (attr.hasOwnProperty('allow_new')) {
                 htmlString += " onChange = 'modal_form.check_new(\"" + attr.datapoint + " \");' ";
             }
 
             if (attr.hasOwnProperty('multiple') && attr.multiple == true) {
-                htmlString += "  name='" + attr.datapoint + "[]' multiple='multiple' ";
+                htmlString += " name='" + attr.datapoint + "[]' multiple='multiple' ";
             } else {
-                htmlString += "  name='" + attr.datapoint + "'";
+                htmlString += " name='" + attr.datapoint + "'";
             }
 
             if ((attr.hasOwnProperty('disabled') && attr.disabled == true) || mode == 'show') {
@@ -308,12 +308,12 @@ var modal_form = (function ($, undefined) {
 
             htmlString += ">";
 
-            if(attr.hasOwnProperty('allow_null')) {
+            if (attr.hasOwnProperty('allow_null')) {
                 htmlString += "<option ";
                 if (!attr.hasOwnProperty('value') || attr.value == '-99') {
                     htmlString += "selected ";
                 }
-                if( typeof attr.allow_null == 'boolean' ) {
+                if (typeof attr.allow_null == 'boolean') {
                     htmlString += "value = '-99'>- not selected -</option>\n";
                 } else {
                     htmlString += "value = '-99'>" + attr.allow_null + "</option>\n";
@@ -332,25 +332,25 @@ var modal_form = (function ($, undefined) {
                 htmlString += element.label;
                 htmlString += "</option>\n";
             });
-            if(attr.hasOwnProperty('allow_new')) {
-                htmlString += "<option value = '_new'>New "+ attr.label + "</option>\n";
+            if (attr.hasOwnProperty('allow_new')) {
+                htmlString += "<option value = '_new'>New " + attr.label + "</option>\n";
             }
 
             htmlString += "</select>";
 
-            if(attr.hasOwnProperty('allow_new')) {
-                htmlString += "<input class='form-control app-hidden' type='text' " +
-                "id='new_" + attr.datapoint + "' name='new_" + attr.datapoint + "' >";
+            if (attr.hasOwnProperty('allow_new')) {
+                htmlString += "<input autocomplete='off' class='form-control app-hidden' type='text' " +
+                    "id='new_" + attr.datapoint + "' name='new_" + attr.datapoint + "' >";
             }
 
             attr.list.forEach(function (element) {
                 if (attr.hasOwnProperty('value') && attr.value == element.value) {
-                    if(element.hasOwnProperty('website') && element.website != '' && typeof(element.website) == 'string') {
-                        htmlString += "<a target='_new' href='"+element.website+"'>"+element.label+"</a>";
+                    if (element.hasOwnProperty('website') && element.website != '' && typeof (element.website) == 'string') {
+                        htmlString += "<a target='_new' href='" + element.website + "'>" + element.label + "</a>";
                     }
                 }
             });
-            if(attr.hasOwnProperty('title')) {
+            if (attr.hasOwnProperty('title')) {
                 htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
             }
             htmlString += "</div></div>";
@@ -360,8 +360,8 @@ var modal_form = (function ($, undefined) {
         },
 
         textarea: function (attr) {
-            htmlString = "<div class='" + attr.grid_class + "'  id='" + attr.datapoint + "_div' ";
-            if(attr.hasOwnProperty('title')) {
+            htmlString = "<div class='" + attr.grid_class + "' id='" + attr.datapoint + "_div' ";
+            if (attr.hasOwnProperty('title')) {
                 htmlString += " title='" + attr.title + "' ";
             }
             htmlString += ">" +
@@ -385,7 +385,7 @@ var modal_form = (function ($, undefined) {
                 htmlString += attr.value;
             }
             htmlString += "</textarea>";
-            if(attr.hasOwnProperty('title')) {
+            if (attr.hasOwnProperty('title')) {
                 htmlString += "<div class='help-text app-hidden' >" + attr.title + "</div>";
             }
             htmlString += "</div></div>";
@@ -411,10 +411,10 @@ var modal_form = (function ($, undefined) {
         button_control: function (attr) {
             htmlString = "<button title='" + attr.title + " ' type='button' " +
                 "class='btn " + attr.class + " btn-control app-hidden' id='" + attr.id + "' ";
-                if(attr.hasOwnProperty('title')) {
-                    htmlString += " title='" + attr.title + "' ";
-                }
-                htmlString += ">";
+            if (attr.hasOwnProperty('title')) {
+                htmlString += " title='" + attr.title + "' ";
+            }
+            htmlString += ">";
             if (attr.hasOwnProperty('icon')) {
                 htmlString += "<span class='" + attr.icon + "'></span>";
             }
@@ -427,7 +427,7 @@ var modal_form = (function ($, undefined) {
 
         button_action: function (attr) {
             htmlString = "<button title='" + attr.title + "' type='button' ";
-            if(attr.hasOwnProperty('title')) {
+            if (attr.hasOwnProperty('title')) {
                 htmlString += " title='" + attr.title + "' ";
             }
             htmlString += "";
@@ -499,7 +499,7 @@ var modal_form = (function ($, undefined) {
         return htmlString;
     };
 
-    var form_element = function(element) {
+    var form_element = function (element) {
         return library[element.type](element.parameters);
     };
 
@@ -519,12 +519,12 @@ var modal_form = (function ($, undefined) {
             htmlString += "<div class='row'>";
             row.forEach(function (element, content) {
                 // untested: watch for action working properly
-                if(content.mode == 'create') {
-                    if(typeof(element.parameters.create != 'undefined') && element.parameters.create === false ) {
+                if (content.mode == 'create') {
+                    if (typeof (element.parameters.create != 'undefined') && element.parameters.create === false) {
                         element.parameters.disabled = true;
                     }
-                } else if(content.mode == 'edit') {
-                    if(typeof(element.parameters.edit != 'undefined') && element.parameters.edit === false ) {
+                } else if (content.mode == 'edit') {
+                    if (typeof (element.parameters.edit != 'undefined') && element.parameters.edit === false) {
                         element.parameters.disabled = true;
                     }
                 }
@@ -538,11 +538,11 @@ var modal_form = (function ($, undefined) {
         return htmlString;
     };
 
-    var check_new = function(datapoint) {
-        if($('#sel_'+datapoint).val() == '_new') {
-            $('#new_'+datapoint).show();
+    var check_new = function (datapoint) {
+        if ($('#sel_' + datapoint).val() == '_new') {
+            $('#new_' + datapoint).show();
         } else {
-            $('#new_'+datapoint).hide();
+            $('#new_' + datapoint).hide();
         }
     };
 

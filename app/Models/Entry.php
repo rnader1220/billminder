@@ -407,9 +407,10 @@ class Entry extends BaseModel
         parent::boot();
 
         self::creating(function($model){
-            // ... code here
+            if(!isset($this->user_id)) {
+                $this->user_id = Auth::user()->id;
+            }
         });
-
         self::created(function($model){
             $details = [
                 'title' => 'BillMinder New Entry',
@@ -438,7 +439,4 @@ class Entry extends BaseModel
             Mail::to('billminder@dyn-it.com')->send(new AdminNotice($details));
         });
     }
-
-
-
 }

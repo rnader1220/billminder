@@ -52,4 +52,35 @@ class CategoryController extends Controller
         $response = $record->destroyRecord();
         return $response;
      }
+
+     public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function($model){
+            if(!isset($this->user_id)) {
+                $this->user_id = Auth::user()->id;
+            }
+        });
+
+        self::created(function($model){
+            // ... code here
+        });
+
+        self::updating(function($model){
+            // ... code here
+        });
+
+        self::updated(function($model){
+            // ... code here
+        });
+
+        self::deleting(function($model){
+            // ... code here
+        });
+
+        self::deleted(function($model){
+            // ... code here
+        });
+    }
 }

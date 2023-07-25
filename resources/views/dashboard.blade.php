@@ -42,46 +42,12 @@
             <div class='row'>
                 <div class='col-lg-8 col-12'>
                     <div class="container-fluid mb-2 app-hidden" id='entry-div'></div>
-                    <div class="container-fluid mb-2 app-hidden" id='hours-div'></div>
-                    <div class="container-fluid mb-2 app-hidden" id='miles-div'></div>
                     <div class="container-fluid mb-2 app-hidden" id='welcome-div'>
                         @include('help.welcome')
                     </div>
                 </div>
 
                  <div class='col-lg-4 col-12'>
-                    <div class='container-fluid mb-2'>
-                        <div class='row'>
-                            <div class="col-12 offset-xl-2 col-xl-8">
-                                <div class='btn-group w-100'>
-                                    <div class='btn-app-primary centered clickable'
-                                        style='width:80%; padding-right:0; margin-right:0'
-                                        onclick="dashboard.list('hours');" data-open='false'><i
-                                            class='fa-regular fa-business-time'></i>&nbsp;&nbsp;Time</div>
-                                    <div class='btn-app-primary centered clickable'
-                                        style='width:20%; padding-left:0; margin-left:0'
-                                        onclick="dashboard.add('hours');"><i class='fa-regular fa-plus-large'></i></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class='container-fluid mb-2'>
-                        <div class='row'>
-                            <div class="col-12 offset-xl-2 col-xl-8">
-                                <div class='btn-group w-100'>
-                                    <div class='btn-app-primary centered clickable'
-                                        style='width:80%; padding-right:0; margin-right:0'
-                                        onclick="dashboard.list('miles');" data-open='false'><i
-                                            class='fa-regular fa-car-building'></i>&nbsp;&nbsp;Travel</div>
-                                    <div class='btn-app-primary centered clickable'
-                                        style='width:20%; padding-left:0; margin-left:0'
-                                        onclick="dashboard.add('miles');"><i class='fa-regular fa-plus-large'></i></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class='container-fluid mb-2'>
                         <div class='row'>
                             <div class="col-12 offset-xl-2 col-xl-8">

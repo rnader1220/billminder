@@ -46,15 +46,10 @@ trait TableMaint
         $action = (isset($this->id)?'Updated':'Stored');
 
         $data = $request->all();
-        if(!isset($data['user_id'])) {
-            $data['user_id'] = Auth::user()->id;
-        }
         unset($data['_token']);
         $this->CustomUpdate($data);
-
         $this->fill($data);
-
-        //dd($this);
+        $this->user_id = Auth::user()->id;
 
         try {
             $this->save();

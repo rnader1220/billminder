@@ -439,6 +439,4 @@ class Entry extends BaseModel
         });
     }
 
-
-
 }

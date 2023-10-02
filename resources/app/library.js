@@ -75,9 +75,6 @@ var library = (function ($, undefined) {
         switch(type) {
             case('entry'):
                 return drawEntry(el);
-            case('hours'):
-            case('miles'):
-                return drawAuxiliary(type, el);
             default:
                 return drawSecondary(type, el);
         }

@@ -120,11 +120,14 @@ class User extends Authenticatable
         });
 
         self::created(function($model){
-            $details = [
-                'title' => 'BillMinder New User',
-                'body' => "A new user({$model->id}) has been created:\n{$model->name}\n{$model->email}"
-            ];
-            Mail::to('billminder@dyn-it.com')->send(new AdminNotice($details));
+            if(Mail::fake()) {
+                $details = [
+                    'title' => 'BillMinder New User',
+                    'body' => "A new user({$model->id}) has been created:\n{$model->name}\n{$model->email}"
+                ];
+                Mail::to('billminder@dyn-it.com')->send(new AdminNotice($details));
+            }
+    
         });
 
         self::updating(function($model){
@@ -140,11 +143,13 @@ class User extends Authenticatable
         });
 
         self::deleted(function($model){
-            $details = [
-                'title' => 'BillMinder Deleted User',
-                'body' => "A user({$model->id}) has been deleted:\n{$model->name}\n{$model->email}"
-            ];
-            Mail::to('billminder@dyn-it.com')->send(new AdminNotice($details));
+            if(Mail::fake()) {
+                $details = [
+                    'title' => 'BillMinder Deleted User',
+                    'body' => "A user({$model->id}) has been deleted:\n{$model->name}\n{$model->email}"
+                ];
+                Mail::to('billminder@dyn-it.com')->send(new AdminNotice($details));
+            }
         });
     }
 

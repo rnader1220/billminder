@@ -49,9 +49,11 @@ trait TableMaint
         unset($data['_token']);
         $this->CustomUpdate($data);
         $this->fill($data);
-        $this->user_id = Auth::user()->id;
 
         try {
+            if(!isset($this->user_id)) {
+                $this->user_id = Auth::user()->id;
+            }
             $this->save();
         } catch (\Exception $e) {
             $success = false;

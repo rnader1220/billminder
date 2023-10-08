@@ -29,7 +29,7 @@ class Category extends BaseModel
     ];
 
 
-    public function getList(string $q = '') {
+    public static function getList(string $q = '') {
         $resultc = [];
         $result = Category::where('user_id', Auth::user()->id)
         ->whereNull('deleted_at')

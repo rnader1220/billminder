@@ -174,6 +174,7 @@ class Entry extends BaseModel
         if($data['category_id'] == '_new') {
             $new_category = new Category();
             $new_category->label = $data['new_category_id'];
+            $new_category->user_id = Auth::user()->id;
             $new_category->save();
             $data['category_id'] = $new_category->id;
         }
@@ -184,6 +185,7 @@ class Entry extends BaseModel
             $new_account->account = 1;
             $new_account->payee = 0;
             $new_account->payor = 0;
+            $new_account->user_id = Auth::user()->id;
             $new_account->save();
             $data['account_id'] = $new_account->id;
         }
@@ -194,6 +196,7 @@ class Entry extends BaseModel
             $new_party->account = 0;
             $new_party->payee = ($data['income']==1?0:1);
             $new_party->payor = ($data['income']==1?1:0);
+            $new_party->user_id = Auth::user()->id;
             $new_party->save();
 
             $data['party_id'] = $new_party->id;

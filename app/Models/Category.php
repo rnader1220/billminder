@@ -103,7 +103,6 @@ class Category extends BaseModel
         parent::boot();
 
         self::creating(function($model){
-            dd('HERE');
             if(!isset($this->user_id)) {
                 $this->user_id = Auth::user()->id;
             }

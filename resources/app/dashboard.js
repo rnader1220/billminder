@@ -372,7 +372,7 @@ var dashboard = (function ($, undefined) {
             value: $("meta[name='csrf-token']").attr("content")
         }];
 
-        if (confirm()) $.ajax({
+        if (confirm('Are You Sure?')) $.ajax({
             type: "patch",
             url: '/' + type + '/' + id + '/cycle',
             data: $.param(data),
@@ -395,7 +395,7 @@ var dashboard = (function ($, undefined) {
             value: $("meta[name='csrf-token']").attr("content")
         }];
 
-        if (confirm()) $.ajax({
+        if (confirm('Are You Sure?')) $.ajax({
             type: "DELETE",
             url: '/' + type + '/' + id,
             data: $.param(data),

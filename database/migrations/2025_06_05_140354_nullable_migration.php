@@ -9,11 +9,19 @@ class NullableMigration extends Migration
     public function up(): void
     {
         Schema::table('accounts', function (Blueprint $table) {
-            $table->string('description')->default('')->nullable(false)->change();
+            $table->dropColumn('description');
         });
-        
+    
         Schema::table('entries', function (Blueprint $table) {
-            $table->string('description')->default('')->nullable(false)->change();
+            $table->dropColumn('description');
+        });
+
+        Schema::table('accounts', function (Blueprint $table) {
+            $table->string('description')->default('')->nullable(false);
+        });
+
+        Schema::table('entries', function (Blueprint $table) {
+            $table->string('description')->default('')->nullable(false);
         });
 
     }
@@ -21,11 +29,19 @@ class NullableMigration extends Migration
     public function down(): void
     {
         Schema::table('accounts', function (Blueprint $table) {
-            $table->string('description')->nullable()->default(null)->change();
+            $table->dropColumn('description');
         });
 
         Schema::table('entries', function (Blueprint $table) {
-            $table->string('description')->nullable()->default(null)->change();
+            $table->dropColumn('description');
+        });
+
+        Schema::table('accounts', function (Blueprint $table) {
+            $table->string('description')->nullable()->default(null);
+        });
+
+        Schema::table('entries', function (Blueprint $table) {
+            $table->string('description')->nullable()->default(null);
         });
 
     }

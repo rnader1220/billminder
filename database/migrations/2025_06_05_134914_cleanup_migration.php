@@ -16,10 +16,10 @@ class CleanupMigration extends Migration
             if (Schema::hasColumn('accounts', 'routing_number')) {
                 $table->dropColumn('routing_number');
             }
-            if (Schema::hasColumn('accounts', 'site_username')) {
+            if (Schema::hasColumn('accounts', 'username')) {
                 $table->dropColumn('username');
             }
-            if (Schema::hasColumn('accounts', 'site_password')) {
+            if (Schema::hasColumn('accounts', 'password')) {
                 $table->dropColumn('password');
             }
         });

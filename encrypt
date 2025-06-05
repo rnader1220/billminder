@@ -1,6 +1,4 @@
 php artisan encryptable:encryptModel 'App\Models\Account';
 php artisan encryptable:encryptModel 'App\Models\Category';
 php artisan encryptable:encryptModel 'App\Models\Entry';
-php artisan encryptable:encryptModel 'App\Models\Hour';
-php artisan encryptable:encryptModel 'App\Models\Mile';
 php artisan encryptable:encryptModel 'App\Models\Register';

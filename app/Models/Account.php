@@ -89,18 +89,8 @@ class Account extends BaseModel
     protected $encryptable = [
         'name',
         'description',
-        'account_number',
-        'routing_number',
         'website',
-        'username',
-        'password'
     ];
-
-    protected $hidden = [
-        'username',
-        'password',
-    ];
-
 
     protected $actions = [
 
@@ -186,26 +176,6 @@ class Account extends BaseModel
                 ]
             ],
             [
-                'type' => 'input_text',
-                'parameters' =>
-                [
-                    'label' => "Account Number",
-                    'title' => "The number the bank, credit card, etc, used to identify this account. (Encrypted)",
-                    'datapoint' => 'account_number',
-                    'grid_class' => 'col-md-6'
-                ]
-            ],
-            [
-                'type' => 'input_text',
-                'parameters' =>
-                [
-                    'label' => "Routing Number",
-                    'title' => "The number that identifies the bank: found on a check. (Encrypted)",
-                    'datapoint' => 'routing_number',
-                    'grid_class' => 'col-md-6'
-                ]
-            ],
-            [
                 'type' => 'input_url',
                 'parameters' =>
                 [
@@ -213,26 +183,6 @@ class Account extends BaseModel
                     'title' => "the website for this account, where you can log in to pay, check balances, etc.  A link will appear on the Expense dialog when this is populated. (Encrypted)",
                     'datapoint' => 'website',
                     'grid_class' => 'col-md-12'
-                ]
-            ],
-            [
-                'type' => 'input_text',
-                'parameters' =>
-                [
-                    'label' => "Website User",
-                    'title' => "This is here for informational purposes, and are safely encrypted. (Encrypted)",
-                    'datapoint' => 'username',
-                    'grid_class' => 'col-md-6'
-                ]
-            ],
-            [
-                'type' => 'input_text',
-                'parameters' =>
-                [
-                    'label' => "Website Password",
-                    'title' => "This is here for informational purposes, and are safely encrypted. (Encrypted)",
-                    'datapoint' => 'password',
-                    'grid_class' => 'col-md-6'
                 ]
             ],
             [

@@ -45,6 +45,15 @@ class Entry extends BaseModel
         'party_id',
     ];
 
+    protected $frequency = [
+        ['value' => -1, 'label' => 'weekly'],
+        ['value' => -2, 'label' => 'biweekly'],
+        ['value' => -3, 'label' => 'monthly'],
+        ['value' => -4, 'label' => 'quarterly'],
+        ['value' => -5, 'label' => 'annual'],
+        ['value' => -99, 'label' => 'manual'],
+    ];
+
     public static function getList(string $q = '') {
         $result = Entry::select(
             'entries.id',

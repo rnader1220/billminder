@@ -1,6 +1,4 @@
 php artisan encryptable:decryptModel 'App\Models\Account';
 php artisan encryptable:decryptModel 'App\Models\Category';
 php artisan encryptable:decryptModel 'App\Models\Entry';
-php artisan encryptable:decryptModel 'App\Models\Hour';
-php artisan encryptable:decryptModel 'App\Models\Mile';
 php artisan encryptable:decryptModel 'App\Models\Register';

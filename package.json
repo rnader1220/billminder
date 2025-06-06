@@ -20,8 +20,6 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-svg-core": "^6.7.2",
-        "@fortawesome/pro-solid-svg-icons": "^6.7.2",
-        "bootstrap": "^5.3.6",
-        "jquery": "^3.7.1"
+        "@fortawesome/pro-solid-svg-icons": "^6.7.2"
     }
 }

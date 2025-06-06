@@ -18,7 +18,8 @@ public function run()
     {
 		$created_at = Carbon::now();
         $user_id = DB::table('users')->insert([
-            'name' => 'administrator',
+
+            'name' => encrypt('administrator'), 
 			'password' => Hash::make('administrator'),
             'email' => 'admin@dyn-it.com',
             'created_at' => $created_at,

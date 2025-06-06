@@ -1,4 +1,0 @@
-php artisan encryptable:decryptModel 'App\Models\Account';
-php artisan encryptable:decryptModel 'App\Models\Category';
-php artisan encryptable:decryptModel 'App\Models\Entry';
-php artisan encryptable:decryptModel 'App\Models\Register';

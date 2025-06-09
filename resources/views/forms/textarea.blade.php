@@ -15,6 +15,6 @@
         class="form-element"
     >{{ old($name, $value) }}</textarea>
     @if($helptext != '') 
-    <p x-show="showHelp" class="helptext">{{ $helptext }}</p>
+    <p x-show="showHelp" class="form-help">{{ $helptext }}</p>
     @endif    
 </div>

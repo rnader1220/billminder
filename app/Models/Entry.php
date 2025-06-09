@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+
 
 class Entry extends Model
 {
@@ -43,6 +45,19 @@ class Entry extends Model
         'next_due_date' => 'datetime',
     ];
     
+    public function getStatusAttribute() {
+        if($this->income) {
+            return 'income';
+        } else if ($this->next_due_date <= Carbon::today()) {
+            return 'late';
+        } else if($this->next_due_date < Auth::user()->next_pay_date()) {
+            return 'due';
+        } else {
+            return 'expense';
+        }
+    }
+
+
     public function category() {
         return $this
             ->belongsTo(Category::class, 'category_id');

@@ -14,10 +14,11 @@
         value="{{ old($name, $value) }}"
         @if($disabled) disabled @endif
         @if($required) required @endif
-
-        class="form-element text-right"            
+        class="form-element"            
     >
     @if($helptext != '') 
-    <p x-show="showHelp" class="helptext">{{ $helptext }}</p>
+    <p x-show="showHelp" class="form-help">{{ $helptext }}</p>
     @endif    
 </div>
+
+<!-- class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm  text-right" -->

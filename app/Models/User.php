@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -50,6 +51,7 @@ class User extends Authenticatable
      */
     protected $appends = [
         'profile_photo_url',
+        'next_pay_date'
     ];
 
     /**
@@ -66,8 +68,25 @@ class User extends Authenticatable
         ];
     }
 
+    ## UNTESTED ##
+    public function getNextPayDateAttribute() {
+        $next_pay_date = Carbon::today();
+        $next_income = $this->entries->where('income', 1)->first();
+        if($next_income && $next_income->next_due_date) {
+            $next_pay_date = $next_income->next_due_date;
+        }
+        return $next_pay_date;
+
+    }
+
+
 # relationships
-    public function entries() {
+public function categories() {
+            return $this
+            ->hasMany(Category::class);
+}
+
+public function entries() {
         return $this
             ->hasMany(Entry::class);
     }

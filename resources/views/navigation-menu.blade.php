@@ -12,10 +12,19 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                    <x-nav-link id='mainmenu_entries'>
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    <x-nav-link id='mainmenu_categories'>
+                        {{ __('Categories') }}
+                    </x-nav-link>
+
+                    <x-nav-link id='mainmenu_accounts'>
+                        {{ __('Accounts') }}
+                    </x-nav-link>                    
                 </div>
+
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">

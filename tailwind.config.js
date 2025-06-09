@@ -10,7 +10,20 @@ export default {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
     ],
+    safelist: [
+        'grid',
+        'grid-cols-2',
+        'col-span-2',
+        'gap-4',
+        'text-center',
+        'p-4',
+        'bg-green-100',
+        'bg-blue-100',
+        {pattern: /^form-/,},
 
+    // other safelisted dynamic classes
+
+    ],
     theme: {
         extend: {
             fontFamily: {

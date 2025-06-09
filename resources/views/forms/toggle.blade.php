@@ -26,7 +26,7 @@
     </label>
 
     @if($helptext)
-        <p x-show="showHelp" class="helptext">{{ $helptext }}</p>
+        <p x-show="showHelp" class="form-help">{{ $helptext }}</p>
     @endif
 </div>
 

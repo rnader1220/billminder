@@ -1,5 +1,5 @@
 {{-- resources/views/forms/hidden.blade.php --}}
-@props(['name', 'value' => '')
+@props(['name', 'value' => ''])
 
     <input
         type="hidden"

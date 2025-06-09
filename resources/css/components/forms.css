@@ -1,9 +1,9 @@
 .form-element {
-  @apply block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm;
+  @apply block w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm;
 }
 
 .form-element[disabled] {
-  @apply bg-gray-100 cursor-not-allowed text-gray-500;
+  @apply bg-gray-100 cursor-not-allowed text-gray-500 border-gray-300 rounded;
 }
 .form-element-error {
   @apply border-red-500 focus:border-red-600 focus:ring-red-500;
@@ -11,6 +11,10 @@
 
 .form-check {
   @apply h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500;
+}
+
+.form-check[disabled] {
+  @apply bg-gray-100 cursor-not-allowed text-gray-500;
 }
 
 .form-label {
@@ -21,6 +25,10 @@
   @apply ml-2 block text-sm text-gray-700;
 }
 
-.helptext {
+.form-help {
   @apply text-sm text-gray-500 mt-1;
+}
+
+.form-title {
+  @apply text-lg font-semibold text-gray-700;
 }

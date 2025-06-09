@@ -1,13 +1,3 @@
-<div class="container mx-auto px-4">
-    <div class="flex justify-end mb-4" id="btn-group-head">
-        <button type="button" id="control-edit" class="btn btn-warning mr-2" disabled><i
-                class='fa-solid fa-edit mr-1'></i>Change {{ $item->income ? 'Income' : 'Expense' }}</button>
-
-        <button type="button" id="control-return" class="btn btn-danger mr-2" disabled><i
-                class='fa-solid fa-trash mr-1'></i>Delete {{ $item->income ? 'Income' : 'Expense' }}</button>
-    </div>
-</div>
-
 <form id="entry_form" class="form" data-mode="{{ $mode }}" accept-charset="UTF-8"   autocomplete="off">
     <div class="container mx-auto px-4">
         @include('forms.hidden', [
@@ -67,7 +57,7 @@
                 @include('forms.select', [
                 'label' => 'Frequency',
                 'name' => 'cycle',
-                'options' => $frequency_list,
+                'options' => $item->frequency_list,
                 'title' => 'What is the billing cycle for this (monthly, annual, etc)?',
                 'value' => $item->cycle,
                 'disabled' => true,
@@ -150,7 +140,7 @@
                 @include('forms.select_new', [
                 'label' => 'Category',
                 'name' => 'name',
-                'options' => $category_list,
+                'options' => $categories,
                 'title' => 'This field is what will display on the list. Select from your ' .
                 'category list, to organize your bills and income for reporting purposes. See the Categories tab' .
                 'for more details.',
@@ -167,7 +157,7 @@
                 @include('forms.select_new', [
                 'label' => $item->income ? 'To Account': 'From Account',
                 'name' => 'account_id',
-                'options' => $account_list,
+                'options' => $accounts,
                 'title' => 'This can point to your internal account (bank, etc). If set, and
                 the account has a link, it will appear here. See the Accounts tab for more details.',
                 'value' => $item->account_id,
@@ -185,7 +175,7 @@
                 @include('forms.select_new', [
                 'label' => $item->income ? 'Collect From': 'Pay To',
                 'name' => 'party_id',
-                'options' => $party_list,
+                'options' => $parties,
                 'title' => 'This can point to your internal account (bank, etc). If set, and
                 the account has a link, it will appear here. See the Accounts tab for more details.',
                 'value' => $item->party_id,
@@ -204,23 +194,8 @@
 </form>
 
 </div>
-<div class="container mx-auto px-4">
-    @include($item->income ? 'help.income': 'help.expense')
-</div>
-<div class="container mx-auto px-4">
-    <div class="flex justify-end mb-4" id="btn-group-foot">
-        <button type="button" id="control-help" class="btn btn-secondary mr-2" disabled><i
-                class='fa-solid fa-person-drowning mr-1'></i>Help</button>
-
-        <button type="button" id="control-save-edit" class="btn btn-success mr-2" disabled><i
-                class='fa-solid fa-floppy-disk-pen mr-1'></i>Save
-            {{ $item->income ? 'Income' : 'Expense' }}</button>
-
-        <button type="button" id="control-cancel-edit" class="btn btn-secondary mr-2" disabled><i
-                class='fa-solid fa-backward mr-1'></i>&nbsp;Cancel
-            {{ $item->income ? 'Income' : 'Expense' }}</button>
-
-        <button type="button" id="control-close" class="btn btn-secondary mr-2" disabled><i
-                class='fa-solid fa-xmark mr-1'></i>Close</button>
+<div class="container mx-auto px-4 ">
+    <div x-show='showHelp' class='form-help'>
+        @include($item->income ? 'help.income': 'help.expense')
     </div>
 </div>

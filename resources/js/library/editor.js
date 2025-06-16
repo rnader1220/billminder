@@ -17,13 +17,17 @@ import 'tinymce/skins/content/default/content.css';
 window.editor = (function () {
     const default_options = {
             selector: 'textarea.tinymce',
-            height: 600,
+            height: 120,
             menubar: false,
-            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-            skin_url: '/vendor/tinymce/skins/ui/oxide',
-            content_css: '/vendor/tinymce/skins/content/default/content.css'
-        }
+            plugins: 'lists link paste',
+            toolbar: 'undo redo | bold italic underline | bullist numlist | link',
+            branding: false,
+            statusbar: false,
+            paste_as_text: true, 
+            license_key: 'gpl',
+            content_css: '/css/app.css',
+            cache_suffix: '?v=' + new Date().getTime()
+                }
 
     // include alternate selector in options if needed
     function init(options = {}) {

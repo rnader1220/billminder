@@ -3,19 +3,13 @@
 
 <div class="mb-4">
     <div class="flex items-center">
-        <input
-            type="checkbox"
-            name="{{ $name }}"
-            id="{{ $name }}"
-        class="form-check"    
-            @if(old($name, $checked)) checked @endif
-            @if($disabled) disabled @endif
-        >
+        <input type="checkbox" name="{{ $name }}" id="{{ $name }}" class="form-check" @if(old($name, $checked)) checked
+            @endif @if($disabled) disabled @endif>
         <label for="{{ $name }}" class="form-check-label">
             {{ $label }}
         </label>
     </div>
     @if($helptext)
-        <p x-show="showHelp" class="form-help">{{ $helptext }}</p>
+    <p class="form-help hidden">{{ $helptext }}</p>
     @endif
 </div>

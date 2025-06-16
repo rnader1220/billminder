@@ -6,6 +6,7 @@ import {init as initEntries} from './entries'
 import {init as initCategories} from './categories'
 import {init as initAccounts} from './accounts'
 import './library/editor.js';
+import './library/formModal.js';
 
 // Add the icons you want
 library.add(fas)

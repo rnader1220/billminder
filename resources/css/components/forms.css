@@ -1,10 +1,15 @@
+
+/* Tailwind preflight fix — ensures form elements retain consistent styling */
+input.form-element,
 .form-element {
-  @apply block w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm;
+  @apply block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm;
 }
 
+input.form-element[disabled],
 .form-element[disabled] {
-  @apply bg-gray-100 cursor-not-allowed text-gray-500 border-gray-300 rounded;
+  @apply bg-gray-100 cursor-not-allowed text-gray-500 border-gray-300 rounded-lg;
 }
+
 .form-element-error {
   @apply border-red-500 focus:border-red-600 focus:ring-red-500;
 }

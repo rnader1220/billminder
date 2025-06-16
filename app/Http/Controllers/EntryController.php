@@ -8,14 +8,14 @@ use App\Models\Register;
 use App\Models\Category;
 use App\Models\Account;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class EntryController extends Controller
 {
-    ## UNTESTED ##
     public function index(Request $request)
     {
-        $slug_list = [];
         try { 
+            $slug_list = [];
             $slug_list[] = view('slugs.entry_buttons')->render();
             $list = Auth::user()->entries()->orderBy('next_due_date')->get();
             foreach($list as $item) {
@@ -27,39 +27,45 @@ class EntryController extends Controller
         }
     }
 
-    ## UNTESTED ##
     public function create(Request $request)
     {
+        try { 
             $entry = new Entry([
                 'user_id' => Auth::user()->id,
                 'income' => $request->income,
             ]);
             $form = $this->buildView( $entry, 'create');
-        try { 
-             return response()->json(['form' => $form]);  
-       } catch (\Exception $e) {
+
+            return response()->json(['form' => $form]);  
+        } catch (\Exception $e) {
             return response()->json(['errors' => $e->getMessage()], 500);                 
         }
 
 
     }
 
-    ## UNTESTED ##
     public function show(string $id)
     {
-        $item = Entry::find($id);
-        return $this->buildView(Entry::find($id), 'show');
+        try { 
+            $form = $this->buildView(Entry::find($id), 'show');
+            return response()->json(['form' => $form]);  
+        } catch (\Exception $e) {
+            return response()->json(['errors' => $e->getMessage()], 500);                 
+        }
     }
 
-    ## UNTESTED ##
     public function edit(string $id)
     {
-        return $this->buildView(Entry::find($id), 'edit');
+        try { 
+            $form = $this->buildView(Entry::find($id), 'edit');
+           return response()->json(['form' => $form]);  
+        } catch (\Exception $e) {
+            return response()->json(['errors' => $e->getMessage()], 500);                 
+        }
     }
 
-    ## UNTESTED ##
-    private function buildView($item, $mode) {
-
+    private function buildView($item, $mode) 
+    {
         $categories = $item->income ? 
             Auth::user()->incomeCats()->orderBy('label')->get() :
             Auth::user()->expenseCats()->orderBy('label')->get();
@@ -68,32 +74,44 @@ class EntryController extends Controller
         $parties = $item->income ? 
             Auth::user()->payors()->orderBy('name')->get():
             Auth::user()->payees()->orderBy('name')->get();
+    
         return view('features.entry', compact('mode', 'item', 'categories', 'accounts', 'parties'))->render();
     }
 
-    ## UNTESTED ##
    public function update(Request $request, $id)
     {
-        $record = Entry::find($id);
-        return $this->saveRecord($request, $record);
+        try { 
+            $record = Entry::find($id);
+            $this->saveRecord($request, $record);
+            return response()->json(['id' => $record->id]);
+        } catch (\Exception $e) {
+            return response()->json(['errors' => $e->getMessage()], 500);                 
+        }
+
     }
 
-    ## UNTESTED ##
     public function store(Request $request)
     {
-        $record = new Entry();
-        return $this->saveRecord($request, $record);
+        try { 
+            $record = new Entry();       
+            $this->saveRecord($request, $record);
+            return response()->json(['id' => $record->id]);
+        } catch (\Exception $e) {
+            return response()->json(['errors' => $e->getMessage()], 500);                 
+        }
+
     }
 
-    ## UNTESTED ##
     public function destroy($id)
     {
-        $record = Entry::find($id);
-        $response = $record->destroyRecord();
-        return $response;
+        try { 
+            Entry::destroy($id);
+            return response()->json(['deleted' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['errors' => $e->getMessage()], 500);                 
+        }
     }
 
-    ## UNTESTED ##
     public function saveRecord(Request $request, $entry) {
         $success = true;
         $detail = '';
@@ -104,39 +122,43 @@ class EntryController extends Controller
         $data['estimated_amount'] = isset($data['estimated_amount'])?1:0;
         $data['fixed_amount'] = isset($data['fixed_amount'])?1:0;
         $data['estimated_date'] = isset($data['estimated_date'])?1:0;
-        $data['income'] = $data['income']?1:0;  ## ???
-        $data['amount'] = $data['amount'] === null ? 0:$data['amount'];
+        $data['income'] = $data['income']=='true'?1:0;  ## ???
+        $data['amount'] = $data['amount'] === null ? 0:$data['amount'];     
 
-        if($data['category_id'] == '_new') {
-            $data['category_id'] = $this->createCategory($data['new_category_id']);
-        }
-
-        if($data['account_id'] == '_new') {
-            $data['account_id'] = $this->createAccount($data['new_account_id'], true, $data['income']);
-        }
-
-        if($data['party_id'] == '_new') {
-            $data['party_id'] = $this->createAccount($data['new_party_id'], false, $data['income']);
-        }
+        DB::beginTransaction();
 
         try {
-            // start transaction
-        $entry->fill($data);
+
+            if($data['category_id'] == '_new') {
+                $data['category_id'] = $this->createCategory($data['new_category_id']);
+            }
+
+            if($data['account_id'] == '_new') {
+                $data['account_id'] = $this->createAccount($data['new_account_id'], true, $data['income']);
+            }
+
+            if($data['party_id'] == '_new') {
+                $data['party_id'] = $this->createAccount($data['new_party_id'], false, $data['income']);
+            }
+
+            $entry->fill($data);
 
             if(!isset($entry->user_id)) {
                 $entry->user_id = Auth::user()->id;
             }
             $entry->save();
-            // commit transaction
-            
+
+            DB::commit();
+
             $id = $entry->id;
-            
             return compact('success', 'id');
 
         } catch (\Exception $e) {
             $success = false;
             $message = $e->getMessage();
-            // rollback transaction
+
+            DB::rollback();
+
             return compact('success', 'message');
         }
     }
@@ -150,6 +172,7 @@ class EntryController extends Controller
         return $new_category->id;
     }
 
+    ## UNTESTED ##    
     private function createAccount($name, $is_account, $is_income) {
         if($is_account) 
             $new_account = Account::create([
@@ -167,35 +190,15 @@ class EntryController extends Controller
     ## OLD CODE ##
     ## ######## ##
 
+    public function getCycle($id) {
+        $register = new Register();
+        $register->entry_id = $id;
+        return $register->getCycle();
+    } 
 
-    public function action(Request $request, $id)
-    {
-        switch($request->method()) {
-            case 'GET':
-                switch($request['action']) {
-                    case 'cycle':
-                        $register = new Register();
-                        $register->entry_id = $id;
-                        return $register->getCycle();
-                }
-                break;
-            case 'POST':
-                switch($request['action']) {
-                    case 'cycle':
-                        $register = new Register();
-                        $register->entry_id = $id;
-                        return $register->storeCycle($request);
-                }
-                break;
-            case 'PATCH':
-                switch($request['action']) {
-                    case 'cycle':
-                        break;
-                }
-                break;
-        }
-
-
+    public function postCycle(Request $request, $id) {
+        $register = new Register();
+        $register->entry_id = $id;
+        return $register->storeCycle($request);
     }
-
 }

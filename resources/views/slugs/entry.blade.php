@@ -1,28 +1,24 @@
+<div class='entry-row entry-{{ $item->status }}' data-entry-id='{{ $item->id }}'>
+    <div class="grid sm:grid-cols-6  lg:grid-cols-12">
 
-        
-<div class='grid'>
-    <div class='col-12 mb-2'>
-        <div class='app-draw-row entry-{{ $item->status }}' data-entry-id='{{ $item->id }}' onclick='dashboard.showentry'>
-            <div class='row'>
-                <div class='col-3 col-lg-1 text-start'>
-                    <i class="fa-solid {{$item->status_icon}} fa-fw" title="{{ucfirst($item->status)}}"></i>
-                    @if($item->autopay) <i class='fa fa-solid fa-robot' title='Autopay'></i> @endif
-                </div>
-                <div class='col-4 col-lg-2 text-end'>
-                    @if($item->estimated_date) <i class='fa fa-solid fa-circle-question' title='Estimated Date'></i> @endif
-                    {{ $item->next_due_date }} 
-                </div>
-                <div class='col-5 col-lg-2 text-end'>
-                    @if($item->estimated_amount) <i class='fa fa-solid fa-circle-question' title='Estimated Amount'></i> @endif
-                    {{ number_format($item->amount, 2) }} 
-                </div>
-                <div class='col-12 col-lg-4 text-start'>
-                {{ $item->name }} 
-                </div>
-                <div class='d-none d-lg-inline col-lg-3 text-start'>
-                {{ $item->category }} 
-                </div>
+        <div class='col-span-2 text-end mr-2'>
+            <div class='float-start'>
+                <i class="fa-solid {{$item->status_icon}} fa-fw" title="{{ucfirst($item->status)}}"></i>
+                @if($item->autopay) <i class='fa-solid fa-robot fa-fw' title='Autopay'></i> @endif
+            </div>
 
-
-"<div class='d-none d-lg-inline col-lg-3 text-start'>"+ (typeof(el.category) != 'string'?'Unassigned':el.category) + "</div>";
-</div></div></div>
+            @if($item->estimated_date) <i class='fa-solid fa-circle-question' title='Estimated Date'></i> @endif
+            {{ date_format($item->next_due_date, "M d y") }}
+        </div>
+        <div class='col-span-2 text-end mr-2'>
+            @if($item->estimated_amount) <i class='fa-solid fa-circle-question' title='Estimated Amount'></i> @endif
+            {{ number_format($item->amount, 2) }}
+        </div>
+        <div class='col-span-4 text-start mr-2'>
+            {{ $item->name }}
+        </div>
+        <div class='col-span-2 text-start '>
+            {{ $item->category }}
+        </div>
+    </div>
+</div>

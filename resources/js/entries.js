@@ -6,6 +6,7 @@ let current_mode = 'view';
 
 const byId = id => document.getElementById(id);
 const byQ = sel => document.querySelector(sel);
+const byQA = sel => document.querySelectorAll(sel);
 
 export function init() {
     fetch('/entry/list')
@@ -26,42 +27,81 @@ export function init() {
         });
 }
 
+export function show(id = null) {
+    if (id !== null) {
+        current_id = id;
+    }
+    fetch(`/entry/${current_id}`)
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => {
+                    throw new Error(err.message || 'Unexpected server error');
+                });
+            }
+               
+            return response.json()
+        })
+        .then(data => {
+            formModal.configure(data.form);
+            setFormControls();
+            injectCycleButton();
+            formModal.show();       
+        })
+        .catch(err => {
+            console.error('entries:init error:', err.message);
+        });
+
+}
+
+function removeCycleButton() {
+    const existing = byId('control_cycle');
+    if (existing) {
+        existing.remove(); // drop it to avoid duplicate triggers
+    }
+}
+
+function injectCycleButton() {
+    const btnGroup = byId('btn-group-head');
+    if (!btnGroup) return;
+
+    removeCycleButton()
+
+    const btn = document.createElement('button');
+    btn.id = 'control_cycle'; 
+    btn.className = 'btn btn-primary btn-control mr-2';
+    btn.innerHTML = `<i class="fas fa-sync-alt mr-1"></i> Cycle`; // FA sync icon
+
+    btn.addEventListener('click', () => {
+        cycleEntry(); // <-- your cycle logic function
+    });
+
+    btnGroup.insertBefore(btn, btnGroup.firstChild);
+}
 
 var set_triggers = function () {
     console.log('triggers here');
 
-    const income_button = document.getElementById('new_income');
+    const income_button = byId('new_income');
     income_button.addEventListener('click', () => create( true));
 
-    const expense_button = document.getElementById('new_expense');
+    const expense_button = byId('new_expense');
     expense_button.addEventListener('click', () => create(false));
 
-
-    /*     $("#content #return-button").off()
-            .on('click', subjects.load)
-            .attr("disabled", false); */
-
-/*         $("#content #export-button").off()
-            .on('click', segment_pdf_export)
-            .attr("disabled", false);  */       
-
-/*         $("#content .primary-object").off().on('click', function () {
-            lesson_id = $(this).data('id');
-            if(lesson_id == 0) {
-                form_new();
-            } else {
-                form_show();
-            }
-        }); */
+    const entry_buttons = byQA('.entry-row');
+    entry_buttons.forEach(function(button) {
+        button.addEventListener('click', function(e) { 
+            current_id = e.currentTarget.getAttribute('data-entry-id');
+            show();
+        });
+    });
 }
 
-
 function render(entries) {
-    const content = document.getElementById('content');
+    const content = byId('content');
     content.innerHTML = "";
 
     const gridWrapper = document.createElement('div');
-    gridWrapper.classList.add('grid', 'grid-cols-2', 'gap-4', 'w-full');
+    gridWrapper.classList.add('entry-list');
 
     entries.forEach(item => {
         const wrapper = document.createElement('div');
@@ -81,7 +121,7 @@ function render(entries) {
 
 function create(is_income) {
     current_id = null;
-    fetch('/entry/create?income=' + is_income)
+    fetch(`/entry/create?income=${is_income}`)
         .then(response => {
             if (!response.ok) {
                 return response.json().then(err => {
@@ -94,6 +134,7 @@ function create(is_income) {
         .then(data => {
             formModal.configure(data.form);
             setFormControls();
+            removeCycleButton();
             formModal.show();
         })
         .catch(err => {
@@ -101,20 +142,22 @@ function create(is_income) {
         });
 }
 
-
 function setFormControls() {
     formModal.controls({
-    onStore: store,
-    onUpdate: update,
-    onCancel: cancel,
-    onEdit: edit,
-    onDelete: destroy
+        onStore: () => store(),
+        onUpdate: () => update(),
+        onCancel: () => cancel(),
+        onEdit: () => edit(),
+        onDelete: () => destroy(),
+        onClose: () => close()
     });
 }
 
-function edit(id) {
-    current_id = id;
-    fetch('/entry/'+id+'/edit')
+function edit(id = null) {
+    if (id !== null) {
+        current_id = id;
+    }
+    fetch(`/entry/${current_id}/edit`)
         .then(response => {
             if (!response.ok) {
                 return response.json().then(err => {
@@ -125,11 +168,11 @@ function edit(id) {
             return response.json()
         })
         .then(data => {
+            editor.kill()
             formModal.configure(data.form);
             setFormControls();
-
-            ClassToday.TinyMCE.init();      
-            formModal.show();                        
+            removeCycleButton();
+            formModal.show();       
         })
         .catch(err => {
             console.error('entries:init error:', err.message);
@@ -140,16 +183,71 @@ function store() {
     const form = byId('entry_form');
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
-    data._token = bQ('meta[name="csrf-token"]').getAttribute('content');
-    Object.assign(data, editor.getContent());
-
-    fetch('/entry', {
+    data._token = byQ('meta[name="csrf-token"]').getAttribute('content');
+    data.description = editor.getContent().description;
+    fetch('/entry/store', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(data)
     }) 
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => {
+                throw new Error(err.message || 'Unexpected server error');
+            });
+        }
+        return response.json()
+    })
+    .then(data => {
+        formModal.close();     
+
+    })
+    .catch(err => {
+        console.error('entries:store error:', err.message);
+    });
+}
+
+function update() {
+    const form = byId('entry_form');
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    data._token = byQ('meta[name="csrf-token"]').getAttribute('content');
+    data.description = editor.getContent().description;
+    fetch(`/entry/${current_id}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    }) 
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => {
+                throw new Error(err.message || 'Unexpected server error');
+            });
+        }
+        return response.json()
+    })
+    .then(data => {
+        close();     
+        show();
+    })
+    .catch(err => {
+        console.error('entries:store error:', err.message);
+    });
+}
+
+function destroy() {
+    if(confirm('Deleting Entry:  Are You Sure?')) {
+        fetch(`/entry/${current_id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': byQ('meta[name="csrf-token"]').getAttribute('content'),
+            }
+        }) 
         .then(response => {
             if (!response.ok) {
                 return response.json().then(err => {
@@ -159,16 +257,28 @@ function store() {
             return response.json()
         })
         .then(data => {
-            editor.kill()
-            formModal.close();     
-
+            close();     
+            init();
+            // refresh list
         })
         .catch(err => {
             console.error('entries:store error:', err.message);
         });
+
+    }
 }
 
-function update() {}
+function close() {
+    removeCycleButton();
+    formModal.close();
+}
 
-function destroy() {}
-function cancel() {}
+function cancel() {
+    close();
+    if(current_id == null) {
+        init();
+    } else {
+        show();     
+    }
+
+}

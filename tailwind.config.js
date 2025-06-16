@@ -17,9 +17,10 @@ export default {
         'gap-4',
         'text-center',
         'p-4',
-        'bg-green-100',
-        'bg-blue-100',
+        'fa',
+        {pattern: /^fa-/,},
         {pattern: /^form-/,},
+        {pattern: /^entry-/,},
 
     // other safelisted dynamic classes
 

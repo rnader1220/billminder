@@ -30,7 +30,7 @@ class Entry extends Model
         'party_id',
     ];
 
-    protected $frequency = [
+    protected $frequency_list = [
         ['value' => -1, 'label' => 'weekly'],
         ['value' => -2, 'label' => 'biweekly'],
         ['value' => -3, 'label' => 'monthly'],
@@ -42,21 +42,39 @@ class Entry extends Model
     protected $casts = [
         'name' => 'encrypted',
         'description' => 'encrypted',
-        'next_due_date' => 'datetime',
+        'next_due_date' => 'date',
     ];
     
     public function getStatusAttribute() {
-        if($this->income) {
+        if($this->income == 1) {
             return 'income';
         } else if ($this->next_due_date <= Carbon::today()) {
             return 'late';
-        } else if($this->next_due_date < Auth::user()->next_pay_date()) {
+        } else if($this->next_due_date < Auth::user()->next_pay_date) {
             return 'due';
         } else {
             return 'expense';
         }
     }
 
+
+    public function getStatusIconAttribute() {
+        switch($this->status) {
+            case 'income':
+                return 'fa-badge-dollar';
+            case 'late':
+                return 'fa-triangle-exclamation';
+            case 'due' :
+                return 'fa-alarm-clock';
+
+            case 'expense' :
+                return 'fa-file-invoice-dollar';
+        }
+    }
+
+    public function getFrequencyListAttribute() {
+        return $this->frequency_list;
+    }
 
     public function category() {
         return $this

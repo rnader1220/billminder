@@ -68,12 +68,12 @@
 
             <div class="sm:col-span-6 md:col-span-4 lg:col-span-3">
                 @include('forms.date', [
-                'label' => 'Next Due Date',
+                'label' => 'Due Date',
                 'name' => 'next_due_date',
                 'title' => 'When is this due, currently?',
                 'value' => $item->next_due_date,
                 'disabled' => true,
-                'required' => false,
+                'required' => true,
                 'helptext' => 'When is this due, currently?',
                 ])
             </div>
@@ -107,7 +107,7 @@
                 'title' => 'Does this have a fixed number of payments? If set, this value will go down on cycling.',
                 'value' => $item->payments_remaining,
                 'disabled' => true,
-                'required' => true,
+                'required' => false,
                 'helptext' => 'Does this have a fixed number of payments? If set, this value will go down on cycling.',
                 ])
             </div>
@@ -139,14 +139,14 @@
              <div class="sm:col-span-6 md:col-span-4 lg:col-span-3">
                 @include('forms.select_new', [
                 'label' => 'Category',
-                'name' => 'name',
+                'name' => 'category_id',
                 'options' => $categories,
                 'title' => 'This field is what will display on the list. Select from your ' .
                 'category list, to organize your bills and income for reporting purposes. See the Categories tab' .
                 'for more details.',
                 'value' => $item->category_id,
                 'disabled' => true,
-                'required' => true,
+                'required' => false,
                 'helptext' => 'This field is what will display on the list. Select from your ' .
                 'category list, to organize your bills and income for reporting purposes. See the Categories tab' .
                 'for more details.',
@@ -162,7 +162,7 @@
                 the account has a link, it will appear here. See the Accounts tab for more details.',
                 'value' => $item->account_id,
                 'disabled' => true,
-                'required' => true,
+                'required' => false,
                 'helptext' => 'This can point to your internal account (bank, etc). If set, and
                 the account has a link, it will appear here. See the Accounts tab for more details.',
                 ])
@@ -180,7 +180,7 @@
                 the account has a link, it will appear here. See the Accounts tab for more details.',
                 'value' => $item->party_id,
                 'disabled' => true,
-                'required' => true,
+                'required' => false,
                 'helptext' => 'This can point to your internal account (bank, etc). If set, and
                 the account has a link, it will appear here. See the Accounts tab for more details.',
                 ])
@@ -195,7 +195,7 @@
 
 </div>
 <div class="container mx-auto px-4 ">
-    <div x-show='showHelp' class='form-help'>
+    <div class='form-help hidden'>
         @include($item->income ? 'help.income': 'help.expense')
     </div>
 </div>

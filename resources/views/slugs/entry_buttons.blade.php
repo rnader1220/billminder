@@ -1,6 +1,6 @@
-<div id='new_income' class='mb-2 bg-green-100 p-4 text-center'>
+<div id='new_income' class='entry-button entry-income'>
     New Income
 </div>
-<div id='new_expense' class='mb-2 bg-blue-100 p-4 text-center'>
+<div id='new_expense' class='entry-button entry-expense'>
     New Expense
 </div>

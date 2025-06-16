@@ -1,5 +1,6 @@
 @import 'components/buttons.css';
 @import 'components/forms.css';
+@import 'components/entry.css';
 
 @tailwind base;
 @tailwind components;
@@ -8,4 +9,6 @@
 [x-cloak] {
     display: none;
 }
+
+
 

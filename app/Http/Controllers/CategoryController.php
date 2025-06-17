@@ -4,18 +4,31 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class CategoryController extends Controller
 {
+
+    public function index(Request $request)
+    {
+        try { 
+            $slug_list = [];
+            $slug_list[] = view('slugs.category_buttons')->render();
+            $list = Auth::user()->categories()->orderBy('label')->get();
+            foreach($list as $item) {
+                $slug_list[] = view('slugs.category', compact('item'))->render();
+            }
+            return response()->json(['list' => $slug_list]);  
+        } catch (\Exception $e) {
+            return response()->json(['errors' => $e->getMessage()], 500);                 
+        }
+    }
+
     ## ######## ##
     ## OLD CODE ##
     ## ######## ##
-
-    public function index()
-    {
-        $list = Category::getList();
-        return $list;
-    }
 
     public function create()
     {
@@ -56,34 +69,4 @@ class CategoryController extends Controller
         return $response;
      }
 
-     public static function boot()
-    {
-        parent::boot();
-
-        self::creating(function($model){
-            if(!isset($this->user_id)) {
-                $this->user_id = Auth::user()->id;
-            }
-        });
-
-        self::created(function($model){
-            // ... code here
-        });
-
-        self::updating(function($model){
-            // ... code here
-        });
-
-        self::updated(function($model){
-            // ... code here
-        });
-
-        self::deleting(function($model){
-            // ... code here
-        });
-
-        self::deleted(function($model){
-            // ... code here
-        });
-    }
 }

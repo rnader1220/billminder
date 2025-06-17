@@ -4,17 +4,32 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Account;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class AccountController extends Controller
 {
+
+    public function index(Request $request)
+    {
+        try { 
+            $slug_list = [];
+            $slug_list[] = view('slugs.account_buttons')->render();
+            $list = Auth::user()->accounts()->orderBy('name')->get();
+            foreach($list as $item) {
+                $slug_list[] = view('slugs.account', compact('item'))->render();
+            }
+            return response()->json(['list' => $slug_list]);  
+        } catch (\Exception $e) {
+            return response()->json(['errors' => $e->getMessage()], 500);                 
+        }
+    }
+
     ## ######## ##
     ## OLD CODE ##
     ## ######## ##
-    public function index()
-    {
-        $list = Account::getList();
-        return $list;
-    }
+
 
     public function create()
     {

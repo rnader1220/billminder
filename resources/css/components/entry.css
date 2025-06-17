@@ -1,28 +1,46 @@
+
+
+
+.account-row,
+.category-row,
 .entry-row {
     @apply mb-1 p-2 col-span-2 rounded-lg;
 }
 
+
+.account-button,
+.category-button,
 .entry-button {
     @apply mb-1 p-2 text-center rounded-lg;
 }
 
+.account-bank,
+.category-income,
 .entry-income {
     @apply bg-green-100 hover:bg-green-200 focus:ring-green-300;
 }
+
 
 .entry-late {
     @apply bg-red-100 hover:bg-red-200 focus:ring-red-300;
 
 }
 
+
 .entry-due {
     @apply bg-yellow-100 hover:bg-yellow-200 focus:ring-yellow-300;
 }
 
+.account-card,
+.category-expense,
 .entry-expense {
     @apply bg-blue-100 hover:bg-blue-200 focus:ring-blue-300;
 }
 
+.account-list,
+.category-list,
 .entry-list {
     @apply grid grid-cols-2 gap-2 w-full;
 }
+
+

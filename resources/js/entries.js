@@ -268,9 +268,69 @@ function destroy() {
     }
 }
 
+
+function cycleEntry() {
+    removeCycleButton();
+    fetch(`/entry/${current_id}/cycle`)
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => {
+                    throw new Error(err.message || 'Unexpected server error');
+                });
+            }
+               
+            return response.json()
+        })
+        .then(data => {
+            formModal.configure(data.form);
+            setRegFormControls();
+            formModal.show();
+        })
+        .catch(err => {
+            console.error('entries:cycle error:', err.message);
+        });
+}
+
+function cycleStore() {
+    const form = byId('cycle_form');
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    data._token = byQ('meta[name="csrf-token"]').getAttribute('content');
+    data.note = editor.getContent().note;
+    fetch(`/entry/${current_id}/cycle`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    }) 
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => {
+                throw new Error(err.message || 'Unexpected server error');
+            });
+        }
+        return response.json()
+    })
+    .then(data => {
+        cancel();     
+    })
+    .catch(err => {
+        console.error('entries:cycle error:', err.message);
+    });
+}
+
+function setRegFormControls() {
+    formModal.controls({
+        onStore: () => cycleStore(),
+        onCancel: () => cancel()
+    });
+}
+
 function close() {
     removeCycleButton();
     formModal.close();
+    init();
 }
 
 function cancel() {

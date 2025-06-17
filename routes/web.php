@@ -23,7 +23,7 @@ Route::middleware([
         Route::get('/{entry_id}/edit', [EntryController::class, 'edit']);
         Route::patch('/{entry_id}', [EntryController::class, 'update']);
         Route::delete('/{entry_id}', [EntryController::class, 'destroy']);
-        Route::get('/{entry_id}/cycle', [EntryController::class, 'getCycle']);
+        Route::get('/{entry_id}/cycle', [EntryController::class, 'createCycle']);
         Route::post('/{entry_id}/cycle', [EntryController::class, 'postCycle']);
     });
 

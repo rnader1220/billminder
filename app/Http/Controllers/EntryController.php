@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Account;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class EntryController extends Controller
 {
@@ -186,19 +187,93 @@ class EntryController extends Controller
 
     }
  
-    ## ######## ##
-    ## OLD CODE ##
-    ## ######## ##
+    public function createCycle($id) {
 
-    public function getCycle($id) {
-        $register = new Register();
-        $register->entry_id = $id;
-        return $register->getCycle();
+       try { 
+
+            $entry = Entry::find($id);
+            $data = $entry->toArray();
+            $item = new Register();
+            $data['entry_id'] = $id;
+            $data['note'] = $data['description'];
+            $data['paid_date'] = Carbon::now();
+            $item->fill($data);
+            $name = $data['name'];
+            $mode = "create";
+            $categories = $item->income ? 
+                Auth::user()->incomeCats()->orderBy('label')->get() :
+                Auth::user()->expenseCats()->orderBy('label')->get();
+            $accounts = Auth::user()->accounts()->orderBy('name')->get();
+            $parties = $item->income ? 
+                Auth::user()->payors()->orderBy('name')->get():
+                Auth::user()->payees()->orderBy('name')->get();
+
+
+            $form = view('features.cycle', compact('mode', 'name', 'item', 'categories', 'accounts', 'parties'))->render();
+            return response()->json(['form' => $form]);  
+        } catch (\Exception $e) {
+            return response()->json(['errors' => $e->getMessage()], 500);                 
+        }
+
     } 
 
     public function postCycle(Request $request, $id) {
         $register = new Register();
-        $register->entry_id = $id;
-        return $register->storeCycle($request);
+        DB::beginTransaction();
+        try {
+            $register->entry_id = $id;
+
+            $data = $request->all();
+            $data['note'] = is_null($data['note']) ? '': $data['note'];
+            
+            //dd($data);
+            unset($data['_token']);
+            $register->fill($data);
+
+            $register->user_id = Auth::user()->id;
+
+            //dd($register);
+
+            $register->save();
+
+            // cycle the entry record
+            $entry = Entry::find($id);
+            $newdate = Carbon::create($entry->next_due_date);
+            switch($entry->cycle) {
+                case -1:
+                    $entry->next_due_date = $newdate->addWeek();
+                    break;
+                case -2:
+                    $entry->next_due_date = $newdate->addWeeks(2);
+                    break;
+                case -3:
+                    $entry->next_due_date = $newdate->addMonth();
+                    break;
+                case -4:
+                    $entry->next_due_date = $newdate->addMonths(3);
+                    break;
+                case -5:
+                    $entry->next_due_date = $newdate->addYear();
+                    break;
+                default:
+                    $entry->next_due_date = null;
+                    break;
+            }
+            $entry->estimated_date = 1;
+            if(!$entry->fixed_amount) {
+                $entry->estimated_amount = 1;
+            }
+            $entry->save();
+
+            // end cycle the entry record
+            DB::commit();
+            return response()->json(['id' => $entry->id]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['errors' => $e->getMessage()], 500);                 
+        }
+
+
+        //return $register->storeCycle($request);
     }
 }
